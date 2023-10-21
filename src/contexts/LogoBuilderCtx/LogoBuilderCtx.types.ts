@@ -1,4 +1,4 @@
-import type { ReactNode, Ref } from "react";
+import type { ReactNode } from "react";
 
 /// --- Types ----------------------------------------------------------------------------------------------------------
 export type SavedCommand = Readonly<{
@@ -10,17 +10,21 @@ export type SavedCommand = Readonly<{
 
 export type InternalValues = {
 	commandsHistory: SavedCommand[]
-	canvasRef: Ref<HTMLCanvasElement>
+	canvas: HTMLCanvasElement | null
 }
 
 export type LogoBuilderCtxValues = InternalValues & Readonly<{
-	executeCommand: (command: string) => void
+	registerCanvas: (canvas: HTMLCanvasElement | null) => void
+	executeCommand: (fullCommand: string) => void
 }>
 
 /// --- Context actions ------------------------------------------------------------------------------------------------
 export enum CONTEXT_STATES {
+	REGISTER_CANVAS = "REGISTER_CANVAS",
 	COMMAND_EXECUTED = "COMMAND_EXECUTED"
 }
+
+type RegisterCanvasAction = { type: CONTEXT_STATES.REGISTER_CANVAS, canvas: HTMLCanvasElement | null }
 
 type CommandExecutedAction = {
 	type: CONTEXT_STATES.COMMAND_EXECUTED
@@ -29,7 +33,7 @@ type CommandExecutedAction = {
 	success: boolean
 }
 
-export type ContextActions = CommandExecutedAction;
+export type ContextActions = RegisterCanvasAction | CommandExecutedAction;
 
 /// --- PropTypes ------------------------------------------------------------------------------------------------------
 export type ProviderProps = { children?: ReactNode };

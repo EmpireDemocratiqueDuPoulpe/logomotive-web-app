@@ -11,7 +11,7 @@ function Canvas() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.canvasBox}>
-			<canvas ref={logoBuilderCtx.canvasRef} className={styles.canvas}/>
+			<canvas ref={logoBuilderCtx.registerCanvas} className={styles.canvas}/>
 		</div>
 	);
 }

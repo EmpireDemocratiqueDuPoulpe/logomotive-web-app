@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, createRef, useCallback, useContext, useMemo, useReducer } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import { InvalidReducerAction, MissingContextProvider } from "@/exceptions";
+import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
 import { CONTEXT_STATES } from "./LogoBuilderCtx.types";
 import type { ContextActions, SavedCommand, InternalValues, LogoBuilderCtxValues, ProviderProps } from "./LogoBuilderCtx.types";
 
@@ -12,16 +13,21 @@ export const CONTEXT: React.Context<LogoBuilderCtxValues | undefined> = createCo
 
 const DEFAULT_REDUCER: InternalValues = {
 	commandsHistory: [],
-	canvasRef: createRef<HTMLCanvasElement>()
+	canvas: null
 };
 
 const MAX_HISTORY_LENGTH: number = 1000;
+
+const LOGO_INTERPRETER: LogoInterpreter = new LogoInterpreter();
 
 /*************************************************************
  * Provider
  *************************************************************/
 function logoBuilderReducer(state: InternalValues, action: ContextActions) : InternalValues {
 	switch (action.type) {
+		case CONTEXT_STATES.REGISTER_CANVAS:
+			LOGO_INTERPRETER.setCanvas(action.canvas);
+			return { ...state, canvas: action.canvas };
 		case CONTEXT_STATES.COMMAND_EXECUTED:
 			const newCommandsHistory: SavedCommand[] = [{
 				timestamp: Date.now(),
@@ -42,16 +48,23 @@ export function LogoBuilderProvider({ children }: ProviderProps) : React.JSX.Ele
 	const [ state, dispatch ] = useReducer(logoBuilderReducer, DEFAULT_REDUCER, undefined);
 
 	/* --- Functions ----------------------------- */
-	const executeCommand = useCallback((command: string) : void => {
-		dispatch({ type: CONTEXT_STATES.COMMAND_EXECUTED, command: command, output: command, success: true });
+	const registerCanvas = useCallback((canvas: HTMLCanvasElement | null) : void => {
+		dispatch({ type: CONTEXT_STATES.REGISTER_CANVAS, canvas });
 	}, []);
 	
-	/* --- Effects ------------------------------- */
+	const executeCommand = useCallback((fullCommand: string) : void => {
+		const [ command, ...args ] = fullCommand.split(" ");
+		LOGO_INTERPRETER.executeCommand(command, ...args);
+
+		dispatch({ type: CONTEXT_STATES.COMMAND_EXECUTED, command: fullCommand, output: fullCommand, success: true });
+	}, []);
+
 	/* --- Provider ------------------------------ */
 	const context: LogoBuilderCtxValues = useMemo(() : LogoBuilderCtxValues => ({
 		...state,
+		registerCanvas,
 		executeCommand
-	}), [executeCommand, state]);
+	}), [executeCommand, registerCanvas, state]);
 	return (
 		<CONTEXT.Provider value={context}>
 			{children}
