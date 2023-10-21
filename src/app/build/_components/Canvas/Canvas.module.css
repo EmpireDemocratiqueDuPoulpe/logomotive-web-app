@@ -1,0 +1,6 @@
+.canvasBox {
+	width: 40vw;
+	height: 55vh;
+	border: 1px solid var(--discrete-border-color);
+	border-radius: var(--default-border-radius);
+}

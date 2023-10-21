@@ -1,0 +1,16 @@
+.console {
+	width: 25vw;
+}
+
+.console .history {
+	font-size: 0.8em;
+	padding: var(--default-spacing);
+	background: var(--console-background-color);
+	color: var(--console-foreground-color);
+	border-radius: var(--default-border-radius);
+	font-family: var(--mono-font);
+}
+.console .history .historyLine { opacity: 0.65; }
+.console .history .historyCurrentLine { opacity: 1; }
+
+.console .history .historyParam { color: var(--console-parameter-color); }
