@@ -10,21 +10,17 @@ export type SavedCommand = Readonly<{
 
 export type InternalValues = {
 	commandsHistory: SavedCommand[]
-	canvas: HTMLCanvasElement | null
 }
 
 export type LogoBuilderCtxValues = InternalValues & Readonly<{
-	registerCanvas: (canvas: HTMLCanvasElement | null) => void
+	registerCanvas: (type: "draw" | "pointer", canvas: HTMLCanvasElement | null) => void
 	executeCommand: (fullCommand: string) => void
 }>
 
 /// --- Context actions ------------------------------------------------------------------------------------------------
 export enum CONTEXT_STATES {
-	REGISTER_CANVAS = "REGISTER_CANVAS",
 	COMMAND_EXECUTED = "COMMAND_EXECUTED"
 }
-
-type RegisterCanvasAction = { type: CONTEXT_STATES.REGISTER_CANVAS, canvas: HTMLCanvasElement | null }
 
 type CommandExecutedAction = {
 	type: CONTEXT_STATES.COMMAND_EXECUTED
@@ -33,7 +29,7 @@ type CommandExecutedAction = {
 	success: boolean
 }
 
-export type ContextActions = RegisterCanvasAction | CommandExecutedAction;
+export type ContextActions = CommandExecutedAction;
 
 /// --- PropTypes ------------------------------------------------------------------------------------------------------
 export type ProviderProps = { children?: ReactNode };

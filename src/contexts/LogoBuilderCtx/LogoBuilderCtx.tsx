@@ -13,7 +13,6 @@ export const CONTEXT: React.Context<LogoBuilderCtxValues | undefined> = createCo
 
 const DEFAULT_REDUCER: InternalValues = {
 	commandsHistory: [],
-	canvas: null
 };
 
 const MAX_HISTORY_LENGTH: number = 1000;
@@ -25,9 +24,6 @@ const LOGO_INTERPRETER: LogoInterpreter = new LogoInterpreter();
  *************************************************************/
 function logoBuilderReducer(state: InternalValues, action: ContextActions) : InternalValues {
 	switch (action.type) {
-		case CONTEXT_STATES.REGISTER_CANVAS:
-			LOGO_INTERPRETER.setCanvas(action.canvas);
-			return { ...state, canvas: action.canvas };
 		case CONTEXT_STATES.COMMAND_EXECUTED:
 			const newCommandsHistory: SavedCommand[] = [{
 				timestamp: Date.now(),
@@ -48,8 +44,17 @@ export function LogoBuilderProvider({ children }: ProviderProps) : React.JSX.Ele
 	const [ state, dispatch ] = useReducer(logoBuilderReducer, DEFAULT_REDUCER, undefined);
 
 	/* --- Functions ----------------------------- */
-	const registerCanvas = useCallback((canvas: HTMLCanvasElement | null) : void => {
-		dispatch({ type: CONTEXT_STATES.REGISTER_CANVAS, canvas });
+	const registerCanvas = useCallback((type: "draw" | "pointer", canvas: HTMLCanvasElement | null) : void => {
+		switch (type) {
+			case "draw":
+				LOGO_INTERPRETER.setDrawCanvas(canvas);
+				break;
+			case "pointer":
+				LOGO_INTERPRETER.setPointerCanvas(canvas);
+				break;
+			default:
+				throw new Error("Invalid canvas type!"); // TODO
+		}
 	}, []);
 	
 	const executeCommand = useCallback((fullCommand: string) : void => {

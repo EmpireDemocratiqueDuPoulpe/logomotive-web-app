@@ -1,4 +1,6 @@
-import type { ExportedCommands } from "./LogoCommands.types";
+"use client";
+
+import type { CommandContext, ExportedCommands } from "./LogoCommands.types";
 
 export abstract class LogoCommand {
 	public readonly instructions: string[];
@@ -9,15 +11,15 @@ export abstract class LogoCommand {
 		this.expectedParameters = expectedParameters;
 	}
 
-	public execute(canvas: HTMLCanvasElement, ...args: unknown[]) : void {
+	public execute(commandCtx: CommandContext, ...args: unknown[]) : void {
 		if (args.length < this.expectedParameters) {
 			throw new Error("Missing parameters"); // TODO
 		}
 
-		this._execute(canvas, ...args);
+		this._execute(commandCtx, ...args);
 	}
 
-	protected abstract _execute(canvas: HTMLCanvasElement, ...args: unknown[]) : void
+	protected abstract _execute(commandCtx: CommandContext, ...args: unknown[]) : void
 }
 
 /*************************************************************
@@ -27,8 +29,8 @@ export abstract class LogoCommand {
 class ForwardCommand extends LogoCommand {
 	public constructor() { super([ "AV" ], 1); }
 
-	protected _execute(canvas: HTMLCanvasElement, ...args: unknown[]): void {
-		console.log("Forward!", canvas, args);
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.logoPointer.goForward(parseInt(args[0] as string));
 	}
 }
 

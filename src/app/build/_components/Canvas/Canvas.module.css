@@ -1,6 +1,26 @@
 .canvasBox {
-	width: 40vw;
-	height: 55vh;
+	box-sizing: content-box;
+	position: relative;
 	border: 1px solid var(--discrete-border-color);
 	border-radius: var(--default-border-radius);
 }
+
+.canvasBox .canvasSize {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 0.7em;
+	opacity: 0.6;
+	z-index: 3;
+}
+
+.canvasBox .canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.canvasBox .canvas.drawCanvas { z-index: 1; }
+.canvasBox .canvas.pointerCanvas { z-index: 2; }
