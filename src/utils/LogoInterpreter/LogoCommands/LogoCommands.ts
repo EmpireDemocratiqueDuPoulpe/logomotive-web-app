@@ -12,11 +12,13 @@ export abstract class LogoCommand {
 	}
 
 	public execute(commandCtx: CommandContext, ...args: unknown[]) : void {
+		commandCtx.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
 		if (args.length < this.expectedParameters) {
 			throw new Error("Missing parameters"); // TODO
 		}
 
 		this._execute(commandCtx, ...args);
+		commandCtx.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "end");
 	}
 
 	protected abstract _execute(commandCtx: CommandContext, ...args: unknown[]) : void
@@ -30,7 +32,7 @@ class ForwardCommand extends LogoCommand {
 	public constructor() { super([ "AV" ], 1); }
 
 	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.logoPointer.goForward(parseInt(args[0] as string));
+		commandCtx.pointer.goForward(parseInt(args[0] as string));
 	}
 }
 

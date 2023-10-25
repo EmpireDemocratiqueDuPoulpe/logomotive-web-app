@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
-import { timestampToDatetime } from "@/utils/dateTime";
 import styles from "./Console.module.css";
 
 function Console() : React.JSX.Element {
@@ -33,11 +32,11 @@ function Console() : React.JSX.Element {
                 <p className={styles.historyLine}>La tortue tourne de <span className={styles.historyParam}>27deg</span>.</p>
                 <p className={styles.historyLine}>La tortue mange la salade.</p>
 
-                {logoBuilderCtx.commandsHistory.map((historyLine, index: number) => (
-                    <p key={`${historyLine.timestamp}-${historyLine.command}-${historyLine.output}`}
+                {logoBuilderCtx.interpreter.history.map((historyLine, index: number) => (
+                    <p key={`${historyLine}-${index}`}
                        className={clsx(styles.historyLine, ((index === 0) && styles.historyCurrentLine))}
                     >
-                        [{timestampToDatetime(historyLine.timestamp)}] {historyLine.output}
+                        {historyLine}
                     </p>
                 )).reverse()}
             </div>
