@@ -1,8 +1,9 @@
 "use client";
 
-import { MissingArguments } from "@/exceptions";
+import { InvalidArgumentsCount } from "@/exceptions";
 import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
 import type { ExposedCommands } from "./LogoCommands.types";
+import {RGBToHex} from "@/utils/colors";
 
 export abstract class LogoCommand {
 	public readonly instructions: string[];
@@ -15,10 +16,10 @@ export abstract class LogoCommand {
 		this.description = description ?? null;
 	}
 
-	public execute(interpreter: LogoInterpreter, ...args: unknown[]) : string | void {
+	public execute(interpreter: LogoInterpreter, ...args: string[]) : string | void {
 		interpreter.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
-		if (args.length < this.expectedParameters) {
-			throw new MissingArguments(this.expectedParameters, args.length);
+		if (args.length !== this.expectedParameters) {
+			throw new InvalidArgumentsCount(this.expectedParameters, args.length);
 		}
 
 		const commandOutput: string | void = this._execute(interpreter, ...args);
@@ -26,7 +27,7 @@ export abstract class LogoCommand {
 		return commandOutput;
 	}
 
-	protected abstract _execute(interpreter: LogoInterpreter, ...args: unknown[]) : string | void
+	protected abstract _execute(interpreter: LogoInterpreter, ...args: string[]) : string | void
 }
 
 /*************************************************************
@@ -52,7 +53,7 @@ class HelpCommand extends LogoCommand {
 		this.message = messageLines.join("\n");
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): string {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string {
 		return this.message;
 	}
 }
@@ -69,8 +70,8 @@ class ForwardCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
-		interpreter.pointer.goForward(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.goForward(parseInt(args[0]));
 	}
 }
 
@@ -83,8 +84,8 @@ class BackwardCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
-		interpreter.pointer.goBackward(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.goBackward(parseInt(args[0]));
 	}
 }
 
@@ -97,8 +98,8 @@ class RotateRightCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
-		interpreter.pointer.rotateRight(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.rotateRight(parseInt(args[0]));
 	}
 }
 
@@ -111,8 +112,8 @@ class RotateLeftCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
-		interpreter.pointer.rotateLeft(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.rotateLeft(parseInt(args[0]));
 	}
 }
 
@@ -125,7 +126,7 @@ class DisableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.pointer.enableTrail(false);
 	}
 }
@@ -139,7 +140,7 @@ class EnableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.pointer.enableTrail(true);
 	}
 }
@@ -153,7 +154,7 @@ class HideTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.pointer.setVisible(false);
 	}
 }
@@ -167,7 +168,7 @@ class ShowTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.pointer.setVisible(true);
 	}
 }
@@ -181,7 +182,7 @@ class ResetAllCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.reset(false);
 	}
 }
@@ -195,7 +196,7 @@ class ResetDrawCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.reset(true);
 	}
 }
@@ -209,7 +210,7 @@ class ResetTurtleOriginCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.pointer.reset(true);
 	}
 }
@@ -223,8 +224,36 @@ class ClearHistoryCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.history.clear();
+	}
+}
+
+class ChangeTrailColor extends LogoCommand {
+	public constructor() {
+		super(
+			["FCC", "COULEURCRAYON"],
+			3,
+			"Change la couleur du crayon avec un code RGB. Exemple : FCC 255 0 0"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.setTrailColor(RGBToHex(args[0], args[1], args[2]));
+	}
+}
+
+class ChangeBackgroundColor extends LogoCommand {
+	public constructor() {
+		super(
+			["FCB", "COULEURTOILE"],
+			3,
+			"Change la couleur de fond de la toile avec un code RGB. Exemple : FCB 128 255 96"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.setBackgroundColor(RGBToHex(args[0], args[1], args[2]));
 	}
 }
 
@@ -237,7 +266,8 @@ const commandsToExpose: LogoCommand[] = [
 	new DisableTrailCommand(), new EnableTrailCommand(),
 	new HideTurtleCommand(), new ShowTurtleCommand(),
 	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand(),
-	new ClearHistoryCommand()
+	new ClearHistoryCommand(),
+	new ChangeTrailColor(), new ChangeBackgroundColor()
 ];
 
 function prepareCommands() : ExposedCommands {

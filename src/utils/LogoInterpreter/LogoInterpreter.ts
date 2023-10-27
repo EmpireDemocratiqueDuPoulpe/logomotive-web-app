@@ -14,6 +14,7 @@ export default class LogoInterpreter {
 	private drawCanvasCtx: CanvasRenderingContext2D | null = null;
 	private pointerCanvasCtx: CanvasRenderingContext2D | null = null;
 	private canvasSize: { width: number, height: number } = { width: 0, height: 0 };
+	private backgroundColor: string = "#FFFFFF";
 
 	public readonly debugger: LogoDebugger = new LogoDebugger(true);
 	public readonly history: LogoHistory;
@@ -66,6 +67,12 @@ export default class LogoInterpreter {
 		}
 	}
 
+	public setBackgroundColor(hexColor: string) : void {
+		this.debugger.printFnCall("Interpreter - setBackgroundColor", "start");
+		this.backgroundColor = hexColor;
+		this.debugger.printFnCall("Interpreter - setBackgroundColor", "end");
+	}
+
 	public addLine(line: Line) : void { this.lines.push(line); }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
@@ -113,7 +120,7 @@ export default class LogoInterpreter {
 		if (!this.drawCanvasCtx || !this.pointerCanvasCtx) return;
 		this.debugger.printFnCall(`Interpreter - render[${reason ?? ""}]`, "start");
 
-		this.drawCanvasCtx.fillStyle = this.pointerCanvasCtx.fillStyle = "#FFFFFF";
+		this.drawCanvasCtx.fillStyle = this.backgroundColor;
 		this.drawCanvasCtx.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 		this.pointerCanvasCtx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 
@@ -145,17 +152,18 @@ export default class LogoInterpreter {
 	private drawLines() : void {
 		if (this.drawCanvasCtx === null) return;
 
-		this.drawCanvasCtx.beginPath();
-		this.drawCanvasCtx.strokeStyle = "#00FF00";
 		this.drawCanvasCtx.lineWidth = 1;
 
 		for (const line of this.lines) {
+			this.drawCanvasCtx.beginPath();
+			this.drawCanvasCtx.strokeStyle = line.hexColor;
+
 			this.drawCanvasCtx.moveTo(line.from.x, line.from.y);
 			this.drawCanvasCtx.lineTo(line.to.x, line.to.y);
-		}
 
-		this.drawCanvasCtx.stroke();
-		this.drawCanvasCtx.closePath();
+			this.drawCanvasCtx.stroke();
+			this.drawCanvasCtx.closePath();
+		}
 	}
 
 	public reset(keepTurtle: boolean = false) : void {

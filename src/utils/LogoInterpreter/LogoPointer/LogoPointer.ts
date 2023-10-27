@@ -11,6 +11,7 @@ export default class LogoPointer {
 	private rotation: number = 0;
 	private visible: boolean = true;
 	private trail: boolean = true;
+	private trailColor: string = "#00FF00";
 	private readonly image: HTMLImageElement | null;
 
 	constructor(interpreter: LogoInterpreter) {
@@ -41,6 +42,13 @@ export default class LogoPointer {
 		this.trail = enable;
 		this.interpreter.debugger.printFnCall("Pointer - enableTrail", "end");
 	}
+
+	public setTrailColor(hexColor: string) : void {
+		this.interpreter.debugger.printFnCall("Pointer - setTrailColor", "start");
+		this.trailColor = hexColor;
+		this.interpreter.debugger.printFnCall("Pointer - setTrailColor", "end");
+	}
+
 	public setVisible(visible: boolean = true) : void {
 		this.interpreter.debugger.printFnCall("Pointer - setVisible", "start");
 		this.visible = visible;
@@ -56,7 +64,8 @@ export default class LogoPointer {
 		if (this.trail) {
 			this.interpreter.addLine({
 				from: { x: this.x, y: this.y },
-				to: { x: newX, y: newY }
+				to: { x: newX, y: newY },
+				hexColor: this.trailColor
 			});
 		}
 
