@@ -76,7 +76,7 @@ export default class LogoInterpreter {
 	public addLine(line: Line) : void { this.lines.push(line); }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
-	private getCommand(command: string) : LogoCommand {
+	public getCommand(command: string) : LogoCommand {
 		if (!LogoCommands.hasOwnProperty(command)) {
 			throw new InvalidCommand();
 		}
@@ -84,10 +84,15 @@ export default class LogoInterpreter {
 		return LogoCommands[command];
 	}
 
+	public splitCommand(fullCommand: string) : string[] {
+		// Split by any whitespace character, unless within square brackets.
+		return fullCommand.split(/\s(?![^\[]*])/);
+	}
+
 	public executeCommand(fullCommand: string) : void {
 		this.debugger.printFnCall("Interpreter - executeCommand", "start");
 
-		const [ command, ...args ] = fullCommand.split(" ");
+		const [ command, ...args ] = this.splitCommand(fullCommand);
 		let output: string | void = "";
 		let error: unknown | null = null;
 

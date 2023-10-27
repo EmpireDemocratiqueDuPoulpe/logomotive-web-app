@@ -53,7 +53,7 @@ class HelpCommand extends LogoCommand {
 		this.message = messageLines.join("\n");
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string {
+	protected _execute(): string {
 		return this.message;
 	}
 }
@@ -112,7 +112,7 @@ class GetTurtlePositionCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string {
+	protected _execute(interpreter: LogoInterpreter): string {
 		const pointerPosition = interpreter.pointer.getPosition();
 		return `x: ${pointerPosition.x}, y: ${pointerPosition.y}`;
 	}
@@ -170,7 +170,7 @@ class GetTurtleAngleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string {
+	protected _execute(interpreter: LogoInterpreter): string {
 		return interpreter.pointer.getAngle().toString(10);
 	}
 }
@@ -184,7 +184,7 @@ class DisableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.pointer.enableTrail(false);
 	}
 }
@@ -198,7 +198,7 @@ class EnableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.pointer.enableTrail(true);
 	}
 }
@@ -212,7 +212,7 @@ class HideTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.pointer.setVisible(false);
 	}
 }
@@ -226,7 +226,7 @@ class ShowTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.pointer.setVisible(true);
 	}
 }
@@ -240,7 +240,7 @@ class ResetAllCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.reset(false);
 	}
 }
@@ -254,7 +254,7 @@ class ResetDrawCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.reset(true);
 	}
 }
@@ -268,7 +268,7 @@ class ResetTurtleOriginCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.pointer.reset(true);
 	}
 }
@@ -282,12 +282,12 @@ class ClearHistoryCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+	protected _execute(interpreter: LogoInterpreter): void {
 		interpreter.history.clear();
 	}
 }
 
-class ChangeTrailColor extends LogoCommand {
+class ChangeTrailColorCommand extends LogoCommand {
 	public constructor() {
 		super(
 			["FCC", "COULEURCRAYON"],
@@ -301,7 +301,7 @@ class ChangeTrailColor extends LogoCommand {
 	}
 }
 
-class ChangeBackgroundColor extends LogoCommand {
+class ChangeBackgroundColorCommand extends LogoCommand {
 	public constructor() {
 		super(
 			["FCB", "COULEURTOILE"],
@@ -312,6 +312,37 @@ class ChangeBackgroundColor extends LogoCommand {
 
 	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
 		interpreter.setBackgroundColor(RGBToHex(args[0], args[1], args[2]));
+	}
+}
+
+class RepeatCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["REPETER"],
+			2,
+			"Repète une série d'instructions x fois. Exemple : REPETER 8 [AV 80 TD 135]"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		const commandsArr: string[] = interpreter.splitCommand(args[1].slice(1, (args[1].length - 1)));
+		const commands: string[] = [];
+		let idx: number = 0;
+
+		while (idx < commandsArr.length) {
+			const command: LogoCommand = interpreter.getCommand(commandsArr[idx]);
+			const args: string[] = commandsArr.splice((idx + 1), command.expectedParameters);
+			commands.push(`${command.instructions[0]} ${args}`);
+
+			idx += command.expectedParameters;
+		}
+
+		const iterations: number = parseInt(args[0]);
+		for (let currIter: number = 0; currIter < iterations; currIter++) {
+			commands.map((fullCommand: string) : string | void => {
+				interpreter.executeCommand(fullCommand);
+			});
+		}
 	}
 }
 
@@ -327,7 +358,8 @@ const commandsToExpose: LogoCommand[] = [
 	new HideTurtleCommand(), new ShowTurtleCommand(),
 	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand(),
 	new ClearHistoryCommand(),
-	new ChangeTrailColor(), new ChangeBackgroundColor()
+	new ChangeTrailColorCommand(), new ChangeBackgroundColorCommand(),
+	new RepeatCommand()
 ];
 
 function prepareCommands() : ExposedCommands {
