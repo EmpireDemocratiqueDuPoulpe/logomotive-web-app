@@ -15,6 +15,9 @@ export default class LogoInterpreter {
 	private pointerCanvasCtx: CanvasRenderingContext2D | null = null;
 	private canvasSize: { width: number, height: number } = { width: 0, height: 0 };
 	private backgroundColor: string = "#FFFFFF";
+	private gridSpacing: number = 10;
+	private gridColor: string = "#EBEBEB";
+	private gridCrossColor: string = "#E1E1E1";
 
 	public readonly debugger: LogoDebugger = new LogoDebugger(true);
 	public readonly history: LogoHistory;
@@ -129,7 +132,7 @@ export default class LogoInterpreter {
 		this.drawCanvasCtx.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 		this.pointerCanvasCtx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 
-		this.drawDebug();
+		this.drawGrid();
 		this.drawLines();
 
 		this.pointer.draw(this.pointerCanvasCtx);
@@ -137,12 +140,31 @@ export default class LogoInterpreter {
 		this.debugger.printFnCall(`Interpreter - render[${reason ?? ""}]`, "end");
 	}
 
-	private drawDebug() : void {
-		if (!this.debugger.isEnabled() || (this.drawCanvasCtx === null)) return;
+	private drawGrid() : void {
+		if (this.drawCanvasCtx === null) return;
 
+		// Draw grid
 		this.drawCanvasCtx.beginPath();
-		this.drawCanvasCtx.strokeStyle = "#FF0000";
+		this.drawCanvasCtx.strokeStyle = this.gridColor;
 		this.drawCanvasCtx.lineWidth = 1;
+
+		for (let x: number = 0; x <= this.canvasSize.width; x += this.gridSpacing) {
+			this.drawCanvasCtx.moveTo((0.5 + x), 0);
+			this.drawCanvasCtx.lineTo((0.5 + x), this.canvasSize.height);
+		}
+
+		for (let y: number = 0; y <= this.canvasSize.height; y += this.gridSpacing) {
+			this.drawCanvasCtx.moveTo(0, (0.5 + y));
+			this.drawCanvasCtx.lineTo(this.canvasSize.width, (0.5 + y));
+		}
+
+		this.drawCanvasCtx.stroke();
+		this.drawCanvasCtx.closePath();
+
+		// Draw center
+		this.drawCanvasCtx.beginPath();
+		this.drawCanvasCtx.strokeStyle = this.gridCrossColor;
+		this.drawCanvasCtx.lineWidth = 2;
 
 		this.drawCanvasCtx.moveTo(0, (this.canvasSize.height / 2));
 		this.drawCanvasCtx.lineTo(this.canvasSize.width, (this.canvasSize.height / 2));
