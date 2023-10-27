@@ -1,16 +1,37 @@
 .console {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
 	width: 25vw;
+	height: 250px;
+	overflow: hidden;
 }
 
 .console .history {
+	flex-grow: 1;
+	width: 100%;
+	padding: var(--default-spacing);
+	padding-bottom: 0;
+	background: var(--console-background-color);
+	border-radius: var(--default-border-radius) var(--default-border-radius) 0 0;
+	overflow: auto;
+}
+
+.console .commandLine {
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+.console .commandLine > input {
+	width: 100%;
+	height: 100%;
 	font-size: 0.8em;
 	padding: var(--default-spacing);
 	background: var(--console-background-color);
 	color: var(--console-foreground-color);
-	border-radius: var(--default-border-radius);
 	font-family: var(--mono-font);
+	border: none;
+	border-radius: 0 0 var(--default-border-radius) var(--default-border-radius);
 }
-.console .history .historyLine { opacity: 0.65; }
-.console .history .historyCurrentLine { opacity: 1; }
-
-.console .history .historyParam { color: var(--console-parameter-color); }
+.console .commandLine > input:focus { outline: none; }

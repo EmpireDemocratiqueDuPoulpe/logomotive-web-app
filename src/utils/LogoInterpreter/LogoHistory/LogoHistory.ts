@@ -7,6 +7,9 @@ export default class LogoHistory {
 		this.entries = [];
 	}
 
+	/* --- Getters -------------------------------------------------------------------------------------------------- */
+	public get length() : number { return this.entries.length; }
+
 	public getLast() : string | null {
 		if (this.entries.length > 0) {
 			return this.entries[this.entries.length - 1];
@@ -15,7 +18,8 @@ export default class LogoHistory {
 		return null;
 	}
 
-	public map<U>(callbackFn: (value: string, index: number, array: string[]) => U, thisArg?: any): U[] {
+	/* --- Functions ------------------------------------------------------------------------------------------------ */
+	public map<U>(callbackFn: (value: string, index: number, array: string[]) => U, thisArg?: any) : U[] {
 		return this.entries.map(callbackFn, thisArg);
 	}
 
@@ -37,8 +41,6 @@ export default class LogoHistory {
 
 	public push(entry: string) : void {
 		this.resetCursor();
-
-		if (this.getLast() === entry) { return; }
 
 		this.entries.unshift(entry);
 		this.preventOverflow();

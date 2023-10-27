@@ -1,0 +1,11 @@
+.historyContent {
+	font-size: 0.8em;
+	color: var(--console-foreground-color);
+	font-family: var(--mono-font);
+}
+.historyContent .historyLine { opacity: 0.65; }
+.historyContent .historyCurrentLine { opacity: 1; }
+
+.historyContent .historyParam { color: var(--console-parameter-color); }
+
+.historyContent .historyBottom { width: 100%; height: var(--default-spacing); }
