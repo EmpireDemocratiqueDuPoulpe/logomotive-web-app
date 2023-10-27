@@ -37,9 +37,31 @@ export default class LogoPointer {
 	}
 
 	/* --- Getters -------------------------------------------------------------------------------------------------- */
+	public getPosition() : { x: number, y: number } {
+		const center = this.interpreter.getCanvasCenter();
+		return {
+			x: (center.x - this.x),
+			y: (center.y - this.y)
+		};
+	}
+
 	public getAngle() : number { return this.rotation; }
 
 	/* --- Setters -------------------------------------------------------------------------------------------------- */
+	public setPosition(x: number, y: number) : void {
+		this.interpreter.debugger.printFnCall("Pointer - setPosition", "start");
+		const center = this.interpreter.getCanvasCenter();
+		this.x = center.x + x;
+		this.y = center.y + y;
+		this.interpreter.debugger.printFnCall("Pointer - setPosition", "end");
+	}
+
+	public setAngle(angle: number) : void {
+		this.interpreter.debugger.printFnCall("Pointer - setAngle", "start");
+		this.rotation = angle % 360;
+		this.interpreter.debugger.printFnCall("Pointer - setAngle", "end");
+	}
+
 	public enableTrail(enable: boolean = true) : void {
 		this.interpreter.debugger.printFnCall("Pointer - enableTrail", "start");
 		this.trail = enable;
@@ -93,12 +115,6 @@ export default class LogoPointer {
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "start");
 		this.rotation = 360 + ((this.rotation - angle) % 360);
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "end");
-	}
-
-	public setAngle(angle: number) : void {
-		this.interpreter.debugger.printFnCall("Pointer - setAngle", "start");
-		this.rotation = angle % 360;
-		this.interpreter.debugger.printFnCall("Pointer - setAngle", "end");
 	}
 
 	public moveTo(x: number, y: number) : void {

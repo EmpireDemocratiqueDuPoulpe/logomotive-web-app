@@ -89,6 +89,36 @@ class BackwardCommand extends LogoCommand {
 	}
 }
 
+class SetTurtlePositionCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["FPOS"],
+			2,
+			"Définit la position de la tortue par rapport au centre de la toile. Exemple : FPOS -32 256"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
+		interpreter.pointer.setPosition(parseInt(args[0]), parseInt(args[1]));
+	}
+}
+
+class GetTurtlePositionCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["POS", "POSITION"],
+			0,
+			"Retourne la position de la tortue par rapport au centre de la toile. Exemple : POS"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string {
+		const pointerPosition = interpreter.pointer.getPosition();
+		return `x: ${pointerPosition.x}, y: ${pointerPosition.y}`;
+	}
+}
+
+
 class RotateRightCommand extends LogoCommand {
 	public constructor() {
 		super(
@@ -122,7 +152,7 @@ class SetTurtleAngleCommand extends LogoCommand {
 		super(
 			["FCAP"],
 			1,
-			"Définit l'angle de la tortue à X degrés par rapport à la verticale.. Exemple : FCAP 180"
+			"Définit l'angle de la tortue à X degrés par rapport à la verticale. Exemple : FCAP 180"
 		);
 	}
 
@@ -136,7 +166,7 @@ class GetTurtleAngleCommand extends LogoCommand {
 		super(
 			["CAP"],
 			0,
-			"Retourne l'angle de la tortue en degrés par rapport à la verticale.. Exemple : CAP"
+			"Retourne l'angle de la tortue en degrés par rapport à la verticale. Exemple : CAP"
 		);
 	}
 
@@ -290,6 +320,7 @@ class ChangeBackgroundColor extends LogoCommand {
  *************************************************************/
 const commandsToExpose: LogoCommand[] = [
 	new ForwardCommand(), new BackwardCommand(),
+	new SetTurtlePositionCommand(), new GetTurtlePositionCommand(),
 	new RotateRightCommand(), new RotateLeftCommand(),
 	new SetTurtleAngleCommand(), new GetTurtleAngleCommand(),
 	new DisableTrailCommand(), new EnableTrailCommand(),
