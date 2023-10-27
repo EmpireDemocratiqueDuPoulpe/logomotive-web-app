@@ -49,10 +49,12 @@ export default class LogoPointer {
 		const newX: number = Math.round(Math.cos((270 + this.rotation) * Math.PI / 180) * distance + this.x);
 		const newY: number = Math.round(Math.sin((270 + this.rotation) * Math.PI / 180) * distance + this.y);
 
-		this.interpreter.addLine({
-			from: { x: this.x, y: this.y },
-			to: { x: newX, y: newY }
-		});
+		if (this.trail) {
+			this.interpreter.addLine({
+				from: { x: this.x, y: this.y },
+				to: { x: newX, y: newY }
+			});
+		}
 
 		this.x = newX;
 		this.y = newY;

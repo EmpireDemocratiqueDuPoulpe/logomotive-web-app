@@ -115,12 +115,41 @@ class RotateLeftCommand extends LogoCommand {
 	}
 }
 
+class DisableTrailCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["LC", "DESACTIVERTRACE"],
+			0,
+			"Désactive la trace derrière la tortue. Exemple: LC"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.enableTrail(false);
+	}
+}
+
+class EnableTrailCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["BC", "ACTIVERTRACE"],
+			0,
+			"Active la trace derrière la tortue. Exemple: BC"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.enableTrail(true);
+	}
+}
+
 /*************************************************************
  * Export
  *************************************************************/
 const commandsToExpose: LogoCommand[] = [
 	new ForwardCommand(), new BackwardCommand(),
-	new RotateRightCommand(), new RotateLeftCommand()
+	new RotateRightCommand(), new RotateLeftCommand(),
+	new DisableTrailCommand(), new EnableTrailCommand()
 ];
 
 function prepareCommands() : ExposedCommands {
