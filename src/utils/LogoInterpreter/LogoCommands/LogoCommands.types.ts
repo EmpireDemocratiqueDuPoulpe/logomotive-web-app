@@ -1,11 +1,11 @@
 import type { LogoCommand } from "./LogoCommands";
 import LogoPointer from "../LogoPointer/LogoPointer";
 import LogoDebugger from "@/utils/LogoInterpreter/LogoDebugger/LogoDebugger";
+import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
 
 /// --- Types ----------------------------------------------------------------------------------------------------------
 export type CommandContext = {
-	drawCtx: CanvasRenderingContext2D
-	pointerCtx: CanvasRenderingContext2D
+	interpreter: LogoInterpreter
 	pointer: LogoPointer
 	debugger: LogoDebugger
 }

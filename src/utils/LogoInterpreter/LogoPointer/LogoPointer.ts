@@ -5,8 +5,8 @@ import { NotImplemented } from "@/exceptions";
 
 export default class LogoPointer {
 	private readonly interpreter: LogoInterpreter;
-	private x: number = 500;
-	private y: number = 300;
+	private x: number;
+	private y: number;
 	private size: number = 32;
 	private rotation: number = 0;
 	private visible: boolean = true;
@@ -15,6 +15,10 @@ export default class LogoPointer {
 
 	constructor(interpreter: LogoInterpreter) {
 		this.interpreter = interpreter;
+
+		const center = this.interpreter.getCanvasCenter();
+		this.x = center.x;
+		this.y = center.y;
 
 		// Prevent Next.js and SSR from trying to build on image element on the server side.
 		if (typeof window === "undefined" || typeof document === "undefined") {
@@ -105,5 +109,15 @@ export default class LogoPointer {
 			canvasCtx.restore();
 		}
 		this.interpreter.debugger.printFnCall("Pointer - draw", "end");
+	}
+
+	public reset() : void {
+		const center = this.interpreter.getCanvasCenter();
+		this.x = center.x;
+		this.y = center.y;
+
+		this.rotation = 0;
+		this.visible = true;
+		this.trail = true;
 	}
 }

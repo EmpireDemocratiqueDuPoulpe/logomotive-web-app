@@ -25,6 +25,11 @@ export default class LogoInterpreter {
 		this.pointer = new LogoPointer(this);
 	}
 
+	/* --- Getters -------------------------------------------------------------------------------------------------- */
+	public getCanvasCenter() : { x: number, y: number } {
+		return { x: (this.canvasSize.width / 2), y: (this.canvasSize.height / 2) };
+	}
+
 	/* --- Setters -------------------------------------------------------------------------------------------------- */
 	public setDrawCanvas(canvas: HTMLCanvasElement | null) : void { this.setCanvases(canvas, this.pointerCanvas); }
 	public setPointerCanvas(canvas: HTMLCanvasElement | null) : void { this.setCanvases(this.drawCanvas, canvas); }
@@ -37,6 +42,11 @@ export default class LogoInterpreter {
 		this.pointerCanvasCtx = pointerCanvas ? pointerCanvas.getContext("2d", { alpha: true }) : null;
 
 		this.setCanvasesSize();
+
+		if (this.pointerCanvasCtx) {
+			this.pointer.reset();
+		}
+
 		this.render("DOMUpdate");
 		this.debugger.printFnCall("Interpreter - setCanvases", "end");
 	}
@@ -56,7 +66,6 @@ export default class LogoInterpreter {
 		}
 	}
 
-	/* --- Setters -------------------------------------------------------------------------------------------------- */
 	public addLine(line: Line) : void { this.lines.push(line); }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
@@ -80,8 +89,7 @@ export default class LogoInterpreter {
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
 				output = commandWorker.execute({
-					drawCtx: this.drawCanvasCtx,
-					pointerCtx: this.pointerCanvasCtx,
+					interpreter: this,
 					pointer: this.pointer,
 					debugger: this.debugger
 				}, ...args);
@@ -152,5 +160,13 @@ export default class LogoInterpreter {
 
 		this.drawCanvasCtx.stroke();
 		this.drawCanvasCtx.closePath();
+	}
+
+	public reset(keepTurtle: boolean = false) : void {
+		this.lines.length = 0;
+
+		if (!keepTurtle) {
+			this.pointer.reset();
+		}
 	}
 }

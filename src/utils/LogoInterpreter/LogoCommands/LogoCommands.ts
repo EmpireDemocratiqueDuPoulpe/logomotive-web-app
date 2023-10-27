@@ -64,7 +64,7 @@ class ForwardCommand extends LogoCommand {
 		super(
 			["AV", "AVANCE"],
 			1,
-			"Avance la tortue de X pixels. Exemple: AV 10"
+			"Avance la tortue de X pixels. Exemple : AV 10"
 		);
 	}
 
@@ -78,7 +78,7 @@ class BackwardCommand extends LogoCommand {
 		super(
 			["RE", "RECULE"],
 			1,
-			"Recule la tortue de X pixels. Exemple: RE 10"
+			"Recule la tortue de X pixels. Exemple : RE 10"
 		);
 	}
 
@@ -92,7 +92,7 @@ class RotateRightCommand extends LogoCommand {
 		super(
 			["TD", "TOURNEDROITE"],
 			1,
-			"Tourne la tortue vers la droite de X degrés. Exemple: TD 90"
+			"Tourne la tortue vers la droite de X degrés. Exemple : TD 90"
 		);
 	}
 
@@ -106,7 +106,7 @@ class RotateLeftCommand extends LogoCommand {
 		super(
 			["TG", "TOURNEGAUCHE"],
 			1,
-			"Tourne la tortue vers la gauche de X degrés. Exemple: TG 90"
+			"Tourne la tortue vers la gauche de X degrés. Exemple : TG 90"
 		);
 	}
 
@@ -120,7 +120,7 @@ class DisableTrailCommand extends LogoCommand {
 		super(
 			["LC", "DESACTIVERTRACE"],
 			0,
-			"Désactive la trace derrière la tortue. Exemple: LC"
+			"Désactive la trace derrière la tortue. Exemple : LC"
 		);
 	}
 
@@ -134,7 +134,7 @@ class EnableTrailCommand extends LogoCommand {
 		super(
 			["BC", "ACTIVERTRACE"],
 			0,
-			"Active la trace derrière la tortue. Exemple: BC"
+			"Active la trace derrière la tortue. Exemple : BC"
 		);
 	}
 
@@ -148,7 +148,7 @@ class HideTurtleCommand extends LogoCommand {
 		super(
 			["CT", "CACHERTORTUE"],
 			0,
-			"Cache la tortue. Exemple: CT"
+			"Cache la tortue. Exemple : CT"
 		);
 	}
 
@@ -162,12 +162,40 @@ class ShowTurtleCommand extends LogoCommand {
 		super(
 			["MT", "MONTRERTORTUE"],
 			0,
-			"Montre la tortue. Exemple: MT"
+			"Montre la tortue. Exemple : MT"
 		);
 	}
 
 	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
 		commandCtx.pointer.setVisible(true);
+	}
+}
+
+class ResetAllCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["VE", "REINITIALISER"],
+			0,
+			"Réinitialise la toile et la position de la tortue. Exemple : VE"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.interpreter.reset(false);
+	}
+}
+
+class ResetDrawCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["NT", "NETTOIE"],
+			0,
+			"Réinitialise la toile sans bouger la tortue. Exemple : NETTOIE"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.interpreter.reset(true);
 	}
 }
 
@@ -178,7 +206,8 @@ const commandsToExpose: LogoCommand[] = [
 	new ForwardCommand(), new BackwardCommand(),
 	new RotateRightCommand(), new RotateLeftCommand(),
 	new DisableTrailCommand(), new EnableTrailCommand(),
-	new HideTurtleCommand(), new ShowTurtleCommand()
+	new HideTurtleCommand(), new ShowTurtleCommand(),
+	new ResetAllCommand(), new ResetDrawCommand()
 ];
 
 function prepareCommands() : ExposedCommands {
