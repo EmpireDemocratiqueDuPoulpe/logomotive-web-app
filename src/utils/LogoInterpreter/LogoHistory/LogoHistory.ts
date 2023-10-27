@@ -24,18 +24,14 @@ export default class LogoHistory {
 	}
 
 	public next() : string | null {
-		const nextCursor: number = this.cursor - 1;
-		if (nextCursor < 0) return null;
+		this.cursor = Math.max((this.cursor - 1), -1);
+		if (this.cursor < 0) return null;
 
-		this.cursor = nextCursor;
 		return this.entries[this.cursor];
 	}
 
 	public prev() : string | null {
-		const prevCursor: number = this.cursor + 1;
-		if (prevCursor >= (this.entries.length - 1)) return null;
-
-		this.cursor = prevCursor;
+		this.cursor = Math.min((this.cursor + 1), (this.entries.length - 1));
 		return this.entries[this.cursor];
 	}
 

@@ -17,11 +17,21 @@ function Console() : React.JSX.Element {
         setCommandLine(event.target.value);
     };
 
-    const onCommandLineSend = (event: React.KeyboardEvent) : void => {
-        if (event.key !== "Enter") return;
-
-        logoBuilderCtx.executeCommand(commandLine);
-        clearCommandLine();
+    const onCommandLineKeyDown = (event: React.KeyboardEvent) : void => {
+        switch (event.key) {
+            case "Enter":
+                logoBuilderCtx.executeCommand(commandLine);
+                clearCommandLine();
+                break;
+            case "ArrowUp":
+                const prevCommand: string | null = logoBuilderCtx.interpreter.history.prev();
+                if (prevCommand) setCommandLine(prevCommand);
+                break;
+            case "ArrowDown":
+                const nextCommand: string | null = logoBuilderCtx.interpreter.history.next();
+                setCommandLine(nextCommand ?? "");
+                break;
+        }
     };
 
     const clearCommandLine = () : void => { setCommandLine(""); };
@@ -39,7 +49,7 @@ function Console() : React.JSX.Element {
                     placeholder="Entrez une commande ici"
                     value={commandLine}
                     onChange={onCommandLineChange}
-                    onKeyDown={onCommandLineSend}
+                    onKeyDown={onCommandLineKeyDown}
                 />
             </div>
         </div>
