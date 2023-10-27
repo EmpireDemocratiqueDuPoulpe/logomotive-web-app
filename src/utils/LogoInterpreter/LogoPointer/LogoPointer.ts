@@ -111,13 +111,15 @@ export default class LogoPointer {
 		this.interpreter.debugger.printFnCall("Pointer - draw", "end");
 	}
 
-	public reset() : void {
+	public reset(onlyPosition: boolean = false) : void {
 		const center = this.interpreter.getCanvasCenter();
 		this.x = center.x;
 		this.y = center.y;
 
-		this.rotation = 0;
-		this.visible = true;
-		this.trail = true;
+		if (!onlyPosition) {
+			this.rotation = 0;
+			this.visible = true;
+			this.trail = true;
+		}
 	}
 }

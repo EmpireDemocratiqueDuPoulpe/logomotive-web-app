@@ -118,7 +118,7 @@ class RotateLeftCommand extends LogoCommand {
 class DisableTrailCommand extends LogoCommand {
 	public constructor() {
 		super(
-			["LC", "DESACTIVERTRACE"],
+			["LC", "LEVERCRAYON"],
 			0,
 			"Désactive la trace derrière la tortue. Exemple : LC"
 		);
@@ -132,7 +132,7 @@ class DisableTrailCommand extends LogoCommand {
 class EnableTrailCommand extends LogoCommand {
 	public constructor() {
 		super(
-			["BC", "ACTIVERTRACE"],
+			["BC", "BAISSERCRAYON"],
 			0,
 			"Active la trace derrière la tortue. Exemple : BC"
 		);
@@ -176,7 +176,7 @@ class ResetAllCommand extends LogoCommand {
 		super(
 			["VE", "REINITIALISER"],
 			0,
-			"Réinitialise la toile et la position de la tortue. Exemple : VE"
+			"Réinitialise la toile et les propriétés de la tortue (position, visible, ...). Exemple : VE"
 		);
 	}
 
@@ -199,6 +199,20 @@ class ResetDrawCommand extends LogoCommand {
 	}
 }
 
+class ResetTurtleOriginCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["ORIGINE"],
+			0,
+			"Réinitialise uniquement la position de la tortue. Exemple : ORIGINE"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.reset(true);
+	}
+}
+
 /*************************************************************
  * Export
  *************************************************************/
@@ -207,7 +221,7 @@ const commandsToExpose: LogoCommand[] = [
 	new RotateRightCommand(), new RotateLeftCommand(),
 	new DisableTrailCommand(), new EnableTrailCommand(),
 	new HideTurtleCommand(), new ShowTurtleCommand(),
-	new ResetAllCommand(), new ResetDrawCommand()
+	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand()
 ];
 
 function prepareCommands() : ExposedCommands {
