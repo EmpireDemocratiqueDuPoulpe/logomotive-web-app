@@ -62,7 +62,7 @@ class HelpCommand extends LogoCommand {
 class ForwardCommand extends LogoCommand {
 	public constructor() {
 		super(
-			["AV"],
+			["AV", "AVANCE"],
 			1,
 			"Avance la tortue de X pixels. Exemple: AV 10"
 		);
@@ -73,10 +73,55 @@ class ForwardCommand extends LogoCommand {
 	}
 }
 
+class BackwardCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["RE", "RECULE"],
+			1,
+			"Recule la tortue de X pixels. Exemple: RE 10"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.goBackward(parseInt(args[0] as string));
+	}
+}
+
+class RotateRightCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["TD", "TOURNEDROITE"],
+			1,
+			"Tourne la tortue vers la droite de X degrés. Exemple: TD 90"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.rotateRight(parseInt(args[0] as string));
+	}
+}
+
+class RotateLeftCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["TG", "TOURNEGAUCHE"],
+			1,
+			"Tourne la tortue vers la gauche de X degrés. Exemple: TG 90"
+		);
+	}
+
+	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
+		commandCtx.pointer.rotateLeft(parseInt(args[0] as string));
+	}
+}
+
 /*************************************************************
  * Export
  *************************************************************/
-const commandsToExpose: LogoCommand[] = [ new ForwardCommand() ];
+const commandsToExpose: LogoCommand[] = [
+	new ForwardCommand(), new BackwardCommand(),
+	new RotateRightCommand(), new RotateLeftCommand()
+];
 
 function prepareCommands() : ExposedCommands {
 	const commands: ExposedCommands = commandsToExpose.reduce((commandsMap: ExposedCommands, command: LogoCommand) : ExposedCommands => {
