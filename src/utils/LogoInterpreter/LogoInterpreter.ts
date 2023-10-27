@@ -17,7 +17,7 @@ export default class LogoInterpreter {
 
 	public readonly debugger: LogoDebugger = new LogoDebugger(true);
 	public readonly history: LogoHistory;
-	private readonly pointer: LogoPointer;
+	public readonly pointer: LogoPointer;
 	private readonly lines: Line[] = [];
 
 	constructor() {
@@ -88,11 +88,7 @@ export default class LogoInterpreter {
 			const commandWorker: LogoCommand = this.getCommand(command);
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
-				output = commandWorker.execute({
-					interpreter: this,
-					pointer: this.pointer,
-					debugger: this.debugger
-				}, ...args);
+				output = commandWorker.execute(this, ...args);
 				this.render("Command");
 			} else {
 				// noinspection ExceptionCaughtLocallyJS

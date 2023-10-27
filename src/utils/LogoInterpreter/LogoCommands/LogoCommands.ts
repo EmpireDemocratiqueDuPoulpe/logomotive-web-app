@@ -1,7 +1,8 @@
 "use client";
 
 import { MissingArguments } from "@/exceptions";
-import type { CommandContext, ExposedCommands } from "./LogoCommands.types";
+import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
+import type { ExposedCommands } from "./LogoCommands.types";
 
 export abstract class LogoCommand {
 	public readonly instructions: string[];
@@ -14,18 +15,18 @@ export abstract class LogoCommand {
 		this.description = description ?? null;
 	}
 
-	public execute(commandCtx: CommandContext, ...args: unknown[]) : string | void {
-		commandCtx.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
+	public execute(interpreter: LogoInterpreter, ...args: unknown[]) : string | void {
+		interpreter.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
 		if (args.length < this.expectedParameters) {
 			throw new MissingArguments(this.expectedParameters, args.length);
 		}
 
-		const commandOutput: string | void = this._execute(commandCtx, ...args);
-		commandCtx.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "end");
+		const commandOutput: string | void = this._execute(interpreter, ...args);
+		interpreter.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "end");
 		return commandOutput;
 	}
 
-	protected abstract _execute(commandCtx: CommandContext, ...args: unknown[]) : string | void
+	protected abstract _execute(interpreter: LogoInterpreter, ...args: unknown[]) : string | void
 }
 
 /*************************************************************
@@ -51,7 +52,7 @@ class HelpCommand extends LogoCommand {
 		this.message = messageLines.join("\n");
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): string {
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): string {
 		return this.message;
 	}
 }
@@ -68,8 +69,8 @@ class ForwardCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.goForward(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.goForward(parseInt(args[0] as string));
 	}
 }
 
@@ -82,8 +83,8 @@ class BackwardCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.goBackward(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.goBackward(parseInt(args[0] as string));
 	}
 }
 
@@ -96,8 +97,8 @@ class RotateRightCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.rotateRight(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.rotateRight(parseInt(args[0] as string));
 	}
 }
 
@@ -110,8 +111,8 @@ class RotateLeftCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.rotateLeft(parseInt(args[0] as string));
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.rotateLeft(parseInt(args[0] as string));
 	}
 }
 
@@ -124,8 +125,8 @@ class DisableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.enableTrail(false);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.enableTrail(false);
 	}
 }
 
@@ -138,8 +139,8 @@ class EnableTrailCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.enableTrail(true);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.enableTrail(true);
 	}
 }
 
@@ -152,8 +153,8 @@ class HideTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.setVisible(false);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.setVisible(false);
 	}
 }
 
@@ -166,8 +167,8 @@ class ShowTurtleCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.setVisible(true);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.setVisible(true);
 	}
 }
 
@@ -180,8 +181,8 @@ class ResetAllCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.interpreter.reset(false);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.reset(false);
 	}
 }
 
@@ -194,8 +195,8 @@ class ResetDrawCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.interpreter.reset(true);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.reset(true);
 	}
 }
 
@@ -208,8 +209,22 @@ class ResetTurtleOriginCommand extends LogoCommand {
 		);
 	}
 
-	protected _execute(commandCtx: CommandContext, ...args: unknown[]): void {
-		commandCtx.pointer.reset(true);
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.pointer.reset(true);
+	}
+}
+
+class ClearHistoryCommand extends LogoCommand {
+	public constructor() {
+		super(
+			["VT", "NETTOIECONSOLE"],
+			0,
+			"Vide la console. Exemple : VT"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: unknown[]): void {
+		interpreter.history.clear();
 	}
 }
 
@@ -221,7 +236,8 @@ const commandsToExpose: LogoCommand[] = [
 	new RotateRightCommand(), new RotateLeftCommand(),
 	new DisableTrailCommand(), new EnableTrailCommand(),
 	new HideTurtleCommand(), new ShowTurtleCommand(),
-	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand()
+	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand(),
+	new ClearHistoryCommand()
 ];
 
 function prepareCommands() : ExposedCommands {

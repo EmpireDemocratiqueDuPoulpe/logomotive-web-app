@@ -36,6 +36,11 @@ export default class LogoHistory {
 		this.preventOverflow();
 	}
 
+	public clear() : void {
+		this.entries.length = 0;
+		this.resetCursor();
+	}
+
 	private resetCursor() : void { this.cursor = -1; }
 
 	private preventOverflow() : void {
