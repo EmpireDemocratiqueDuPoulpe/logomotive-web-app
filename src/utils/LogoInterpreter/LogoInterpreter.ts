@@ -33,7 +33,7 @@ export default class LogoInterpreter {
 		this.drawCanvasCtx = drawCanvas ? drawCanvas.getContext("2d", { alpha: false }) : null;
 
 		this.pointerCanvas = pointerCanvas;
-		this.pointerCanvasCtx = pointerCanvas ? pointerCanvas.getContext("2d", { alpha: false }) : null;
+		this.pointerCanvasCtx = pointerCanvas ? pointerCanvas.getContext("2d", { alpha: true }) : null;
 
 		this.setCanvasesSize();
 		this.render("DOMUpdate");
@@ -107,7 +107,20 @@ export default class LogoInterpreter {
 
 		this.drawCanvasCtx.fillStyle = this.pointerCanvasCtx.fillStyle = "#FFFFFF";
 		this.drawCanvasCtx.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
-		this.pointerCanvasCtx.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
+		this.pointerCanvasCtx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
+
+		// TODO: REMOVE ---------------------
+		this.drawCanvasCtx.strokeStyle = "#FF0000";
+		this.drawCanvasCtx.lineWidth = 1;
+
+		this.drawCanvasCtx.moveTo(0, (this.canvasSize.height / 2));
+		this.drawCanvasCtx.lineTo(this.canvasSize.width, (this.canvasSize.height / 2));
+
+		this.drawCanvasCtx.moveTo((this.canvasSize.width / 2), 0);
+		this.drawCanvasCtx.lineTo((this.canvasSize.width / 2), this.canvasSize.height);
+
+		this.drawCanvasCtx.stroke();
+		// TODO: REMOVE ---------------------
 
 		this.pointer.draw(this.pointerCanvasCtx);
 

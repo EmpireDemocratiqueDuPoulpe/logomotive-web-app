@@ -3,6 +3,7 @@
 	position: relative;
 	border: 1px solid var(--discrete-border-color);
 	border-radius: var(--default-border-radius);
+	overflow: hidden;
 }
 
 .canvasBox .canvasSize {
