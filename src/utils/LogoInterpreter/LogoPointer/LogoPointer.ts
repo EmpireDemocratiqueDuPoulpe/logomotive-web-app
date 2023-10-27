@@ -36,6 +36,9 @@ export default class LogoPointer {
 		}
 	}
 
+	/* --- Getters -------------------------------------------------------------------------------------------------- */
+	public getAngle() : number { return this.rotation; }
+
 	/* --- Setters -------------------------------------------------------------------------------------------------- */
 	public enableTrail(enable: boolean = true) : void {
 		this.interpreter.debugger.printFnCall("Pointer - enableTrail", "start");
@@ -90,6 +93,12 @@ export default class LogoPointer {
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "start");
 		this.rotation = 360 + ((this.rotation - angle) % 360);
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "end");
+	}
+
+	public setAngle(angle: number) : void {
+		this.interpreter.debugger.printFnCall("Pointer - setAngle", "start");
+		this.rotation = angle % 360;
+		this.interpreter.debugger.printFnCall("Pointer - setAngle", "end");
 	}
 
 	public moveTo(x: number, y: number) : void {
