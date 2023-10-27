@@ -1,7 +1,6 @@
 "use client";
 
 import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
-import { NotImplemented } from "@/exceptions";
 
 export default class LogoPointer {
 	private readonly interpreter: LogoInterpreter;
@@ -86,23 +85,32 @@ export default class LogoPointer {
 		const newX: number = Math.round(Math.cos((270 + this.rotation) * Math.PI / 180) * distance + this.x);
 		const newY: number = Math.round(Math.sin((270 + this.rotation) * Math.PI / 180) * distance + this.y);
 
-		if (this.trail) {
-			this.interpreter.addLine({
-				from: { x: this.x, y: this.y },
-				to: { x: newX, y: newY },
-				hexColor: this.trailColor
-			});
-		}
-
-		this.x = newX;
-		this.y = newY;
+		this.moveTo(newX, newY);
 		this.interpreter.debugger.printFnCall("Pointer - goForward", "end");
 	}
 
 	public goBackward(distance: number) : void {
 		this.interpreter.debugger.printFnCall("Pointer - goBackward", "start");
-		throw new NotImplemented();
+		const newX: number = Math.round(Math.cos((270 + this.rotation + 180) * Math.PI / 180) * distance + this.x);
+		const newY: number = Math.round(Math.sin((270 + this.rotation + 180) * Math.PI / 180) * distance + this.y);
+
+		this.moveTo(newX, newY);
 		this.interpreter.debugger.printFnCall("Pointer - goBackward", "end");
+	}
+
+	private moveTo(x: number, y: number) : void {
+		this.interpreter.debugger.printFnCall("Pointer - moveTo", "start");
+		if (this.trail) {
+			this.interpreter.addLine({
+				from: { x: this.x, y: this.y },
+				to: { x: x, y: y },
+				hexColor: this.trailColor
+			});
+		}
+
+		this.x = x;
+		this.y = y;
+		this.interpreter.debugger.printFnCall("Pointer - moveTo", "end");
 	}
 
 	public rotateRight(angle: number) : void {
@@ -115,13 +123,6 @@ export default class LogoPointer {
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "start");
 		this.rotation = 360 + ((this.rotation - angle) % 360);
 		this.interpreter.debugger.printFnCall("Pointer - rotateLeft", "end");
-	}
-
-	public moveTo(x: number, y: number) : void {
-		this.interpreter.debugger.printFnCall("Pointer - moveTo", "start");
-		this.x = x;
-		this.y = y;
-		this.interpreter.debugger.printFnCall("Pointer - moveTo", "end");
 	}
 
 	public draw(canvasCtx: CanvasRenderingContext2D) : void {
