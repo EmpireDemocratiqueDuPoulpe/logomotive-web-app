@@ -1,7 +1,6 @@
 "use client";
 
-import React, {useState, useEffect} from "react";
-import clsx from "clsx";
+import React, { useState } from "react";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import ConsoleHistory from "./ConsoleHistory/ConsoleHistory";
 import styles from "./Console.module.css";
@@ -24,12 +23,12 @@ function Console() : React.JSX.Element {
                 clearCommandLine();
                 break;
             case "ArrowUp":
-                const prevCommand: string | null = logoBuilderCtx.interpreter.history.prev();
-                if (prevCommand) setCommandLine(prevCommand);
+                const prevCommand = logoBuilderCtx.interpreter.history.prev();
+                if (prevCommand) setCommandLine(prevCommand.command);
                 break;
             case "ArrowDown":
-                const nextCommand: string | null = logoBuilderCtx.interpreter.history.next();
-                setCommandLine(nextCommand ?? "");
+                const nextCommand = logoBuilderCtx.interpreter.history.next();
+                setCommandLine(nextCommand?.command ?? "");
                 break;
         }
     };

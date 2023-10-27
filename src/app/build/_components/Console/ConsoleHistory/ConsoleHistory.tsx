@@ -20,11 +20,11 @@ function ConsoleHistory({ history }: Props) : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.historyContent}>
-			{history.map((historyLine: string, index: number) => (
+			{history.map((historyLine, index: number) => (
 				<p key={`${historyLine}-${index}`}
 				   className={clsx(styles.historyLine, ((index === 0) && styles.historyCurrentLine))}
 				>
-					{historyLine}
+					{historyLine.output}
 				</p>
 			)).reverse()}
 

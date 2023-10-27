@@ -1,5 +1,6 @@
 "use client";
 
+import { InvalidCommand, UnexpectedError } from "@/exceptions";
 import LogoDebugger from "./LogoDebugger/LogoDebugger";
 import LogoPointer from "./LogoPointer/LogoPointer";
 import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
@@ -57,7 +58,7 @@ export default class LogoInterpreter {
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
 	private getCommand(command: string) : LogoCommand {
 		if (!LogoCommands.hasOwnProperty(command)) {
-			throw new Error("Invalid command!"); // TODO
+			throw new InvalidCommand();
 		}
 
 		return LogoCommands[command];
@@ -67,20 +68,33 @@ export default class LogoInterpreter {
 		this.debugger.printFnCall("Interpreter - executeCommand", "start");
 
 		const [ command, ...args ] = fullCommand.split(" ");
-		const commandWorker: LogoCommand = this.getCommand(command);
-		this.history.push(fullCommand);
+		let error: unknown | null = null;
 
-		if (this.drawCanvasCtx && this.pointerCanvasCtx) {
-			commandWorker.execute({
-				drawCtx: this.drawCanvasCtx,
-				pointerCtx: this.pointerCanvasCtx,
-				pointer: this.pointer,
-				debugger: this.debugger
-			}, ...args);
-			this.render("Command");
-		} else {
-			this.debugger.printFnCall("Interpreter - executeCommand", "end");
-			throw new Error("Unknown error: Canvas not found!"); // TODO
+		try {
+			const commandWorker: LogoCommand = this.getCommand(command);
+
+			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
+				commandWorker.execute({
+					drawCtx: this.drawCanvasCtx,
+					pointerCtx: this.pointerCanvasCtx,
+					pointer: this.pointer,
+					debugger: this.debugger
+				}, ...args);
+				this.render("Command");
+			} else {
+				// noinspection ExceptionCaughtLocallyJS
+				throw new UnexpectedError("Canvas not found!");
+			}
+		} catch (err: unknown) {
+			error = err;
+		} finally {
+			let output: string = `> ${fullCommand}`;
+
+			if (error !== null && (error instanceof Error)) {
+				output += "\n" + error.message;
+			}
+
+			this.history.push(fullCommand, output);
 		}
 
 		this.debugger.printFnCall("Interpreter - executeCommand", "end");

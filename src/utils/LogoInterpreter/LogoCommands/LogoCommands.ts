@@ -1,5 +1,6 @@
 "use client";
 
+import { MissingArguments } from "@/exceptions";
 import type { CommandContext, ExportedCommands } from "./LogoCommands.types";
 
 export abstract class LogoCommand {
@@ -14,7 +15,7 @@ export abstract class LogoCommand {
 	public execute(commandCtx: CommandContext, ...args: unknown[]) : void {
 		commandCtx.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
 		if (args.length < this.expectedParameters) {
-			throw new Error("Missing parameters"); // TODO
+			throw new MissingArguments(this.expectedParameters, args.length);
 		}
 
 		this._execute(commandCtx, ...args);
