@@ -1,6 +1,9 @@
 {
   "name": "logo-web-app",
   "version": "0.1.0",
+  "author": "TODO",
+  "description": "TODO",
+  "license": "TODO",
   "private": true,
   "scripts": {
     "dev": "next dev",
