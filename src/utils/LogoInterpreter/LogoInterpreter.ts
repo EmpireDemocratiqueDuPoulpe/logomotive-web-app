@@ -68,13 +68,14 @@ export default class LogoInterpreter {
 		this.debugger.printFnCall("Interpreter - executeCommand", "start");
 
 		const [ command, ...args ] = fullCommand.split(" ");
+		let output: string | void = "";
 		let error: unknown | null = null;
 
 		try {
 			const commandWorker: LogoCommand = this.getCommand(command);
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
-				commandWorker.execute({
+				output = commandWorker.execute({
 					drawCtx: this.drawCanvasCtx,
 					pointerCtx: this.pointerCanvasCtx,
 					pointer: this.pointer,
@@ -88,7 +89,7 @@ export default class LogoInterpreter {
 		} catch (err: unknown) {
 			error = err;
 		} finally {
-			let output: string = `> ${fullCommand}`;
+			output = `> ${fullCommand}${output ? `\n${output}` : ""}`;
 
 			if (error !== null && (error instanceof Error)) {
 				output += "\n" + error.message;

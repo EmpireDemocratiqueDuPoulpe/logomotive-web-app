@@ -10,6 +10,6 @@ export type CommandContext = {
 	debugger: LogoDebugger
 }
 
-export type ExportedCommands = {
+export type ExposedCommands = {
 	[key: string]: LogoCommand
 }
