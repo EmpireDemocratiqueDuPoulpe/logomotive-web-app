@@ -6,7 +6,7 @@ import LogoPointer from "./LogoPointer/LogoPointer";
 import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
 import LogoCommands from "./LogoCommands/LogoCommands";
 import type { LogoCommand } from "./LogoCommands/LogoCommands";
-import type { RenderReason } from "./LogoInterpreter.types";
+import type { Line, RenderReason } from "./LogoInterpreter.types";
 
 export default class LogoInterpreter {
 	private drawCanvas: HTMLCanvasElement | null = null;
@@ -18,6 +18,7 @@ export default class LogoInterpreter {
 	public readonly debugger: LogoDebugger = new LogoDebugger(true);
 	public readonly history: LogoHistory;
 	private readonly pointer: LogoPointer;
+	private readonly lines: Line[] = [];
 
 	constructor() {
 		this.history = new LogoHistory();
@@ -54,6 +55,9 @@ export default class LogoInterpreter {
 			this.pointerCanvas.height = this.canvasSize.height;
 		}
 	}
+
+	/* --- Setters -------------------------------------------------------------------------------------------------- */
+	public addLine(line: Line) : void { this.lines.push(line); }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
 	private getCommand(command: string) : LogoCommand {
@@ -109,7 +113,18 @@ export default class LogoInterpreter {
 		this.drawCanvasCtx.fillRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 		this.pointerCanvasCtx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height);
 
-		// TODO: REMOVE ---------------------
+		this.drawDebug();
+		this.drawLines();
+
+		this.pointer.draw(this.pointerCanvasCtx);
+
+		this.debugger.printFnCall(`Interpreter - render[${reason ?? ""}]`, "end");
+	}
+
+	private drawDebug() : void {
+		if (!this.debugger.isEnabled() || (this.drawCanvasCtx === null)) return;
+
+		this.drawCanvasCtx.beginPath();
 		this.drawCanvasCtx.strokeStyle = "#FF0000";
 		this.drawCanvasCtx.lineWidth = 1;
 
@@ -120,10 +135,22 @@ export default class LogoInterpreter {
 		this.drawCanvasCtx.lineTo((this.canvasSize.width / 2), this.canvasSize.height);
 
 		this.drawCanvasCtx.stroke();
-		// TODO: REMOVE ---------------------
+		this.drawCanvasCtx.closePath();
+	}
 
-		this.pointer.draw(this.pointerCanvasCtx);
+	private drawLines() : void {
+		if (this.drawCanvasCtx === null) return;
 
-		this.debugger.printFnCall(`Interpreter - render[${reason ?? ""}]`, "end");
+		this.drawCanvasCtx.beginPath();
+		this.drawCanvasCtx.strokeStyle = "#00FF00";
+		this.drawCanvasCtx.lineWidth = 1;
+
+		for (const line of this.lines) {
+			this.drawCanvasCtx.moveTo(line.from.x, line.from.y);
+			this.drawCanvasCtx.lineTo(line.to.x, line.to.y);
+		}
+
+		this.drawCanvasCtx.stroke();
+		this.drawCanvasCtx.closePath();
 	}
 }

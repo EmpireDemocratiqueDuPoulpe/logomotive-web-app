@@ -46,8 +46,16 @@ export default class LogoPointer {
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
 	public goForward(distance: number) : void {
 		this.interpreter.debugger.printFnCall("Pointer - goForward", "start");
-		this.x = Math.round(Math.cos((270 + this.rotation) * Math.PI / 180) * distance + this.x);
-		this.y = Math.round(Math.sin((270 + this.rotation) * Math.PI / 180) * distance + this.y);
+		const newX: number = Math.round(Math.cos((270 + this.rotation) * Math.PI / 180) * distance + this.x);
+		const newY: number = Math.round(Math.sin((270 + this.rotation) * Math.PI / 180) * distance + this.y);
+
+		this.interpreter.addLine({
+			from: { x: this.x, y: this.y },
+			to: { x: newX, y: newY }
+		});
+
+		this.x = newX;
+		this.y = newY;
 		this.interpreter.debugger.printFnCall("Pointer - goForward", "end");
 	}
 
