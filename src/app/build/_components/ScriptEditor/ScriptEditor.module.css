@@ -1,0 +1,28 @@
+.scriptEditor {
+	height: 500px;
+}
+
+.scriptEditor .editor {
+	--left-padding: 60px;
+
+	counter-reset: line;
+	border: 1px solid var(--discrete-border-color);
+}
+
+.scriptEditor .editor .codeArea {
+	color: #ccc !important;
+	outline: none;
+	padding-left: var(--left-padding) !important;
+}
+
+.scriptEditor .editor .codePre {
+	padding-left: var(--left-padding) !important;
+}
+
+.editor .editorLineNumber {
+	position: absolute;
+	left: 0;
+	text-align: right;
+	width: 40px;
+	font-weight: 100;
+}

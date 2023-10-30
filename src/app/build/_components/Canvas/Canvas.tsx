@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import clsx from "clsx";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import type { Props } from "./Canvas.types";
