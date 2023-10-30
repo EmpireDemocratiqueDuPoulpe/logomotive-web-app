@@ -7,7 +7,7 @@ export type PathParams = { [key: string]: string | null };
 
 export type QueryParams = { [key: string]: string };
 
-export type SerializedBody = ReadableStream<string> | string;
+export type PathQueryParams = { pathParams?: PathParams, queryParams?: QueryParams }
 
 export type JSONResponse<B = unknown, R = object> = R & {
 	status: number

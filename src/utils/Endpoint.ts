@@ -1,6 +1,6 @@
 import urlJoin from "url-join";
 import { API } from "@/constants";
-import type { Method, Headers, SerializedBody, JSONResponse, PathParams, QueryParams } from "./Endpoint.types";
+import type { Method, Headers, JSONResponse, PathParams, QueryParams, PathQueryParams } from "./Endpoint.types";
 
 /************************************************************
  * API Endpoint
@@ -8,10 +8,8 @@ import type { Method, Headers, SerializedBody, JSONResponse, PathParams, QueryPa
 class Endpoint<I extends object | undefined, O> {
 	private method: Method = "HEAD";
 	private path: string = "";
-	private preparedPath: string | null = null;
 	private globalHeaders: Headers = { "Accept": "application/json" };
 	private additionalHeaders: Headers = {};
-	private body: SerializedBody | I | null = null;
 	private credentials: RequestCredentials = "include";
 	private parseResponse: boolean = true;
 
@@ -23,10 +21,6 @@ class Endpoint<I extends object | undefined, O> {
 	/* ---- Getters ----------------------------------- */
 	public getPath(): string {
 		return this.path;
-	}
-
-	protected getRequestPath(): string {
-		return this.preparedPath ?? this.getPath();
 	}
 
 	public getHeaders(): Headers {
@@ -59,21 +53,11 @@ class Endpoint<I extends object | undefined, O> {
 		return this;
 	}
 
-	protected setRequestPath(requestPath: string | null): this {
-		this.preparedPath = requestPath;
-		return this;
-	}
-
 	public addHeaders(headers: Headers): this {
 		if (headers) {
 			this.additionalHeaders = { ...this.additionalHeaders, ...headers };
 		}
 
-		return this;
-	}
-
-	protected setBody(body: SerializedBody | I | null): this {
-		this.body = body;
 		return this;
 	}
 
@@ -88,8 +72,38 @@ class Endpoint<I extends object | undefined, O> {
 	}
 
 	/* ---- Functions --------------------------------- */
-	public async fetch(..._args: unknown[]): Promise<JSONResponse<O>> {
-		const uri: string = urlJoin(API.BASE_URL, this.getRequestPath());
+	private buildFullPath(pathParams?: PathParams, queryParams?: QueryParams): string {
+		let fullPath: string = this.getPath();
+
+		const paramsInPath: RegExpMatchArray | null = fullPath.match(/{(.*?)}/g);
+		if (paramsInPath && pathParams) {
+			paramsInPath.forEach((param: string): void => {
+				const paramValue: string | null = pathParams[param.slice(1, -1)];
+
+				if (paramValue !== null) {
+					fullPath = fullPath.replace(param, paramValue);
+				}
+			});
+		}
+
+		if (queryParams) {
+			const queryStr: string[] = [];
+
+			Object.entries(queryParams).forEach(([ paramName, paramValue ]): void => {
+				if (paramName === undefined || paramName === null) return;
+				queryStr.push(`${paramName}=${paramValue}`);
+			});
+
+			if (queryStr.length > 0) {
+				fullPath = `${fullPath}?${queryStr.join("&")}`;
+			}
+		}
+
+		return fullPath;
+	}
+
+	protected async send(pathParams?: PathParams, queryParams?: QueryParams, body?: string | I | undefined): Promise<JSONResponse<O>> {
+		const uri: string = urlJoin(API.BASE_URL, this.buildFullPath(pathParams, queryParams));
 		const options: RequestInit = {
 			method: this.method,
 			headers: this.getAllHeaders(),
@@ -97,9 +111,9 @@ class Endpoint<I extends object | undefined, O> {
 			credentials: this.credentials
 		};
 
-		if (this.body) {
+		if (body) {
 			// @ts-ignore
-			options.body = this.body;
+			options.body = body;
 		}
 
 		return new Promise((resolve, reject): void => {
@@ -136,60 +150,24 @@ class BodyPayload<I extends object | undefined, O> extends Endpoint<I, O> {
 	}
 
 	/* ---- Functions --------------------------------- */
-	private processBody(args?: I): void {
-		let body: SerializedBody | I | null = null;
+	private processBody(args?: I): string | I | undefined {
+		let body: string | I | undefined = undefined;
 
 		if (args) {
 			body = this.willStringify() ? JSON.stringify(args) : args;
 		}
 
-		if (body) {
-			this.setBody(body);
-		}
+		return body;
 	}
 
-	public async fetch(args?: I) {
-		this.processBody(args);
-		return super.fetch();
+	public async fetch(body?: I, pathParams?: PathParams, queryParams?: QueryParams): Promise<JSONResponse<O>> {
+		return this.send(pathParams, queryParams, this.processBody(body));
 	}
 }
 
 class URIPayload<O> extends Endpoint<undefined, O> {
-	/* ---- Getters ----------------------------------- */
-	private buildFullPath(pathParams: PathParams | null = null, queryParams: QueryParams | null = null): void {
-		let fullPath: string = this.getPath();
-
-		const paramsInPath: RegExpMatchArray | null = fullPath.match(/{(.*?)}/g);
-		if (paramsInPath && pathParams) {
-			paramsInPath.forEach((param: string): void => {
-				const paramValue: string | null = pathParams[param.slice(1, -1)];
-
-				if (paramValue !== null) {
-					fullPath = fullPath.replace(param, paramValue);
-				}
-			});
-		}
-
-		if (queryParams) {
-			const queryStr: string[] = [];
-
-			Object.entries(queryParams).forEach(([ paramName, paramValue ]): void => {
-				if (paramName === undefined || paramName === null) return;
-				queryStr.push(`${paramName}=${paramValue}`);
-			});
-
-			if (queryStr.length > 0) {
-				fullPath = `${fullPath}?${queryStr.join("&")}`;
-			}
-		}
-
-		this.setRequestPath(fullPath);
-	}
-
-	/* ---- Functions --------------------------------- */
-	async fetch(pathParams: PathParams | null = null, queryParams: QueryParams | null = null) {
-		this.buildFullPath(pathParams, queryParams);
-		return super.fetch();
+	async fetch(pathParams?: PathParams, queryParams?: QueryParams): Promise<JSONResponse<O>> {
+		return this.send(pathParams, queryParams, undefined);
 	}
 }
 
@@ -201,7 +179,7 @@ export class GET<O> extends URIPayload<O> {
 		super("GET", path);
 	}
 
-	async fetch(pathParams: PathParams | null = null, queryParams: QueryParams | null = null) {
+	async fetch(pathParams?: PathParams, queryParams?: QueryParams): Promise<JSONResponse<O>> {
 		return super.fetch(pathParams, queryParams);
 	}
 }
@@ -212,7 +190,8 @@ export class POST<I extends object | undefined, O> extends BodyPayload<I, O> {
 		this.addHeaders({ "Content-Type": "application/json" });
 	}
 
-	async fetch(args?: I) {
-		return super.fetch(args);
+	async fetch(body?: I): Promise<JSONResponse<O>>;
+	async fetch(body?: I, pathQueryParams?: PathQueryParams): Promise<JSONResponse<O>> {
+		return this.send(pathQueryParams?.pathParams, pathQueryParams?.queryParams, body);
 	}
 }
