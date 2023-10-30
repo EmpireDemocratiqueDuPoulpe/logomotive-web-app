@@ -1,10 +1,9 @@
 import React from "react";
-import { Inter } from "next/font/google";
 import type { Metadata } from "next";
-import type { NextFont } from "next/dist/compiled/@next/font";
+import { Fonts } from "@/constants";
+import ReactQueryWrapper from "@/app/_components/ReactQueryWrapper/ReactQueryWrapper";
+import { AuthProvider } from "@/contexts/AuthCtx/AuthCtx";
 import "./globals.css";
-
-const inter: NextFont = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "Create Next App", // TODO
@@ -14,7 +13,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="fr">
-			<body className={inter.className}>{children}</body>
+			<body className={Fonts.CLASSNAMES}>
+				<noscript>
+					Vous avez besoin de JavaScript pour accéder à la page Web. {/* TODO */}
+				</noscript>
+
+				<ReactQueryWrapper>
+					<AuthProvider>
+						<React.StrictMode>
+							{children}
+						</React.StrictMode>
+					</AuthProvider>
+				</ReactQueryWrapper>
+			</body>
 		</html>
 	);
 }
