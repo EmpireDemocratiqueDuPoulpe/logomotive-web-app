@@ -1,9 +1,10 @@
-import type { CommandHistory } from "./LogoHistory.types";
+import type { CommandHistory, HistoryListener } from "./LogoHistory.types";
 
 export default class LogoHistory {
 	private entries: CommandHistory[];
 	private cursor: number = -1;
 	private static readonly MAX_LENGTH: number = 1000;
+	private listeners: HistoryListener[] = [];
 
 	constructor() {
 		this.entries = [];
@@ -13,6 +14,18 @@ export default class LogoHistory {
 	public get length() : number { return this.entries.length; }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
+	public registerListener(callback: HistoryListener) : void {
+		this.listeners.push(callback);
+	}
+
+	public unregisterListener(callback: HistoryListener) : void {
+		const listenerIdx: number = this.listeners.indexOf(callback);
+
+		if (listenerIdx !== -1) {
+			this.listeners.splice(listenerIdx, 1);
+		}
+	}
+
 	public map<U>(callbackFn: (value: CommandHistory, index: number, array: CommandHistory[]) => U, thisArg?: any) : U[] {
 		return this.entries.map(callbackFn, thisArg);
 	}
@@ -34,11 +47,13 @@ export default class LogoHistory {
 
 		this.entries.unshift({ command, output });
 		this.preventOverflow();
+		this.notifyListeners();
 	}
 
 	public clear() : void {
 		this.entries.length = 0;
 		this.resetCursor();
+		this.notifyListeners();
 	}
 
 	private resetCursor() : void { this.cursor = -1; }
@@ -48,4 +63,10 @@ export default class LogoHistory {
 			this.entries = this.entries.slice(0, LogoHistory.MAX_LENGTH);
 		}
 	};
+
+	private notifyListeners() : void {
+		for (const listener of this.listeners) {
+			listener(this.entries, this.length);
+		}
+	}
 }

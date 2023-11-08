@@ -6,3 +6,10 @@ export type Line = {
 };
 
 export type RenderReason = "DOMUpdate" | "AssetLoaded" | "Command" | null;
+
+export type ScriptError = { line: number, error: string };
+
+export type ScriptReturn = {
+	status: "ok" | "failed"
+	errors: ScriptError[]
+};

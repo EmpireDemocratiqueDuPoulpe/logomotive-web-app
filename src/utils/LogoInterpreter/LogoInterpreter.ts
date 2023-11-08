@@ -6,7 +6,7 @@ import LogoPointer from "./LogoPointer/LogoPointer";
 import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
 import LogoCommands from "./LogoCommands/LogoCommands";
 import type { LogoCommand } from "./LogoCommands/LogoCommands";
-import type { Line, RenderReason } from "./LogoInterpreter.types";
+import type { Line, RenderReason, ScriptReturn } from "./LogoInterpreter.types";
 
 export default class LogoInterpreter {
 	private drawCanvas: HTMLCanvasElement | null = null;
@@ -89,18 +89,18 @@ export default class LogoInterpreter {
 
 	public splitCommand(fullCommand: string) : string[] {
 		// Split by any whitespace character, unless within square brackets.
-		return fullCommand.split(/\s(?![^\[]*])/);
+		return fullCommand.split(/\s+(?![^\[]*])/);
 	}
 
-	public executeCommand(fullCommand: string) : void {
-		this.debugger.printFnCall("Interpreter - executeCommand", "start");
+	private executeInstruction(fullInstruction: string) : Error | null {
+		this.debugger.printFnCall("Interpreter - executeInstruction", "start");
 
-		const [ command, ...args ] = this.splitCommand(fullCommand);
+		const [ instruction, ...args ] = this.splitCommand(fullInstruction);
 		let output: string | void = "";
 		let error: unknown | null = null;
 
 		try {
-			const commandWorker: LogoCommand = this.getCommand(command);
+			const commandWorker: LogoCommand = this.getCommand(instruction);
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
 				output = commandWorker.execute(this, ...args);
@@ -112,16 +112,43 @@ export default class LogoInterpreter {
 		} catch (err: unknown) {
 			error = err;
 		} finally {
-			output = `> ${fullCommand}${output ? `\n${output}` : ""}`;
+			output = `> ${fullInstruction}${output ? `\n${output}` : ""}`;
 
 			if (error !== null && (error instanceof Error)) {
 				output += "\n" + error.message;
 			}
 
-			this.history.push(fullCommand, output);
+			this.history.push(fullInstruction, output);
 		}
 
+		this.debugger.printFnCall("Interpreter - executeInstruction", "end");
+		return (error instanceof Error) ? error : null;
+	}
+
+	public executeCommand(fullCommand: string) : void {
+		this.debugger.printFnCall("Interpreter - executeCommand", "start");
+		this.executeInstruction(fullCommand);
 		this.debugger.printFnCall("Interpreter - executeCommand", "end");
+	}
+
+	public executeScript(script: string) : ScriptReturn {
+		this.debugger.printFnCall("Interpreter - executeScript", "start");
+		this.reset();
+		const instructions: string[] = script.split("\n");
+		const returnObj: ScriptReturn = { status: "ok", errors: [] };
+
+		instructions.forEach((instruction: string, idx: number) : void => {
+			const err: Error | null = this.executeInstruction(instruction);
+
+			if (err) {
+				returnObj.status = "failed";
+				returnObj.errors.push({ line: (idx + 1), error: err.message });
+				return;
+			}
+		});
+
+		this.debugger.printFnCall("Interpreter - executeScript", "end");
+		return returnObj;
 	}
 
 	public render(reason: RenderReason = null) : void {

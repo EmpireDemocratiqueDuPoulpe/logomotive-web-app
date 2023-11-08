@@ -1,28 +1,62 @@
-.scriptEditor {
+.scriptEditorBox {
 	height: 500px;
 }
 
-.scriptEditor .editor {
+.scriptEditor .scriptEditorBox .editor {
 	--left-padding: 60px;
 
 	counter-reset: line;
 	border: 1px solid var(--discrete-border-color);
 }
 
-.scriptEditor .editor .codeArea {
+.scriptEditor .scriptEditorBox .editor .codeArea {
 	color: #ccc !important;
 	outline: none;
 	padding-left: var(--left-padding) !important;
 }
 
-.scriptEditor .editor .codePre {
+.scriptEditor .scriptEditorBox .editor .codePre {
 	padding-left: var(--left-padding) !important;
 }
 
-.editor .editorLineNumber {
+.scriptEditor .scriptEditorBox .editor .editorLine {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.scriptEditor .scriptEditorBox .editor .editorLine .editorLineNumber {
 	position: absolute;
-	left: 0;
-	text-align: right;
-	width: 40px;
+	left: calc(var(--left-padding) * -0.5);
 	font-weight: 100;
+}
+
+.scriptEditor .scriptEditorBox .editor .editorLine .editorLineError {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding-left: 1em;
+	color: var(--error-color);
+
+}
+
+.scriptEditor .scriptEditorBox .editor .editorLine .editorLineError .errorText {
+	display: inline-block;
+	width: 100%;
+	white-space: pre;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.scriptEditor .scriptEditorBox .editor .editorLine .editorLineError::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: calc(var(--left-padding) * -1);
+	width: calc(100% + var(--left-padding));
+	height: 100%;
+	background: var(--error-color);
+	opacity: 0.25;
 }
