@@ -192,6 +192,18 @@ export class POST<I extends object | undefined, O> extends BodyPayload<I, O> {
 
 	async fetch(body?: I): Promise<JSONResponse<O>>;
 	async fetch(body?: I, pathQueryParams?: PathQueryParams): Promise<JSONResponse<O>> {
-		return this.send(pathQueryParams?.pathParams, pathQueryParams?.queryParams, body);
+		return super.fetch(body, pathQueryParams?.pathParams, pathQueryParams?.queryParams);
+	}
+}
+
+export class PUT<I extends object | undefined, O> extends BodyPayload<I, O> {
+	constructor(path: string) {
+		super("PUT", path);
+		this.addHeaders({ "Content-Type": "application/json" });
+	}
+
+	async fetch(body?: I): Promise<JSONResponse<O>>;
+	async fetch(body?: I, pathQueryParams?: PathQueryParams): Promise<JSONResponse<O>> {
+		return super.fetch(body, pathQueryParams?.pathParams, pathQueryParams?.queryParams);
 	}
 }
