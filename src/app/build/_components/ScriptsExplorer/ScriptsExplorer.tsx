@@ -11,8 +11,6 @@ function ScriptsExplorer() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const scripts = useScripts();
 
-	/* --- Functions ----------------------------- */
-
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.scriptsExplorer}>

@@ -1,7 +1,7 @@
 import { GET, POST, PUT } from "@/utils/Endpoint";
 import type { PrebuiltAPIConstants } from "@/constants/API.types";
 import type { LoginUser, RegisteringUser, User } from "@/contexts/AuthCtx/AuthCtx.types";
-import type { Script, NewScript, UpdatingScript } from "@/typings/global";
+import type { Script, NewScript, UpdatingScript, ScriptInfo } from "@/typings/global";
 
 const API: PrebuiltAPIConstants = {
 	PROTOCOL: process.env.NEXT_PUBLIC_API_PROTOCOL || "https",
@@ -16,7 +16,8 @@ const ALL = {
 		V1: {
 			SCRIPTS: {
 				create: new POST<NewScript, { script_id: number }>("/api/v1/scripts"),
-				getAllOfUser: new GET<{ scripts: Script[] }>("/api/v1/scripts"),
+				getAllOfUser: new GET<{ scripts: ScriptInfo[] }>("/api/v1/scripts"),
+				getAllPublic: new GET<{ scripts: Script[] }>("/api/v1/scripts/all"),
 				getByID: new GET<{ script: Script }>("/api/v1/scripts/{scriptID}"),
 				save: new PUT<UpdatingScript, {}>("/api/v1/scripts"),
 			},

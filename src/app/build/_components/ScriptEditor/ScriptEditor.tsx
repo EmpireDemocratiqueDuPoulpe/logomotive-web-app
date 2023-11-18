@@ -9,7 +9,7 @@ import Editor from "react-simple-code-editor";
 import Prism, { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
 import { downloadTextFile } from "@/utils/files";
 import styles from "./ScriptEditor.module.css";
-import "./ScriptEditor.theme.css";
+import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
 
 const SCRIPT_ID_PARAM: string = "scriptID";

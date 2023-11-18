@@ -10,6 +10,10 @@ export type Script = {
 export type NewScript = Omit<Script, "script_id" | "user_id">
 export type UpdatingScript = Omit<Script, "user_id">
 
+export type PublicScript = Omit<Script, "user_id" | "content" | "is_public"> & {
+	username: string
+}
+
 export type ScriptInfo = Omit<Script, "content"> & {
 	fileSize: number
 }
