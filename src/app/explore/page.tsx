@@ -22,7 +22,9 @@ function Explore() : React.JSX.Element {
 				publicScripts.isError ? <p>Erreur : {publicScripts.error.message}</p> : (
 					<>
 						{publicScripts.data?.data.scripts.map((script: PublicScript) : React.JSX.Element => (
-							<button key={script.script_id} onClick={() => handleScriptClick(script)}>{script.name} - {script.username}</button>
+							<button key={script.script_id} onClick={() => handleScriptClick(script)}>
+								<b>{script.name}</b> par <em>{script.username}</em> {script.tags ? `[${script.tags?.join(", ")}]` : null}
+							</button>
 						))}
 
 						{currentScriptID && <ScriptPreview scriptID={currentScriptID}/>}
