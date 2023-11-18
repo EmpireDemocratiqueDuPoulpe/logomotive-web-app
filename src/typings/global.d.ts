@@ -6,3 +6,9 @@ export type Script = {
 }
 
 export type NewScript = Omit<Script, "script_id" | "user_id">
+
+declare global {
+	interface Navigator {
+		msSaveBlob?: (blob: any, defaultName?: string) => boolean
+	}
+}

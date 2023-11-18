@@ -1,16 +1,16 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import type { ScriptError, ScriptReturn } from "@/utils/LogoInterpreter/LogoInterpreter.types";
 import useScript from "@/hooks/scripts/useScript";
 import Editor from "react-simple-code-editor";
 import Prism, { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
+import { downloadTextFile } from "@/utils/downloads";
 import styles from "./ScriptEditor.module.css";
 import "./ScriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
-import { useRouter, useSearchParams } from "next/navigation";
-
 
 function highlight(code: string, languageName: string, errors: ScriptError[], withLineNumbers: boolean = true) : string {
 	return Prism.highlight(code, Prism.languages[languageName], languageName)
@@ -65,11 +65,17 @@ function ScriptEditor() : React.JSX.Element {
 		});
 	};
 
+	const downloadScript = () : void => {
+		downloadTextFile("script.logo", scriptContent);
+	};
+
 	useEffect(() : void => {
 		if (script.data?.data) {
 			setScriptName(script.data.data.script.name);
 			setScriptContent(script.data.data.script.content);
 		}
+		// We only want to update the script editor when the request is successful
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [script.isSuccess]);
 
 	/* --- Component ----------------------------- */
@@ -85,6 +91,8 @@ function ScriptEditor() : React.JSX.Element {
 								<input type="text" value={scriptName} onChange={handleScriptNameChange}/>
 								<button onClick={saveScript}>Sauvegarder</button>
 							</div>
+
+							<button onClick={downloadScript}>Télécharger</button>
 						</div>
 
 
