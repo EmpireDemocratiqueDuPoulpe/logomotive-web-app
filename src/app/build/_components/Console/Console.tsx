@@ -10,7 +10,6 @@ function Console() : React.JSX.Element {
 	const logoBuilderCtx = useLogoBuilderContext();
 	const [ commandLine, setCommandLine ] = useState<string>("");
 
-
 	/* --- Functions ----------------------------- */
 	const onCommandLineChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
 		setCommandLine(event.target.value);

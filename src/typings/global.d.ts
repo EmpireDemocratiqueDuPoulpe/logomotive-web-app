@@ -7,6 +7,10 @@ export type Script = {
 
 export type NewScript = Omit<Script, "script_id" | "user_id">
 
+export type ScriptInfo = Omit<Script, "content"> & {
+	fileSize: number
+}
+
 declare global {
 	interface Navigator {
 		msSaveBlob?: (blob: any, defaultName?: string) => boolean

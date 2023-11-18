@@ -7,7 +7,7 @@ import type { ScriptError, ScriptReturn } from "@/utils/LogoInterpreter/LogoInte
 import useScript from "@/hooks/scripts/useScript";
 import Editor from "react-simple-code-editor";
 import Prism, { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
-import { downloadTextFile } from "@/utils/downloads";
+import { downloadTextFile } from "@/utils/files";
 import styles from "./ScriptEditor.module.css";
 import "./ScriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
