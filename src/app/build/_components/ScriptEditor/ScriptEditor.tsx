@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import type { ScriptError, ScriptReturn } from "@/utils/LogoInterpreter/LogoInterpreter.types";
 import useScript from "@/hooks/scripts/useScript";
@@ -11,6 +11,12 @@ import { downloadTextFile } from "@/utils/files";
 import styles from "./ScriptEditor.module.css";
 import "./ScriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
+
+const SCRIPT_ID_PARAM: string = "scriptID";
+
+function getScriptID(searchParams: ReadonlyURLSearchParams) : number | null {
+	return searchParams.has(SCRIPT_ID_PARAM) ? parseInt(searchParams.get(SCRIPT_ID_PARAM)!, 10) : null;
+}
 
 function highlight(code: string, languageName: string, errors: ScriptError[], withLineNumbers: boolean = true) : string {
 	return Prism.highlight(code, Prism.languages[languageName], languageName)
@@ -39,14 +45,25 @@ function ScriptEditor() : React.JSX.Element {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const logoBuilderCtx = useLogoBuilderContext();
-	const script = useScript(searchParams.has("scriptID") ? parseInt(searchParams.get("scriptID")!, 10) : null);
+	const [ scriptID, setScriptID ] = useState<number | null>(getScriptID(searchParams));
 	const [ scriptName, setScriptName ] = useState<string>("");
 	const [ scriptContent, setScriptContent ] = useState<string>("");
+	const [ scriptTags, setScriptTags ] = useState<string>("");
+	const [ scriptIsPublic, setScriptPublic ] = useState<boolean>(false);
+	const script = useScript(scriptID);
 	const [ errors, setErrors ] = useState<ScriptError[]>([]);
 
 	/* --- Functions ----------------------------- */
 	const handleScriptNameChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
 		setScriptName(event.target.value);
+	};
+
+	const handleScriptTagsChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
+		setScriptTags(event.target.value);
+	};
+
+	const handleScriptVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
+		setScriptPublic(event.target.checked);
 	};
 
 	const executeScript = () : void => {
@@ -58,25 +75,43 @@ function ScriptEditor() : React.JSX.Element {
 	};
 
 	const saveScript = () : void => {
-		script.create.mutate({ name: scriptName, content: scriptContent }, {
-			onSuccess: ({ data: {script_id} }) : void => {
-				router.replace(`/build?scriptID=${script_id}`);
-			}
-		});
+		const newScriptData = {
+			name: scriptName,
+			content: scriptContent,
+			tags: scriptTags.split(","),
+			is_public: scriptIsPublic
+		};
+
+		if (scriptID) {
+			script.update.mutate({ ...newScriptData, script_id: scriptID });
+		} else {
+			script.create.mutate(newScriptData, {
+				onSuccess: ({ data: {script_id} }) : void => {
+					router.replace(`/build?scriptID=${script_id}`);
+				}
+			});
+		}
 	};
 
 	const downloadScript = () : void => {
 		downloadTextFile("script.logo", scriptContent);
 	};
 
+	/* --- Effects ------------------------------- */
+	useEffect(() : void => {
+		setScriptID(getScriptID(searchParams));
+	}, [searchParams]);
+
 	useEffect(() : void => {
 		if (script.data?.data) {
 			setScriptName(script.data.data.script.name);
 			setScriptContent(script.data.data.script.content);
+			setScriptTags(script.data.data.script.tags?.join(",") ?? "");
+			setScriptPublic(script.data.data.script.is_public);
 		}
-		// We only want to update the script editor when the request is successful
+		// We only want to update the script editor when the data is updated.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [script.isSuccess]);
+	}, [script.dataUpdatedAt]);
 
 	/* --- Component ----------------------------- */
 	return (
@@ -89,6 +124,11 @@ function ScriptEditor() : React.JSX.Element {
 
 							<div>
 								<input type="text" value={scriptName} onChange={handleScriptNameChange}/>
+								<input type="text" value={scriptTags} onChange={handleScriptTagsChange}/>
+								<label>
+									public?
+									<input type="checkbox" checked={scriptIsPublic} onChange={handleScriptVisibilityChange}/>
+								</label>
 								<button onClick={saveScript}>Sauvegarder</button>
 							</div>
 

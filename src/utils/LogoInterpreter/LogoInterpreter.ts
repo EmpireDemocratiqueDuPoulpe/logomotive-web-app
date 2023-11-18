@@ -19,7 +19,7 @@ export default class LogoInterpreter {
 	private gridColor: string = "#EBEBEB";
 	private gridCrossColor: string = "#E1E1E1";
 
-	public readonly debugger: LogoDebugger = new LogoDebugger(true);
+	public readonly debugger: LogoDebugger = new LogoDebugger(false);
 	public readonly history: LogoHistory;
 	public readonly pointer: LogoPointer;
 	private readonly lines: Line[] = [];

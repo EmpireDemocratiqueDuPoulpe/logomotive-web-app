@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "@/constants";
 import type { UseScriptData } from "@/hooks/scripts/useScript.types";
 import type { QueryParams } from "@/utils/Endpoint.types";
-import type { NewScript, Script } from "@/typings/global";
+import type { NewScript, UpdatingScript } from "@/typings/global";
 
 function useScript(scriptID: number | null, queryParams: QueryParams | undefined = undefined, options: object = {}): UseScriptData {
+	const queryClient: QueryClient = useQueryClient();
 	const scriptQuery = useQuery({
 		...options,
 		queryKey: [ "script", "byID", scriptID ],
@@ -15,13 +16,15 @@ function useScript(scriptID: number | null, queryParams: QueryParams | undefined
 	const create = useMutation({
 		mutationFn: (script: NewScript) => {
 			return API.ENDPOINTS.V1.SCRIPTS.create.fetch(script);
-		}
+		},
+		onSuccess: () : void => { queryClient.invalidateQueries({ queryKey: ["scripts"] }).catch(console.error); }
 	});
 
 	const update = useMutation({
-		mutationFn: (script: Script) => {
+		mutationFn: (script: UpdatingScript) => {
 			return API.ENDPOINTS.V1.SCRIPTS.save.fetch(script);
-		}
+		},
+		onSuccess: () : void => { queryClient.invalidateQueries({ queryKey: ["scripts"] }).catch(console.error); }
 	});
 
 	return { ...scriptQuery, create, update };
