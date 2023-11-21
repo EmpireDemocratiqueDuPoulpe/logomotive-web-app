@@ -207,3 +207,15 @@ export class PUT<I extends object | undefined, O> extends BodyPayload<I, O> {
 		return super.fetch(body, pathQueryParams?.pathParams, pathQueryParams?.queryParams);
 	}
 }
+
+export class DELETE<I extends object | undefined, O> extends BodyPayload<I, O> {
+	constructor(path: string) {
+		super("DELETE", path);
+		this.addHeaders({ "Content-Type": "application/json" });
+	}
+
+	async fetch(body?: I): Promise<JSONResponse<O>>;
+	async fetch(body?: I, pathQueryParams?: PathQueryParams): Promise<JSONResponse<O>> {
+		return super.fetch(body, pathQueryParams?.pathParams, pathQueryParams?.queryParams);
+	}
+}

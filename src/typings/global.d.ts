@@ -18,6 +18,13 @@ export type ScriptInfo = Omit<Script, "content"> & {
 	fileSize: number
 }
 
+export type ScriptSharingLink = {
+	link_id: string
+	script_id: number
+};
+export type NewScriptSharingLink = Omit<ScriptSharingLink, "link_id">
+export type SharingLinkID = Omit<ScriptSharingLink, "script_id">
+
 declare global {
 	interface Navigator {
 		msSaveBlob?: (blob: any, defaultName?: string) => boolean

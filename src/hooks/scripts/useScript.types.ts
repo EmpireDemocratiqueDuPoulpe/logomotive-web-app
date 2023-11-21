@@ -1,4 +1,4 @@
-import type {UseMutationResult, UseQueryResult} from "@tanstack/react-query";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { JSONResponse } from "@/utils/Endpoint.types";
 import type { NewScript, Script, UpdatingScript } from "@/typings/global";
 
