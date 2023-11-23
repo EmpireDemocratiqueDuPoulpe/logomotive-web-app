@@ -9,6 +9,9 @@
 	--console-foreground-color: #FFFFFF;
 	--console-parameter-color: #53CE2E;
 
+	--success-color: #53CE2E;
+	--info-color: #2E91CE;
+	--warn-color: #CEB32E;
 	--error-color: #E41749;
 
 	--default-spacing: 1rem;

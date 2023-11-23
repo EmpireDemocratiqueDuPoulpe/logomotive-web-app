@@ -30,10 +30,10 @@ const ALL = {
 				save: new PUT<UpdatingScript, {}>("/api/v1/scripts"),
 			},
 			SCRIPT_SHARING_LINKS: {
-				create: new POST<NewScriptSharingLink, SharingLinkID>("/api/v1/scripts/share"),
+				create: new POST<NewScriptSharingLink, SharingLinkID>("/api/v1/scripts/share/"),
 				getScriptID: new GET<Pick<Script, "script_id">>("/api/v1/scripts/share/{linkID}"),
 				getLinksOf: new GET<ScriptSharingLink[]>("/api/v1/scripts/share/links-of/{scriptID}"),
-				delete: new DELETE<SharingLinkID, {}>("/api/v1/scripts/share/{scriptID}"),
+				delete: new DELETE<SharingLinkID, {}>("/api/v1/scripts/share/"),
 			},
 			USERS: {
 				register: new POST<RegisteringUser, { user_id: number }>("/api/v1/users"),

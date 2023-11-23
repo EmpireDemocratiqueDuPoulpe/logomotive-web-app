@@ -1,22 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import type { ScriptError, ScriptReturn } from "@/utils/LogoInterpreter/LogoInterpreter.types";
 import useScript from "@/hooks/scripts/useScript";
 import Editor from "react-simple-code-editor";
 import Prism, { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
 import { downloadTextFile } from "@/utils/files";
+import { Props } from "@/app/build/_components/ScriptEditor/ScriptEditor.types";
 import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
-
-const SCRIPT_ID_PARAM: string = "scriptID";
-
-function getScriptID(searchParams: ReadonlyURLSearchParams) : number | null {
-	return searchParams.has(SCRIPT_ID_PARAM) ? parseInt(searchParams.get(SCRIPT_ID_PARAM)!, 10) : null;
-}
 
 function highlight(code: string, languageName: string, errors: ScriptError[], withLineNumbers: boolean = true) : string {
 	return Prism.highlight(code, Prism.languages[languageName], languageName)
@@ -40,17 +35,16 @@ function highlightLine(code: string, idx: number, errors: ScriptError[], withLin
 	return `<span class="${styles.editorLine}">${lineNumberSpan}${code}${errorOverlay}</span>`;
 }
 
-function ScriptEditor() : React.JSX.Element {
+function ScriptEditor({ script_id }: Props) : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const router = useRouter();
 
 	const logoBuilderCtx = useLogoBuilderContext();
-	const [ scriptID, setScriptID ] = useState<number | null>(getScriptID(searchParams));
 	const [ scriptName, setScriptName ] = useState<string>("");
 	const [ scriptContent, setScriptContent ] = useState<string>("");
 	const [ scriptTags, setScriptTags ] = useState<string>("");
 	const [ scriptIsPublic, setScriptPublic ] = useState<boolean>(false);
-	const script = useScript(scriptID);
+	const script = useScript(script_id);
 	const [ errors, setErrors ] = useState<ScriptError[]>([]);
 
 	/* --- Functions ----------------------------- */
@@ -82,12 +76,12 @@ function ScriptEditor() : React.JSX.Element {
 			is_public: scriptIsPublic
 		};
 
-		if (scriptID) {
-			script.update.mutate({ ...newScriptData, script_id: scriptID });
+		if (script_id) {
+			script.update.mutate({ ...newScriptData, script_id });
 		} else {
 			script.create.mutate(newScriptData, {
-				onSuccess: ({ data: {script_id} }) : void => {
-					router.replace(`/build?scriptID=${script_id}`);
+				onSuccess: ({ data: {script_id: newScriptID} }) : void => {
+					router.replace(`/build?scriptID=${newScriptID}`);
 				}
 			});
 		}
@@ -98,10 +92,6 @@ function ScriptEditor() : React.JSX.Element {
 	};
 
 	/* --- Effects ------------------------------- */
-	useEffect(() : void => {
-		setScriptID(getScriptID(searchParams));
-	}, [searchParams]);
-
 	useEffect(() : void => {
 		if (script.data?.data) {
 			setScriptName(script.data.data.script.name);

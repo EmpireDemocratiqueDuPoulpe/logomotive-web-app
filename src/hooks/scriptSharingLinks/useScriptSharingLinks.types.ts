@@ -4,6 +4,6 @@ import type { Script, NewScriptSharingLink, SharingLinkID } from "@/typings/glob
 
 /// --- Types ----------------------------------------------------------------------------------------------------------
 export type UseScriptSharingLinksData = UseQueryResult<JSONResponse<Pick<Script, "script_id">>> & {
-    create: UseMutationResult<JSONResponse<SharingLinkID>, Error, NewScriptSharingLink>
-    delete: UseMutationResult<JSONResponse<{}>, Error, SharingLinkID>
+    create: UseMutationResult<JSONResponse<SharingLinkID>, JSONResponse, NewScriptSharingLink>
+    delete: UseMutationResult<JSONResponse<{}>, JSONResponse, SharingLinkID>
 }

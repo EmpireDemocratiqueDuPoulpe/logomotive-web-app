@@ -4,6 +4,6 @@ import type { NewScript, Script, UpdatingScript } from "@/typings/global";
 
 /// --- Types ----------------------------------------------------------------------------------------------------------
 export type UseScriptData = UseQueryResult<JSONResponse<{ script: Script }>> & {
-	create: UseMutationResult<JSONResponse<{ script_id: number }>, Error, NewScript>
-	update: UseMutationResult<JSONResponse<{}>, Error, UpdatingScript>
+	create: UseMutationResult<JSONResponse<{ script_id: number }>, JSONResponse, NewScript>
+	update: UseMutationResult<JSONResponse<{}>, JSONResponse, UpdatingScript>
 }

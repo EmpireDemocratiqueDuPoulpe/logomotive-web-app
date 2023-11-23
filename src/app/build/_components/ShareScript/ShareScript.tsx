@@ -16,7 +16,7 @@ function ShareScript({ script_id }: Props) : React.JSX.Element {
 	const onCreateClick = () : void => {
 		scriptSharingLink.create.mutate({ script_id }, {
 			onSuccess: (response: JSONResponse<SharingLinkID>) : void  => {
-				navigator.clipboard.writeText(response.data.link_id).catch(console.error);
+				navigator.clipboard.writeText(`${window.location.origin}/view/${response.data.link_id}`).catch(console.error);
 				messages.add({ status: "success", message: "Lien copié dans le presse-papier" });
 			}
 		});
