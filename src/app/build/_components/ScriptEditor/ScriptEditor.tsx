@@ -43,7 +43,7 @@ function highlightLine(code: string, idx: number, errors: ScriptError[], withLin
 function ScriptEditor() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const router = useRouter();
-	const searchParams = useSearchParams();
+
 	const logoBuilderCtx = useLogoBuilderContext();
 	const [ scriptID, setScriptID ] = useState<number | null>(getScriptID(searchParams));
 	const [ scriptName, setScriptName ] = useState<string>("");

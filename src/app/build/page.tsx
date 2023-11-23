@@ -4,8 +4,13 @@ import Console from "@/app/build/_components/Console/Console";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
 import ScriptsExplorer from "@/app/build/_components/ScriptsExplorer/ScriptsExplorer";
 import ScriptEditor from "@/app/build/_components/ScriptEditor/ScriptEditor";
+import ShareScript from "@/app/build/_components/ShareScript/ShareScript";
+import {useSearchParams} from "next/navigation";
 
 function Build() : React.JSX.Element {
+	/* --- States -------(((---------------------- */
+	const searchParams = useSearchParams();
+
 	/* --- Component ----------------------------- */
 	return (
 		<main>
@@ -13,6 +18,7 @@ function Build() : React.JSX.Element {
 				<Console/>
 				<Canvas/>
 
+				<ShareScript script_id={sc}/>
 				<ScriptsExplorer/>
 				<ScriptEditor/>
 			</LogoBuilderProvider>
