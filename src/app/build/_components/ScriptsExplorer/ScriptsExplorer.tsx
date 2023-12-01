@@ -16,7 +16,7 @@ function ScriptsExplorer({ script_id }: Props) : React.JSX.Element {
 	return (
 		<div className={styles.scriptsExplorer}>
 			{ scripts.isLoading ? <p>Chargement...</p> : (
-				scripts.isError ? <p>Erreur : {scripts.error.message}</p> : (
+				scripts.isError ? null : (
 					scripts.data?.data.scripts.map((script: ScriptInfo) : React.JSX.Element => (
 						<Link key={script.script_id} href={`/build?scriptID=${script.script_id}`}>
 							{(script.script_id === script_id) && "[C] "}{script.name} - {bytesToHumanReadable(script.fileSize)}

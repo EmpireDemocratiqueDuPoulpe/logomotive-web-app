@@ -14,6 +14,7 @@ import type {
 	LoginUser
 } from "./AuthCtx.types";
 import { CONTEXT_STATES } from "./AuthCtx.types";
+import toast from "react-hot-toast";
 
 /*************************************************************
  * Constants
@@ -81,6 +82,7 @@ export function AuthProvider({ children }: ProviderProps) : React.JSX.Element {
 	}, []);
 
 	const setError = useCallback((error: string) : void => {
+		toast.error(error);
 		dispatch({ type: CONTEXT_STATES.SET_ERROR, error });
 	}, []);
 
@@ -143,13 +145,7 @@ export function AuthProvider({ children }: ProviderProps) : React.JSX.Element {
 	}, [setDisconnected, setError]);
 
 	/* --- Effects ------------------------------- */
-	useEffect(() : void => {
-		if (state.error) {
-			console.log(state.error); // TODO
-		}
-	}, [state.error]);
-
-	// auth.error is not a dependency, otherwise the desired effect won't work
+	// state.error is not a dependency, otherwise the desired effect won't work
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() : void => { if (state.error) cleanError(); }, [pathname]);
 

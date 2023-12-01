@@ -31,7 +31,7 @@ const ALL = {
 			},
 			SCRIPT_SHARING_LINKS: {
 				create: new POST<NewScriptSharingLink, SharingLinkID>("/api/v1/scripts/share/"),
-				getScriptID: new GET<Pick<Script, "script_id">>("/api/v1/scripts/share/{linkID}"),
+				getScriptByLinkID: new GET<{ script: Script }>("/api/v1/scripts/share/{linkID}"),
 				getLinksOf: new GET<ScriptSharingLink[]>("/api/v1/scripts/share/links-of/{scriptID}"),
 				delete: new DELETE<SharingLinkID, {}>("/api/v1/scripts/share/"),
 			},

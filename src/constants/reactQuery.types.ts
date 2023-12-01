@@ -1,6 +1,6 @@
-import type { QueryClientConfig } from "@tanstack/query-core";
+import type { DefaultOptions } from "@tanstack/query-core";
 
 // --- Types -----------------------------------------------------------------------------------------------------------
 export type ReactQueryConstants = Readonly<{
-	CLIENT_CONFIG: QueryClientConfig
+	CLIENT_CONFIG: DefaultOptions
 }>;

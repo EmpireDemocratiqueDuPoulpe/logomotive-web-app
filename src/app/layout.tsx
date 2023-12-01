@@ -1,8 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Fonts } from "@/constants";
+import { Toaster } from "react-hot-toast";
 import ReactQueryWrapper from "@/app/_components/ReactQueryWrapper/ReactQueryWrapper";
-import { MessagesProvider } from "@/contexts/MessagesCtx/MessagesCtx";
 import { AuthProvider } from "@/contexts/AuthCtx/AuthCtx";
 import "./globals.css";
 
@@ -19,14 +19,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					Vous avez besoin de JavaScript pour accéder à la page Web. {/* TODO */}
 				</noscript>
 
+				<Toaster/>
+
 				<ReactQueryWrapper>
-					<MessagesProvider>
-						<AuthProvider>
-							<React.StrictMode>
-								{children}
-							</React.StrictMode>
-						</AuthProvider>
-					</MessagesProvider>
+					<AuthProvider>
+						<React.StrictMode>
+							{children}
+						</React.StrictMode>
+					</AuthProvider>
 				</ReactQueryWrapper>
 			</body>
 		</html>

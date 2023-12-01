@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import useScript from "@/hooks/scripts/useScript";
 import Editor from "react-simple-code-editor";
 import Prism, { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
 import { downloadTextFile } from "@/utils/files";
@@ -24,48 +23,39 @@ function highlightLine(code: string, idx: number, withLineNumbers: boolean = tru
 	return `<span class="${styles.editorLine}">${lineNumberSpan}${code}</span>`;
 }
 
-function ScriptPreview({ scriptID }: Props) : React.JSX.Element {
-	/* --- States -------------------------------- */
-	const script = useScript(scriptID);
-
+function ScriptPreview({ script }: Props) : React.JSX.Element {
 	/* --- Functions ----------------------------- */
 	const downloadScript = () : void => {
-		if (script.data) {
-			downloadTextFile("script.logo", script.data.data.script.content);
+		if (script) {
+			downloadTextFile("script.logo", script.content);
 		}
 	};
 
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.scriptEditor}>
-			{script.isLoading ? <p>Chargement en cours...</p> : (
-				script.isError ? <p>Erreur: {script.error.message}</p> : (
-					<>
-						<div>
-							<button onClick={downloadScript}>Télécharger</button>
-						</div>
+			<div>
+				<button onClick={downloadScript}>Télécharger</button>
+			</div>
 
-						<div className={styles.scriptEditorBox}>
-							<Editor
-								className={`${styles.editor} language-${languageName}`}
-								textareaClassName={`${styles.codeArea} language-${languageName}`}
-								preClassName={`${styles.codePre} language-${languageName}`}
-								value={script.data?.data.script.content ?? ""}
-								onValueChange={() => {}}
-								highlight={(code: string) => highlight(code, languageName, true) }
-								padding={10}
-								style={{
-									fontFamily: "\"Fira code\", \"Fira Mono\", monospace",
-									fontSize: 12,
-								}}
-								tabSize={1}
-								insertSpaces={false}
-								ignoreTabKey={false}
-							/>
-						</div>
-					</>
-				)
-			)}
+			<div className={styles.scriptEditorBox}>
+				<Editor
+					className={`${styles.editor} language-${languageName}`}
+					textareaClassName={`${styles.codeArea} language-${languageName}`}
+					preClassName={`${styles.codePre} language-${languageName}`}
+					value={script.content}
+					onValueChange={() => {}}
+					highlight={(code: string) => highlight(code, languageName, true) }
+					padding={10}
+					style={{
+						fontFamily: "\"Fira code\", \"Fira Mono\", monospace",
+						fontSize: 12,
+					}}
+					tabSize={1}
+					insertSpaces={false}
+					ignoreTabKey={false}
+				/>
+			</div>
 		</div>
 	);
 }

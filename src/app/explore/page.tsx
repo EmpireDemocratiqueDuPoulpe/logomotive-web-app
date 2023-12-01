@@ -2,13 +2,15 @@
 
 import React, { useState } from "react";
 import usePublicScripts from "@/hooks/scripts/usePublicScripts";
+import useScript from "@/hooks/scripts/useScript";
 import type { PublicScript } from "@/typings/global";
-import ScriptPreview from "@/app/explore/_components/ScriptPreview/ScriptPreview";
+import ScriptPreview from "@/components/ScriptPreview/ScriptPreview";
 
 function Explore() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const publicScripts = usePublicScripts();
 	const [ currentScriptID, setCurrentScriptID ] = useState<number | null>(null);
+	const currentScript = useScript(currentScriptID);
 
 	/* --- Functions ----------------------------- */
 	const handleScriptClick = (script: PublicScript) : void => {
@@ -19,7 +21,7 @@ function Explore() : React.JSX.Element {
 	return (
 		<main>
 			{publicScripts.isLoading ? <p>Chargement en cours...</p> : (
-				publicScripts.isError ? <p>Erreur : {publicScripts.error.message}</p> : (
+				publicScripts.isError ? null : (
 					<>
 						{publicScripts.data?.data.scripts.map((script: PublicScript) : React.JSX.Element => (
 							<button key={script.script_id} onClick={() => handleScriptClick(script)}>
@@ -27,7 +29,7 @@ function Explore() : React.JSX.Element {
 							</button>
 						))}
 
-						{currentScriptID && <ScriptPreview scriptID={currentScriptID}/>}
+						{(currentScript.isSuccess && currentScript.data) && <ScriptPreview script={currentScript.data.data.script}/>}
 					</>
 				)
 			)}

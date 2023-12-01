@@ -1,4 +1,6 @@
+import type {Script} from "@/typings/global";
+
 /// --- PropTypes ------------------------------------------------------------------------------------------------------
 export type Props = {
-	scriptID: number
+	script: Script
 }

@@ -1,23 +1,22 @@
 "use client";
 
 import React from "react";
-import useMessageContext from "@/contexts/MessagesCtx/MessagesCtx";
 import useScriptSharingLink from "@/hooks/scriptSharingLinks/useScriptSharingLink";
 import type { Props } from "./ShareScript.types";
 import type { SharingLinkID } from "@/typings/global";
 import type { JSONResponse } from "@/utils/Endpoint.types";
+import toast from "react-hot-toast";
 
 function ShareScript({ script_id }: Props) : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const scriptSharingLink = useScriptSharingLink(null);
-	const messages = useMessageContext();
 
 	/* --- Functions ----------------------------- */
 	const onCreateClick = () : void => {
 		scriptSharingLink.create.mutate({ script_id }, {
 			onSuccess: (response: JSONResponse<SharingLinkID>) : void  => {
-				navigator.clipboard.writeText(`${window.location.origin}/view/${response.data.link_id}`).catch(console.error);
-				messages.add({ status: "success", message: "Lien copié dans le presse-papier" });
+				navigator.clipboard.writeText(`${window.location.origin}/view/${response.data.link_id}`).catch(toast.error);
+				toast.success("Lien copié dans le presse-papier");
 			}
 		});
 	};
