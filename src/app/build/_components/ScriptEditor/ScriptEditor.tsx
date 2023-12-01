@@ -12,6 +12,7 @@ import { Props } from "@/app/build/_components/ScriptEditor/ScriptEditor.types";
 import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
+import toast from "react-hot-toast";
 
 function highlight(code: string, languageName: string, errors: ScriptError[], withLineNumbers: boolean = true) : string {
 	return Prism.highlight(code, Prism.languages[languageName], languageName)
@@ -75,16 +76,27 @@ function ScriptEditor({ script_id }: Props) : React.JSX.Element {
 			tags: scriptTags.split(","),
 			is_public: scriptIsPublic
 		};
-
-		if (script_id) {
-			script.update.mutate({ ...newScriptData, script_id });
-		} else {
-			script.create.mutate(newScriptData, {
-				onSuccess: ({ data: {script_id: newScriptID} }) : void => {
-					router.replace(`/build?scriptID=${newScriptID}`);
-				}
-			});
-		}
+		
+		toast.promise(new Promise<void>((resolve, reject) : void => {
+			if (script_id) {
+				script.update.mutate({ ...newScriptData, script_id }, {
+					onSuccess: () => resolve(),
+					onError: (error: unknown) => reject(error),
+				});
+			} else {
+				script.create.mutate(newScriptData, {
+					onSuccess: ({ data: {script_id: newScriptID} }) : void => {
+						router.replace(`/build?scriptID=${newScriptID}`);
+						resolve();
+					},
+					onError: (error: unknown) => reject(error)
+				});
+			}
+		}), {
+			loading: "Sauvegarde du script...",
+			success: "Script sauvegardé.",
+			error: "Erreur lors de la sauvegarde du script."
+		}).catch();
 	};
 
 	const downloadScript = () : void => {
