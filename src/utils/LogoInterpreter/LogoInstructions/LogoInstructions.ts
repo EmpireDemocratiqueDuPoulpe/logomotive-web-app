@@ -2,10 +2,10 @@
 
 import { InvalidArgumentsCount } from "@/exceptions";
 import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
-import type { ExposedCommands } from "./LogoCommands.types";
+import type { ExposedInstructions } from "./LogoInstructions.types";
 import {RGBToHex} from "@/utils/colors";
 
-export abstract class LogoCommand {
+export abstract class LogoInstruction {
 	public readonly instructions: string[];
 	public readonly expectedParameters: number;
 	public readonly description: string | null;
@@ -17,36 +17,36 @@ export abstract class LogoCommand {
 	}
 
 	public execute(interpreter: LogoInterpreter, ...args: string[]) : string | void {
-		interpreter.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "start");
+		interpreter.debugger.printFnCall(`Instruction - execute[${this.instructions.join(" | ")}]`, "start");
 		if (args.length !== this.expectedParameters) {
 			throw new InvalidArgumentsCount(this.expectedParameters, args.length);
 		}
 
-		const commandOutput: string | void = this._execute(interpreter, ...args);
-		interpreter.debugger.printFnCall(`Command - execute[${this.instructions.join(" | ")}]`, "end");
-		return commandOutput;
+		const instructionOutput: string | void = this._execute(interpreter, ...args);
+		interpreter.debugger.printFnCall(`Instruction - execute[${this.instructions.join(" | ")}]`, "end");
+		return instructionOutput;
 	}
 
 	protected abstract _execute(interpreter: LogoInterpreter, ...args: string[]) : string | void
 }
 
 /*************************************************************
- * Help command - This one is special
+ * Help instruction - This one is special
  *************************************************************/
-class HelpCommand extends LogoCommand {
+class HelpInstruction extends LogoInstruction {
 	private message: string = "";
 
-	public constructor(commands: LogoCommand[]) {
+	public constructor(instructions: LogoInstruction[]) {
 		super([ "HELP" ], 0);
-		this.buildMessage(commands);
+		this.buildMessage(instructions);
 	}
 
-	private buildMessage(commands: LogoCommand[]) : void {
+	private buildMessage(instructions: LogoInstruction[]) : void {
 		const messageLines: string[] = [];
 
-		commands.forEach((command: LogoCommand) : void => {
-			if (command.description) {
-				messageLines.push(`${command.instructions.join(", ")} - ${command.description}`);
+		instructions.forEach((instruction: LogoInstruction) : void => {
+			if (instruction.description) {
+				messageLines.push(`${instruction.instructions.join(", ")} - ${instruction.description}`);
 			}
 		});
 
@@ -59,9 +59,9 @@ class HelpCommand extends LogoCommand {
 }
 
 /*************************************************************
- * Commands
+ * Instructions
  *************************************************************/
-class ForwardCommand extends LogoCommand {
+class ForwardInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["AV", "AVANCE"],
@@ -75,7 +75,7 @@ class ForwardCommand extends LogoCommand {
 	}
 }
 
-class BackwardCommand extends LogoCommand {
+class BackwardInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["RE", "RECULE"],
@@ -89,7 +89,7 @@ class BackwardCommand extends LogoCommand {
 	}
 }
 
-class SetTurtlePositionCommand extends LogoCommand {
+class SetTurtlePositionInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["FPOS"],
@@ -103,7 +103,7 @@ class SetTurtlePositionCommand extends LogoCommand {
 	}
 }
 
-class GetTurtlePositionCommand extends LogoCommand {
+class GetTurtlePositionInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["POS", "POSITION"],
@@ -119,7 +119,7 @@ class GetTurtlePositionCommand extends LogoCommand {
 }
 
 
-class RotateRightCommand extends LogoCommand {
+class RotateRightInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["TD", "TOURNEDROITE"],
@@ -133,7 +133,7 @@ class RotateRightCommand extends LogoCommand {
 	}
 }
 
-class RotateLeftCommand extends LogoCommand {
+class RotateLeftInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["TG", "TOURNEGAUCHE"],
@@ -147,7 +147,7 @@ class RotateLeftCommand extends LogoCommand {
 	}
 }
 
-class SetTurtleAngleCommand extends LogoCommand {
+class SetTurtleAngleInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["FCAP"],
@@ -161,7 +161,7 @@ class SetTurtleAngleCommand extends LogoCommand {
 	}
 }
 
-class GetTurtleAngleCommand extends LogoCommand {
+class GetTurtleAngleInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["CAP"],
@@ -175,7 +175,7 @@ class GetTurtleAngleCommand extends LogoCommand {
 	}
 }
 
-class DisableTrailCommand extends LogoCommand {
+class DisableTrailInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["LC", "LEVERCRAYON"],
@@ -189,7 +189,7 @@ class DisableTrailCommand extends LogoCommand {
 	}
 }
 
-class EnableTrailCommand extends LogoCommand {
+class EnableTrailInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["BC", "BAISSERCRAYON"],
@@ -203,7 +203,7 @@ class EnableTrailCommand extends LogoCommand {
 	}
 }
 
-class HideTurtleCommand extends LogoCommand {
+class HideTurtleInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["CT", "CACHERTORTUE"],
@@ -217,7 +217,7 @@ class HideTurtleCommand extends LogoCommand {
 	}
 }
 
-class ShowTurtleCommand extends LogoCommand {
+class ShowTurtleInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["MT", "MONTRERTORTUE"],
@@ -231,7 +231,7 @@ class ShowTurtleCommand extends LogoCommand {
 	}
 }
 
-class ResetAllCommand extends LogoCommand {
+class ResetAllInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["VE", "REINITIALISER"],
@@ -245,7 +245,7 @@ class ResetAllCommand extends LogoCommand {
 	}
 }
 
-class ResetDrawCommand extends LogoCommand {
+class ResetDrawInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["NT", "NETTOIE"],
@@ -259,7 +259,7 @@ class ResetDrawCommand extends LogoCommand {
 	}
 }
 
-class ResetTurtleOriginCommand extends LogoCommand {
+class ResetTurtleOriginInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["ORIGINE"],
@@ -273,7 +273,7 @@ class ResetTurtleOriginCommand extends LogoCommand {
 	}
 }
 
-class ClearHistoryCommand extends LogoCommand {
+class ClearHistoryInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["VT", "NETTOIECONSOLE"],
@@ -287,7 +287,7 @@ class ClearHistoryCommand extends LogoCommand {
 	}
 }
 
-class ChangeTrailColorCommand extends LogoCommand {
+class ChangeTrailColorInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["FCC", "COULEURCRAYON"],
@@ -301,7 +301,7 @@ class ChangeTrailColorCommand extends LogoCommand {
 	}
 }
 
-class ChangeBackgroundColorCommand extends LogoCommand {
+class ChangeBackgroundColorInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["FCB", "COULEURTOILE"],
@@ -315,7 +315,7 @@ class ChangeBackgroundColorCommand extends LogoCommand {
 	}
 }
 
-class RepeatCommand extends LogoCommand {
+class RepeatInstruction extends LogoInstruction {
 	public constructor() {
 		super(
 			["REPETER"],
@@ -325,22 +325,22 @@ class RepeatCommand extends LogoCommand {
 	}
 
 	protected _execute(interpreter: LogoInterpreter, ...args: string[]): void {
-		const commandsArr: string[] = interpreter.splitCommand(args[1].slice(1, (args[1].length - 1)));
-		const commands: string[] = [];
+		const instructionsArr: string[] = interpreter.splitInstruction(args[1].slice(1, (args[1].length - 1)));
+		const instructions: string[] = [];
 		let idx: number = 0;
 
-		while (idx < commandsArr.length) {
-			const command: LogoCommand = interpreter.getCommand(commandsArr[idx]);
-			const args: string[] = commandsArr.splice((idx + 1), command.expectedParameters);
-			commands.push(`${command.instructions[0]} ${args}`);
+		while (idx < instructionsArr.length) {
+			const instruction: LogoInstruction = interpreter.getInstruction(instructionsArr[idx]);
+			const args: string[] = instructionsArr.splice((idx + 1), instruction.expectedParameters);
+			instructions.push(`${instruction.instructions[0]} ${args}`);
 
-			idx += command.expectedParameters;
+			idx += instruction.expectedParameters;
 		}
 
 		const iterations: number = parseInt(args[0]);
 		for (let currIter: number = 0; currIter < iterations; currIter++) {
-			commands.map((fullCommand: string) : string | void => {
-				interpreter.executeCommand(fullCommand);
+			instructions.map((fullInstruction: string) : string | void => {
+				interpreter.executeInstruction(fullInstruction);
 			});
 		}
 	}
@@ -349,30 +349,30 @@ class RepeatCommand extends LogoCommand {
 /*************************************************************
  * Export
  *************************************************************/
-const commandsToExpose: LogoCommand[] = [
-	new ForwardCommand(), new BackwardCommand(),
-	new SetTurtlePositionCommand(), new GetTurtlePositionCommand(),
-	new RotateRightCommand(), new RotateLeftCommand(),
-	new SetTurtleAngleCommand(), new GetTurtleAngleCommand(),
-	new DisableTrailCommand(), new EnableTrailCommand(),
-	new HideTurtleCommand(), new ShowTurtleCommand(),
-	new ResetAllCommand(), new ResetDrawCommand(), new ResetTurtleOriginCommand(),
-	new ClearHistoryCommand(),
-	new ChangeTrailColorCommand(), new ChangeBackgroundColorCommand(),
-	new RepeatCommand()
+const instructionsToExpose: LogoInstruction[] = [
+	new ForwardInstruction(), new BackwardInstruction(),
+	new SetTurtlePositionInstruction(), new GetTurtlePositionInstruction(),
+	new RotateRightInstruction(), new RotateLeftInstruction(),
+	new SetTurtleAngleInstruction(), new GetTurtleAngleInstruction(),
+	new DisableTrailInstruction(), new EnableTrailInstruction(),
+	new HideTurtleInstruction(), new ShowTurtleInstruction(),
+	new ResetAllInstruction(), new ResetDrawInstruction(), new ResetTurtleOriginInstruction(),
+	new ClearHistoryInstruction(),
+	new ChangeTrailColorInstruction(), new ChangeBackgroundColorInstruction(),
+	new RepeatInstruction()
 ];
 
-function prepareCommands() : ExposedCommands {
-	const commands: ExposedCommands = commandsToExpose.reduce((commandsMap: ExposedCommands, command: LogoCommand) : ExposedCommands => {
-		const currentMap: ExposedCommands = {};
-		command.instructions.forEach((instruction: string) => (currentMap[instruction] = command));
-		return { ...commandsMap, ...currentMap };
+function prepareInstructions() : ExposedInstructions {
+	const instructions: ExposedInstructions = instructionsToExpose.reduce((instructionsMap: ExposedInstructions, instruction: LogoInstruction) : ExposedInstructions => {
+		const currentMap: ExposedInstructions = {};
+		instruction.instructions.forEach((ins: string) => (currentMap[ins] = instruction));
+		return { ...instructionsMap, ...currentMap };
 	}, {});
 
-	const helpCommand: HelpCommand = new HelpCommand(commandsToExpose);
-	helpCommand.instructions.forEach((instruction: string) => (commands[instruction] = helpCommand));
+	const helpInstruction: HelpInstruction = new HelpInstruction(instructionsToExpose);
+	helpInstruction.instructions.forEach((instruction: string) => (instructions[instruction] = helpInstruction));
 
-	return commands;
+	return instructions;
 }
 
-export default prepareCommands();
+export default prepareInstructions();

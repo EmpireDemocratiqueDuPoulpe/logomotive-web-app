@@ -1,11 +1,11 @@
 "use client";
 
-import { InvalidCommand, UnexpectedError } from "@/exceptions";
+import { InvalidInstruction, UnexpectedError } from "@/exceptions";
 import LogoDebugger from "./LogoDebugger/LogoDebugger";
 import LogoPointer from "./LogoPointer/LogoPointer";
 import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
-import LogoCommands from "./LogoCommands/LogoCommands";
-import type { LogoCommand } from "./LogoCommands/LogoCommands";
+import LogoInstructions from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
+import type { LogoInstruction } from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 import type { Line, RenderReason, ScriptReturn } from "./LogoInterpreter.types";
 
 export default class LogoInterpreter {
@@ -79,32 +79,32 @@ export default class LogoInterpreter {
 	public addLine(line: Line) : void { this.lines.push(line); }
 
 	/* --- Functions ------------------------------------------------------------------------------------------------ */
-	public getCommand(command: string) : LogoCommand {
-		if (!LogoCommands.hasOwnProperty(command)) {
-			throw new InvalidCommand();
+	public getInstruction(instruction: string) : LogoInstruction {
+		if (!LogoInstructions.hasOwnProperty(instruction)) {
+			throw new InvalidInstruction();
 		}
 
-		return LogoCommands[command];
+		return LogoInstructions[instruction];
 	}
 
-	public splitCommand(fullCommand: string) : string[] {
+	public splitInstruction(fullInstruction: string) : string[] {
 		// Split by any whitespace character, unless within square brackets.
-		return fullCommand.split(/\s+(?![^\[]*])/);
+		return fullInstruction.split(/\s+(?![^\[]*])/);
 	}
 
-	private executeInstruction(fullInstruction: string) : Error | null {
+	public executeInstruction(fullInstruction: string) : Error | null {
 		this.debugger.printFnCall("Interpreter - executeInstruction", "start");
 
-		const [ instruction, ...args ] = this.splitCommand(fullInstruction);
+		const [ instruction, ...args ] = this.splitInstruction(fullInstruction.trim());
 		let output: string | void = "";
 		let error: unknown | null = null;
 
 		try {
-			const commandWorker: LogoCommand = this.getCommand(instruction);
+			const instructionWorker: LogoInstruction = this.getInstruction(instruction);
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
-				output = commandWorker.execute(this, ...args);
-				this.render("Command");
+				output = instructionWorker.execute(this, ...args);
+				this.render("Instruction");
 			} else {
 				// noinspection ExceptionCaughtLocallyJS
 				throw new UnexpectedError("Canvas not found!");

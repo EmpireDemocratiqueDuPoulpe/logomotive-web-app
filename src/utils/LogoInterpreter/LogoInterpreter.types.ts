@@ -5,7 +5,7 @@ export type Line = {
 	hexColor: string
 };
 
-export type RenderReason = "DOMUpdate" | "AssetLoaded" | "Command" | null;
+export type RenderReason = "DOMUpdate" | "AssetLoaded" | "Instruction" | null;
 
 export type ScriptError = { line: number, error: string };
 

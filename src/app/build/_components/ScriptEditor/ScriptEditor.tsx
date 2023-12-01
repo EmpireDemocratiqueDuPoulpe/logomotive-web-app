@@ -65,7 +65,7 @@ function ScriptEditor({ script_id }: Props) : React.JSX.Element {
 
 		if (scriptReturn.status === "failed") {
 			setErrors(scriptReturn.errors);
-		}
+		} else setErrors([]);
 	};
 
 	const saveScript = () : void => {

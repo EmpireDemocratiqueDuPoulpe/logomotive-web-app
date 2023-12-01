@@ -1,5 +1,5 @@
 import Prism, { Grammar } from "prismjs";
-import LogoCommands from "@/utils/LogoInterpreter/LogoCommands/LogoCommands";
+import LogoCommands from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 
 export const languageName: string = "logo";
 const languageDefinition: Grammar = {
