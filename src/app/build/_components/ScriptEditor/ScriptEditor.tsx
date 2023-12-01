@@ -13,6 +13,7 @@ import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
 import toast from "react-hot-toast";
+import clsx from "clsx";
 
 function highlight(code: string, languageName: string, errors: ScriptError[], withLineNumbers: boolean = true) : string {
 	return Prism.highlight(code, Prism.languages[languageName], languageName)
@@ -33,7 +34,7 @@ function highlightLine(code: string, idx: number, errors: ScriptError[], withLin
 		errorOverlay = `<div class="${styles.editorLineError}"><span class="${styles.errorText}">${Array.from({ length: lineLength }, (): string => " ").join("")}${lineError[0].error}</span></div>`;
 	}
 
-	return `<span class="${styles.editorLine}">${lineNumberSpan}${code}${errorOverlay}</span>`;
+	return `<span class="${clsx(styles.editorLine, (!code && styles.emptyLine))}">${lineNumberSpan}${code}${errorOverlay}</span>`;
 }
 
 function ScriptEditor({ script_id }: Props) : React.JSX.Element {

@@ -27,8 +27,13 @@
 
 .scriptEditor .scriptEditorBox .editor .editorLine .editorLineNumber {
 	position: absolute;
+	top: 0;
 	left: calc(var(--left-padding) * -0.5);
 	font-weight: 100;
+}
+
+.scriptEditor .scriptEditorBox .editor .editorLine.emptyLine .editorLineNumber {
+	top: -1em; /* C'est sale, mais ça marche. */
 }
 
 .scriptEditor .scriptEditorBox .editor .editorLine .editorLineError {
