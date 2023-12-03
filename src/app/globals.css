@@ -1,9 +1,10 @@
 /* --- Variables ---------------------------------------------------------------------------------------------------- */
 :root {
 	--foreground-color: #000000;
-	--background-color-start: #D6DBDC;
-	--background-color-end: #FFFFFF;
+	--background-color: #F0F0F0;
 	--discrete-border-color: #E1E1E1;
+
+	--header-background-color: #FFFFFF;
 
 	--console-background-color: #000000;
 	--console-foreground-color: #FFFFFF;
@@ -16,17 +17,12 @@
 
 	--default-spacing: 1rem;
 	--default-border-radius: 0.3125rem;
-
-	--mono-font: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-	"Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-	"Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
 		--foreground-color: #FFFFFF;
-		--background-color-start: #000000;
-		--background-color-end: #000000;
+		--background-color: #000000;
 	}
 }
 
@@ -37,9 +33,7 @@ html, body {
 }
 
 body {
-	background:
-		linear-gradient(to bottom, transparent, rgb(var(--background-color-end)))
-		rgb(var(--background-color-start));
+	background: var(--background-color);
 	color: rgb(var(--foreground-color));
 }
 

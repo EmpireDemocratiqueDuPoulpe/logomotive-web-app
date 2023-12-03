@@ -1,4 +1,4 @@
 // --- Types -----------------------------------------------------------------------------------------------------------
-export type FontsConstants = Readonly<{
-	CLASSNAMES: string
+export type AppConstants = Readonly<{
+	APP_NAME: string
 }>;

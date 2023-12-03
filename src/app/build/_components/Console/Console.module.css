@@ -30,7 +30,6 @@
 	padding: var(--default-spacing);
 	background: var(--console-background-color);
 	color: var(--console-foreground-color);
-	font-family: var(--mono-font);
 	border: none;
 	border-radius: 0 0 var(--default-border-radius) var(--default-border-radius);
 }

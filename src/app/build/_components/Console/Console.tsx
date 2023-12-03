@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import clsx from "clsx";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import ConsoleHistory from "./ConsoleHistory/ConsoleHistory";
+import { Fonts } from "@/constants";
 import styles from "./Console.module.css";
 
 function Console() : React.JSX.Element {
@@ -36,13 +38,14 @@ function Console() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<div className={styles.console}>
+		<div className={clsx(styles.console, Fonts.firaCode.className)}>
 			<div className={styles.history}>
 				<ConsoleHistory/>
 			</div>
 
 			<div className={styles.commandLine}>
 				<input
+					className={Fonts.firaCode.className}
 					type="text"
 					placeholder="Entrez une commande ici"
 					value={commandLine}
