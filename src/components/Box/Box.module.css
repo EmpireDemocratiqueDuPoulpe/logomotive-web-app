@@ -3,4 +3,6 @@
 	padding: var(--default-spacing);
 	background: var(--box-background-color);
 	border-radius: var(--default-border-radius);
+	overflow-x: hidden;
+	overflow-y: auto;
 }

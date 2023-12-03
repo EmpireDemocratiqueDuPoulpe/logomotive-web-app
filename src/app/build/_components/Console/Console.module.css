@@ -3,8 +3,8 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: stretch;
-	width: 25vw;
 	height: 250px;
+	margin-top: var(--default-spacing);
 	overflow: hidden;
 }
 
@@ -21,6 +21,7 @@
 .console .commandLine {
 	flex-grow: 0;
 	flex-shrink: 0;
+	border-top: 1px #D0D0D0 solid;
 }
 
 .console .commandLine > input {

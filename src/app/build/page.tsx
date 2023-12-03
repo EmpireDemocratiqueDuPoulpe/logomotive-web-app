@@ -32,20 +32,27 @@ function Build() : React.JSX.Element {
 		<main className={styles.page}>
 			<LogoBuilderProvider>
 
-				<Box width={`${canvasSize.width}px`} height={`${canvasSize.height}px`}>
+				<Box className={styles.canvasBox} width={`${canvasSize.width}px`} height={`${canvasSize.height}px`}>
 					<Canvas width={canvasSize.width} height={canvasSize.height}/>
 				</Box>
 
 				<Box height={`${canvasSize.height}px`}>
-					{scriptID && <ShareScript script_id={scriptID}/>}
+					<Box.Header name="Éditeur">
+						{scriptID && <ShareScript script_id={scriptID}/>}
+					</Box.Header>
+
 					<ScriptEditor script_id={scriptID}/>
 				</Box>
 
 				<Box width={`${canvasSize.width}px`}>
+					<Box.Header name="Console"/>
+
 					<Console/>
 				</Box>
 
 				<Box>
+					<Box.Header name="Explorateur de scripts"/>
+
 					<ScriptsExplorer script_id={scriptID}/>
 				</Box>
 			</LogoBuilderProvider>

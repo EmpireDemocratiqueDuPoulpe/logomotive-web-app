@@ -1,8 +1,10 @@
 .page {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
+	grid-template-columns: min-content 1fr;
+	grid-template-rows: 1fr min-content;
 	grid-column-gap: var(--default-spacing);
 	grid-row-gap: var(--default-spacing);
 	padding: 0 var(--default-spacing) var(--default-spacing) var(--default-spacing);
 }
+
+.page .canvasBox { overflow: hidden; }

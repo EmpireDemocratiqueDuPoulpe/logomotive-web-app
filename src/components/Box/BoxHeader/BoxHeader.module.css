@@ -1,0 +1,19 @@
+.boxHeaderWrapper {
+	--box-header-height: 2.25rem;
+
+	position: relative;
+	width: 100%;
+	height: calc(var(--box-header-height) - var(--default-spacing));
+}
+
+.boxHeaderWrapper .boxHeader {
+	position: absolute;
+	top: calc(var(--default-spacing) * -1);
+	left: calc(var(--default-spacing) * -1);
+	width: calc(100% + (var(--default-spacing) * 2));
+	height: var(--box-header-height);
+	line-height: var(--box-header-height);
+	font-size: 0.8em;
+	padding: 0 var(--default-spacing);
+	border-bottom: 1px var(--discrete-border-color) solid;
+}
