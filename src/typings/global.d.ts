@@ -5,10 +5,12 @@ export type Script = {
 	content: string
 	tags?: string[]
 	is_public: boolean
+	created_at: string
+	updated_at: string
 }
 
-export type NewScript = Omit<Script, "script_id" | "user_id">
-export type UpdatingScript = Omit<Script, "user_id">
+export type NewScript = Omit<Script, "script_id" | "user_id" | "created_at" | "updated_at">
+export type UpdatingScript = Omit<Script, "user_id" | "created_at" | "updated_at">
 
 export type PublicScript = Omit<Script, "user_id" | "content" | "is_public"> & {
 	username: string

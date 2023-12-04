@@ -1,0 +1,36 @@
+.scriptsExplorer {
+	--name-section-size: calc(100% - var(--size-section-size) - var(--created-at-section-size) - var(--updated-at-section-size) - (var(--default-spacing) * 3));
+	--size-section-size: 10%;
+	--created-at-section-size: 20%;
+	--updated-at-section-size: 20%;
+
+	font-size: 0.8em;
+}
+
+.scriptsExplorer .header,
+.scriptsExplorer .script {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--default-spacing);
+	width: 100%;
+	height: 2em;
+	padding: 0 calc(var(--default-spacing) / 2);
+}
+
+.scriptsExplorer > * > :nth-child(1) { width: var(--name-section-size); }
+.scriptsExplorer > * > :nth-child(2) { width: var(--size-section-size); }
+.scriptsExplorer > * > :nth-child(3) { width: var(--created-at-section-size); }
+.scriptsExplorer > * > :nth-child(4) { width: var(--updated-at-section-size); }
+
+.scriptsExplorer > .script > :nth-child(2) { color: rgba(0, 0, 0, 0.65); }
+.scriptsExplorer > .script > :nth-child(3) { color: rgba(0, 0, 0, 0.65); }
+.scriptsExplorer > .script > :nth-child(4) { color: rgba(0, 0, 0, 0.65); }
+
+.scriptsExplorer .header { font-weight: bold; }
+
+.scriptsExplorer .script:hover { background: var(--selection-color); }
+.scriptsExplorer .script .scriptName svg { margin-right: calc(var(--default-spacing) / 2); }
+
+.scriptsExplorer .script.current { background: var(--info-color); }
