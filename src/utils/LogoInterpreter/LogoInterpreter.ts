@@ -99,6 +99,8 @@ export default class LogoInterpreter {
 		let output: string | void = "";
 		let error: unknown | null = null;
 
+		if (!instruction) return null;
+
 		try {
 			const instructionWorker: LogoInstruction = this.getInstruction(instruction);
 

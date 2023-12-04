@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import useWindowSize from "@/hooks/windowSize/useWindowSize";
 import { LogoBuilderProvider } from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
+import { ScriptEditorProvider } from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Box from "@/components/Box/Box";
 import Console from "@/app/build/_components/Console/Console";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
@@ -31,17 +32,18 @@ function Build() : React.JSX.Element {
 	return (
 		<main className={styles.page}>
 			<LogoBuilderProvider>
-
 				<Box className={styles.canvasBox} width={`${canvasSize.width}px`} height={`${canvasSize.height}px`}>
 					<Canvas width={canvasSize.width} height={canvasSize.height}/>
 				</Box>
 
 				<Box height={`${canvasSize.height}px`}>
-					<Box.Header name="Éditeur">
-						{scriptID && <ShareScript script_id={scriptID}/>}
-					</Box.Header>
+					<ScriptEditorProvider scriptID={scriptID ?? undefined}>
+						<Box.Header name="Éditeur">
+							{scriptID && <ShareScript script_id={scriptID}/>}
+						</Box.Header>
 
-					<ScriptEditor script_id={scriptID}/>
+						<ScriptEditor/>
+					</ScriptEditorProvider>
 				</Box>
 
 				<Box width={`${canvasSize.width}px`}>
