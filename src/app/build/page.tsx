@@ -45,7 +45,9 @@ function Build() : React.JSX.Element {
 				</Box>
 
 				<Box width={`${canvasSize.width}px`}>
-					<Box.Header name="Console"/>
+					<Box.Header name="Console">
+						<Console.CleanBtn/>
+					</Box.Header>
 
 					<Console/>
 				</Box>

@@ -8,7 +8,10 @@ function BoxHeader({ name, children }: Props) : React.JSX.Element {
 		<div className={styles.boxHeaderWrapper}>
 			<div className={styles.boxHeader}>
 				{name && <span>{name}</span>}
-				{children}
+
+				<div className={styles.extra}>
+					{children}
+				</div>
 			</div>
 		</div>
 	);

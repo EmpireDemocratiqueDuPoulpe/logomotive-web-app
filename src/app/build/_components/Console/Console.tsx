@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import ConsoleHistory from "./ConsoleHistory/ConsoleHistory";
+import ConsoleCleanButton from "./ConsoleCleanButton/ConsoleCleanButton";
 import { Fonts } from "@/constants";
 import styles from "./Console.module.css";
 
@@ -56,5 +57,6 @@ function Console() : React.JSX.Element {
 		</div>
 	);
 }
+Console.CleanBtn = ConsoleCleanButton;
 
 export default Console;

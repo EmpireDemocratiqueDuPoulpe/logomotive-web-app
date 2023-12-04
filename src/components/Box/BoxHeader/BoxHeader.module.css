@@ -10,10 +10,18 @@
 	position: absolute;
 	top: calc(var(--default-spacing) * -1);
 	left: calc(var(--default-spacing) * -1);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
 	width: calc(100% + (var(--default-spacing) * 2));
 	height: var(--box-header-height);
 	line-height: var(--box-header-height);
 	font-size: 0.8em;
 	padding: 0 var(--default-spacing);
 	border-bottom: 1px var(--discrete-border-color) solid;
+}
+
+.boxHeaderWrapper .boxHeader .extra {
+	margin-left: auto;
 }
