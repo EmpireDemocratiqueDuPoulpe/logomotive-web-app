@@ -3,6 +3,12 @@
 import React from "react";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Editor from "react-simple-code-editor";
+import ScriptEditorExecuteButton
+	from "@/app/build/_components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
+import ScriptEditorDownloadButton
+	from "@/app/build/_components/ScriptEditor/ScriptEditorDownloadButton/ScriptEditorDownloadButton";
+import ScriptEditorShareButton
+	from "@/app/build/_components/ScriptEditor/ScriptEditorShareButton/ScriptEditorShareButton";
 import { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
 import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
@@ -32,8 +38,6 @@ function ScriptEditor() : React.JSX.Element {
 				scriptEditorCtx.isLoadError ? null : (
 					<>
 						<div>
-							<button onClick={scriptEditorCtx.executeScript}>Exécuter &gt;</button>
-
 							<div>
 								<input type="text" value={scriptEditorCtx.currentScript.name} onChange={handleScriptNameChange}/>
 								<input type="text" value={scriptEditorCtx.currentScript.tags} onChange={handleScriptTagsChange}/>
@@ -43,8 +47,6 @@ function ScriptEditor() : React.JSX.Element {
 								</label>
 								<button onClick={scriptEditorCtx.saveScript}>Sauvegarder</button>
 							</div>
-
-							<button onClick={scriptEditorCtx.downloadScript}>Télécharger</button>
 						</div>
 
 
@@ -72,5 +74,8 @@ function ScriptEditor() : React.JSX.Element {
 		</div>
 	);
 }
+ScriptEditor.ExecuteButton = ScriptEditorExecuteButton;
+ScriptEditor.DownloadButton = ScriptEditorDownloadButton;
+ScriptEditor.ShareButton = ScriptEditorShareButton;
 
 export default ScriptEditor;

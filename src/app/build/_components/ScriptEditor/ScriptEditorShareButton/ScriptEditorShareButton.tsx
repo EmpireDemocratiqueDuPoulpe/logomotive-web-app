@@ -1,19 +1,22 @@
-"use client";
-
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShare } from "@fortawesome/free-solid-svg-icons";
 import useScriptSharingLink from "@/hooks/scriptSharingLinks/useScriptSharingLink";
-import type { Props } from "./ShareScript.types";
+import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import type { SharingLinkID } from "@/typings/global";
 import type { JSONResponse } from "@/utils/Endpoint.types";
 import toast from "react-hot-toast";
 
-function ShareScript({ script_id }: Props) : React.JSX.Element {
+function ScriptEditorShareButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
+	const scriptEditorCtx = useScriptEditorContext();
 	const scriptSharingLink = useScriptSharingLink(null);
 
 	/* --- Functions ----------------------------- */
 	const onCreateClick = () : void => {
-		scriptSharingLink.create.mutate({ script_id }, {
+		if (!scriptEditorCtx.currentScript.script_id) return;
+
+		scriptSharingLink.create.mutate({ script_id: scriptEditorCtx.currentScript.script_id }, {
 			onSuccess: (response: JSONResponse<SharingLinkID>) : void  => {
 				navigator.clipboard.writeText(`${window.location.origin}/view/${response.data.link_id}`).catch(toast.error);
 				toast.success("Lien copié dans le presse-papier");
@@ -23,11 +26,13 @@ function ShareScript({ script_id }: Props) : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<div>
-			<button onClick={onCreateClick}>Partager</button>
-			<button>Voir les liens de partage</button>
-		</div>
+		<>
+			<button onClick={onCreateClick} disabled={!scriptEditorCtx.currentScript.script_id}>
+				<FontAwesomeIcon icon={faShare}/>
+			</button>
+			<button disabled={!scriptEditorCtx.currentScript.script_id}>Voir les liens de partage</button>
+		</>
 	);
 }
 
-export default ShareScript;
+export default ScriptEditorShareButton;

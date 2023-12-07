@@ -23,5 +23,11 @@
 }
 
 .boxHeaderWrapper .boxHeader .extra {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	height: var(--box-header-height);
+	line-height: var(--box-header-height);
 	margin-left: auto;
 }

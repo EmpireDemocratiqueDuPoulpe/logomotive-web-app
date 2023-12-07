@@ -10,7 +10,6 @@ import Console from "@/app/build/_components/Console/Console";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
 import ScriptsExplorer from "@/app/build/_components/ScriptsExplorer/ScriptsExplorer";
 import ScriptEditor from "@/app/build/_components/ScriptEditor/ScriptEditor";
-import ShareScript from "@/app/build/_components/ShareScript/ShareScript";
 import styles from "./page.module.css";
 
 const SCRIPT_ID_PARAM: string = "scriptID";
@@ -39,7 +38,9 @@ function Build() : React.JSX.Element {
 				<Box height={`${canvasSize.height}px`}>
 					<ScriptEditorProvider scriptID={scriptID ?? undefined}>
 						<Box.Header name="Éditeur">
-							{scriptID && <ShareScript script_id={scriptID}/>}
+							<ScriptEditor.ExecuteButton/>
+							<ScriptEditor.DownloadButton/>
+							<ScriptEditor.ShareButton/>
 						</Box.Header>
 
 						<ScriptEditor/>
