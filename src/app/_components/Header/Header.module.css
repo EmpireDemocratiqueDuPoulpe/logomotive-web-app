@@ -26,8 +26,9 @@
 
 	width: var(--size);
 	height: var(--size);
-	background: red;
 }
+
+.header .logo > * { object-fit: contain; width: 100%; height: 100% }
 
 .header .pageName {
 	line-height: var(--header-height);

@@ -2,7 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import useAuthContext from "@/contexts/AuthCtx/AuthCtx";
+import logomotive from "../../../assets/logos/Logomotive.png";
 import styles from "./Header.module.css";
 
 const TITLE_SEP: string = " - ";
@@ -19,7 +21,9 @@ function Header() : React.JSX.Element {
 	return (
 		<div className={styles.headerContainer}>
 			<header className={styles.header}>
-				<div className={styles.logo}/>
+				<div className={styles.logo}>
+					<Image src={logomotive} alt="Logo(motive)"/>
+				</div>
 				<div className={styles.pageName}>{removeAppName(document.title)}</div>
 
 				<div className={styles.navigation}>
