@@ -9,7 +9,7 @@ function ScriptEditorSaveButton() : React.JSX.Element | null {
 
 	/* --- Component ----------------------------- */
 	return !scriptEditorCtx.currentScript.script_id ? null : (
-		<button className="blue icon" onClick={scriptEditorCtx.saveScript}>
+		<button className="primaryColor icon" onClick={scriptEditorCtx.saveScript}>
 			<FontAwesomeIcon icon={faSave}/>
 		</button>
 	);
