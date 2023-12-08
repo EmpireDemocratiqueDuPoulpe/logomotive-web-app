@@ -132,7 +132,7 @@ export function AuthProvider({ children }: ProviderProps) : React.JSX.Element {
 		try {
 			const response = await API.ENDPOINTS.V1.USERS.logout.fetch();
 
-			if (response.status !== 204) setError(response.error ?? "Erreur inconnue : Déconnexion impossible (dommage).");
+			if (response.status !== 200) setError(response.error ?? "Erreur inconnue : Déconnexion impossible (dommage).");
 			else {
 				setDisconnected();
 				success = true;

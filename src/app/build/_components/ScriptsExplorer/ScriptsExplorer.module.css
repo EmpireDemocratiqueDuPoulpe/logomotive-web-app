@@ -33,6 +33,6 @@
 .scriptsExplorer .script:hover { background: var(--selection-color); }
 
 .scriptsExplorer .script .scriptName svg { margin-right: calc(var(--default-spacing) / 2); color: var(--primary-color); }
-.scriptsExplorer .script.current .scriptName svg { color: var(--background-color); }
+.scriptsExplorer .script.current .scriptName svg { color: var(--upfront-background-color); }
 
-.scriptsExplorer .script.current { background: var(--primary-color); }
+.scriptsExplorer .script.current { background: var(--primary-color); color: var(--upfront-background-color); }

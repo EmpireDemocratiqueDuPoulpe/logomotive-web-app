@@ -37,13 +37,13 @@ function Header() : React.JSX.Element {
 					{auth.status === "connected" ? (
 						<>
 							<span className={styles.authUsername}>{auth.user?.username}</span>
-							<Link href="/logout">D&eacute;connexion</Link>
+							<Link href="/auth/logout">D&eacute;connexion</Link>
 						</>
 					) : (
 						<>
-							<Link href="/login">Se connecter</Link>
+							<Link href="/auth/login">Se connecter</Link>
 							ou
-							<Link href="/register">Cr&eacute;er un compte</Link>
+							<Link href="/auth/register">Cr&eacute;er un compte</Link>
 						</>
 					)}
 				</div>
