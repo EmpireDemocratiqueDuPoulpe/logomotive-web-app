@@ -33,7 +33,7 @@ function ScriptEditorEditButton() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<button className="icon" onClick={() => setModalVisible(true)}>
+			<button className={clsx("icon", (!scriptEditorCtx.currentScript.script_id && "blue"))} onClick={() => setModalVisible(true)}>
 				<FontAwesomeIcon icon={scriptEditorCtx.currentScript.script_id ? faEdit : faSave}/>
 			</button>
 
