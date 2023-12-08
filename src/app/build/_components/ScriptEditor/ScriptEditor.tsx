@@ -25,26 +25,22 @@ function ScriptEditor() : React.JSX.Element {
 		<div className={styles.scriptEditor}>
 			{scriptEditorCtx.isLoading ? <p>Chargement en cours...</p> : (
 				scriptEditorCtx.isLoadError ? null : (
-					<>
-						<div className={styles.scriptEditorBox}>
-							<Editor
-								className={`${styles.editor} language-${languageName}`}
-								textareaClassName={`${styles.codeArea} language-${languageName}`}
-								preClassName={`${styles.codePre} language-${languageName}`}
-								value={scriptEditorCtx.currentScript.content}
-								onValueChange={scriptEditorCtx.changeScriptContent}
-								highlight={(code: string) => scriptEditorCtx.highlight(code, languageName, true) }
-								padding={10}
-								style={{
-									fontFamily: "\"Fira code\", \"Fira Mono\", monospace",
-									fontSize: 12,
-								}}
-								tabSize={1}
-								insertSpaces={false}
-								ignoreTabKey={false}
-							/>
-						</div>
-					</>
+					<Editor
+						className={`${styles.editor} language-${languageName}`}
+						textareaClassName={`${styles.codeArea} language-${languageName}`}
+						preClassName={`${styles.codePre} language-${languageName}`}
+						value={scriptEditorCtx.currentScript.content}
+						onValueChange={scriptEditorCtx.changeScriptContent}
+						highlight={(code: string) => scriptEditorCtx.highlight(code, languageName, true) }
+						padding={10}
+						style={{
+							fontFamily: "\"Fira code\", \"Fira Mono\", monospace",
+							fontSize: 12,
+						}}
+						tabSize={1}
+						insertSpaces={false}
+						ignoreTabKey={false}
+					/>
 				)
 			)}
 		</div>

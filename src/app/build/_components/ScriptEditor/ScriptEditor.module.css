@@ -1,20 +1,17 @@
-.scriptEditorBox {
-	height: 500px;
-}
-
-.scriptEditor .scriptEditorBox .editor {
+.scriptEditor .editor {
 	--left-padding: 60px;
 
+	margin-top: var(--default-spacing);
 	counter-reset: line;
 	border: 1px solid var(--discrete-border-color);
 }
 
-.scriptEditor .scriptEditorBox .editor .codeArea {
+.scriptEditor .editor .codeArea {
 	color: #ccc !important;
 	outline: none;
 	padding-left: var(--left-padding) !important;
 }
 
-.scriptEditor .scriptEditorBox .editor .codePre {
+.scriptEditor .editor .codePre {
 	padding-left: var(--left-padding) !important;
 }

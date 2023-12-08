@@ -1,6 +1,4 @@
 .boxHeaderWrapper {
-	--box-header-height: 2.25rem;
-
 	position: relative;
 	width: 100%;
 	height: calc(var(--box-header-height) - var(--default-spacing));

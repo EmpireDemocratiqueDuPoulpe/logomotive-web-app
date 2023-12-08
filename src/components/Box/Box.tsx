@@ -5,11 +5,21 @@ import BoxHeader from "@/components/Box/BoxHeader/BoxHeader";
 import type { Props } from "@/components/Box/Box.types";
 import styles from "./Box.module.css";
 
-function Box({ className, width, height, children }: Props) : React.JSX.Element {
+function Box({ className, width, height, header, children }: Props) : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
-		<div className={clsx(styles.box, className)} style={{ width: width ?? "auto", height: height ?? "auto" }}>
-			{children}
+		<div
+			className={clsx(styles.box, (header && styles.withHeader), className)}
+			style={{
+				width: width ?? "auto",
+				height: height ?? "auto"
+			}}
+		>
+			{header}
+
+			<div className={styles.content}>
+				{children}
+			</div>
 		</div>
 	);
 }

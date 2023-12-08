@@ -24,6 +24,7 @@
 	--default-spacing: 1rem;
 	--default-border-radius: 0.3125rem;
 	--header-height: 3.125em;
+	--box-header-height: 2.25rem;
 }
 
 @media (prefers-color-scheme: dark) {

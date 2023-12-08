@@ -35,8 +35,8 @@ function Build() : React.JSX.Element {
 					<Canvas width={canvasSize.width} height={canvasSize.height}/>
 				</Box>
 
-				<Box height={`${canvasSize.height}px`}>
-					<ScriptEditorProvider scriptID={scriptID ?? undefined}>
+				<ScriptEditorProvider scriptID={scriptID ?? undefined}>
+					<Box height={`${canvasSize.height}px`} header={(
 						<Box.Header name="Éditeur">
 							<ScriptEditor.ExecuteButton/>
 							<ScriptEditor.SaveButton/>
@@ -44,22 +44,20 @@ function Build() : React.JSX.Element {
 							<ScriptEditor.DownloadButton/>
 							<ScriptEditor.ShareButton/>
 						</Box.Header>
-
+					)}>
 						<ScriptEditor/>
-					</ScriptEditorProvider>
-				</Box>
+					</Box>
+				</ScriptEditorProvider>
 
-				<Box width={`${canvasSize.width}px`}>
+				<Box width={`${canvasSize.width}px`} header={(
 					<Box.Header name="Console">
 						<Console.CleanBtn/>
 					</Box.Header>
-
+				)}>
 					<Console/>
 				</Box>
 
-				<Box>
-					<Box.Header name="Explorateur de scripts"/>
-
+				<Box header={<Box.Header name="Explorateur de scripts"/>}>
 					<ScriptsExplorer script_id={scriptID}/>
 				</Box>
 			</LogoBuilderProvider>
