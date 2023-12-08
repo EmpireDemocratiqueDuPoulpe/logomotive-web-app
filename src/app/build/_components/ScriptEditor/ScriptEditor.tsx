@@ -3,6 +3,7 @@
 import React from "react";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Editor from "react-simple-code-editor";
+import ScriptEditorEditButton from "@/app/build/_components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
 import ScriptEditorExecuteButton
 	from "@/app/build/_components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
 import ScriptEditorDownloadButton
@@ -18,38 +19,12 @@ function ScriptEditor() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const scriptEditorCtx = useScriptEditorContext();
 
-	/* --- Functions ----------------------------- */
-	const handleScriptNameChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptName(event.target.value);
-	};
-
-	const handleScriptTagsChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptTags(event.target.value);
-	};
-
-	const handleScriptVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptPublicStatus(event.target.checked);
-	};
-
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.scriptEditor}>
 			{scriptEditorCtx.isLoading ? <p>Chargement en cours...</p> : (
 				scriptEditorCtx.isLoadError ? null : (
 					<>
-						<div>
-							<div>
-								<input type="text" value={scriptEditorCtx.currentScript.name} onChange={handleScriptNameChange}/>
-								<input type="text" value={scriptEditorCtx.currentScript.tags} onChange={handleScriptTagsChange}/>
-								<label>
-									public?
-									<input type="checkbox" checked={scriptEditorCtx.currentScript.is_public} onChange={handleScriptVisibilityChange}/>
-								</label>
-								<button onClick={scriptEditorCtx.saveScript}>Sauvegarder</button>
-							</div>
-						</div>
-
-
 						<div className={styles.scriptEditorBox}>
 							<Editor
 								className={`${styles.editor} language-${languageName}`}
@@ -74,6 +49,7 @@ function ScriptEditor() : React.JSX.Element {
 		</div>
 	);
 }
+ScriptEditor.EditButton = ScriptEditorEditButton;
 ScriptEditor.ExecuteButton = ScriptEditorExecuteButton;
 ScriptEditor.DownloadButton = ScriptEditorDownloadButton;
 ScriptEditor.ShareButton = ScriptEditorShareButton;

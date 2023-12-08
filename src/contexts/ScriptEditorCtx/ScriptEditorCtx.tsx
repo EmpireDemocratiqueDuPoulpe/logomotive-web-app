@@ -117,7 +117,7 @@ export function ScriptEditorProvider({ scriptID, children }: ProviderProps) : Re
 	const saveScript = useCallback(() : void => {
 		const newScriptData = {
 			...state.currentScript,
-			tags: state.currentScript.tags.split(",")
+			tags: state.currentScript.tags.split(",").map(t => t.trim()).filter(Boolean)
 		};
 
 		toast.promise(new Promise<void>((resolve, reject) : void => {

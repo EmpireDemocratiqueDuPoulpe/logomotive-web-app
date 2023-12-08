@@ -1,7 +1,7 @@
 .box {
 	box-sizing: content-box;
 	padding: var(--default-spacing);
-	background: var(--box-background-color);
+	background: var(--upfront-background-color);
 	border-radius: var(--default-border-radius);
 	overflow-x: hidden;
 	overflow-y: auto;
