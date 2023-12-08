@@ -65,7 +65,7 @@ a {
 
 /* --- Buttons ------------------------------------------------------------------------------------------------------ */
 button, input[type="submit"] {
-	--button-color: var(--discrete-text-color);
+	--button-color: var(--foreground-color);
 	--button-height: calc(1em + var(--default-spacing) + 2px);
 
 	display: flex;
