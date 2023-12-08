@@ -65,8 +65,8 @@ function Register() : React.JSX.Element {
 					<input type="password" name="password2" value={user.password2} onChange={handleInputChange} autoComplete="new-password"/>
 				</label>
 
+				<input className="primaryColor" type="submit" value="Créer un compte"/>
 				<Link href="/auth/login">J&apos;ai d&eacute;j&agrave; un compte</Link>
-				<input type="submit" value="Créer un compte"/>
 			</form>
 		</main>
 	);

@@ -54,8 +54,8 @@ function Login() : React.JSX.Element {
 					<input type="password" name="password" value={user.password} onChange={handleInputChange}/>
 				</label>
 
+				<input className="primaryColor" type="submit" value="Se connecter"/>
 				<Link href="/auth/register">Je n&apos;ai pas de compte</Link>
-				<input type="submit" value="Se connecter"/>
 			</form>
 		</main>
 	);

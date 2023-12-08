@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useAuthContext from "@/contexts/AuthCtx/AuthCtx";
-import styles from "./page.module.css";
 
 function Logout() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -13,7 +12,7 @@ function Logout() : React.JSX.Element {
 	/* --- Effects ------------------------------- */
 	useEffect(() : void => {
 		if (!authCtx.isConnected) {
-			router.push("/auth/login");
+			router.push("/");
 		}
 	}, [authCtx.isConnected, router]);
 
@@ -28,9 +27,7 @@ function Logout() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<main>
-			<div className={styles.logoutMessage}>
-				Déconnexion en cours...
-			</div>
+			Déconnexion en cours...
 		</main>
 	);
 }

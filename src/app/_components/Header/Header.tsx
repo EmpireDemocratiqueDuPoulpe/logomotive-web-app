@@ -1,24 +1,30 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import useAuthContext from "@/contexts/AuthCtx/AuthCtx";
 import logomotive from "../../../assets/logos/Logomotive.png";
 import styles from "./Header.module.css";
 
+const EXCLUDED_ROUTES: string[] = [ "/auth" ];
 const TITLE_SEP: string = " - ";
 
 function removeAppName(str: string) : string {
-	return str.substring(str.indexOf(TITLE_SEP) + TITLE_SEP.length);
+	const separatorIdx: number = str.indexOf(TITLE_SEP);
+
+	if (separatorIdx === -1) return str;
+	else return str.substring(separatorIdx + TITLE_SEP.length);
 }
 
-function Header() : React.JSX.Element {
+function Header() : React.JSX.Element | null {
 	/* --- States -------------------------------- */
 	const auth = useAuthContext();
+	const pathname: string = usePathname();
 
 	/* --- Component ----------------------------- */
-	return (
+	return EXCLUDED_ROUTES.some((r: string) => pathname.includes(r)) ? null : (
 		<div className={styles.headerContainer}>
 			<header className={styles.header}>
 				<div className={styles.logo}>
