@@ -9,7 +9,7 @@ function ScriptEditorExecuteButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<button onClick={scriptEditorCtx.executeScript}>
+		<button className="green icon" onClick={scriptEditorCtx.executeScript}>
 			<FontAwesomeIcon icon={faPlay}/>
 		</button>
 	);

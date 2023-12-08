@@ -27,6 +27,7 @@
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
+	gap: calc(var(--default-spacing) / 2);
 	height: var(--box-header-height);
 	line-height: var(--box-header-height);
 	margin-left: auto;

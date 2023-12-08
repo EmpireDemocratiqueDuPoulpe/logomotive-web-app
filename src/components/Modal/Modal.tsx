@@ -10,20 +10,24 @@ function Modal({ title, isVisible, setVisible, children }: Props) : React.JSX.El
 	const backgroundRef = useRef<HTMLDivElement>(null);
 
 	/* --- Functions ----------------------------- */
-	const toggleModal = (event: React.MouseEvent) : void => {
+	const toggleModalFromBackground = (event: React.MouseEvent) : void => {
 		if (event.target === backgroundRef.current) {
-			setVisible(!isVisible);
+			toggleModal();
 		}
+	};
+
+	const toggleModal = () : void => {
+		setVisible(!isVisible);
 	};
 
 	/* --- Component ----------------------------- */
 	return (
-		<div ref={backgroundRef} className={clsx(styles.modalBackground, (isVisible ? styles.visible : styles.hidden))} onClick={toggleModal}>
+		<div ref={backgroundRef} className={clsx(styles.modalBackground, (isVisible ? styles.visible : styles.hidden))} onClick={toggleModalFromBackground}>
 			<div className={styles.modal}>
 				<div className={styles.header}>
 					<h2>{title ?? "Fenêtre"}</h2>
 
-					<button onClick={toggleModal}>
+					<button className={styles.closeButton} onClick={toggleModal}>
 						<FontAwesomeIcon icon={faXmark}/>
 					</button>
 				</div>

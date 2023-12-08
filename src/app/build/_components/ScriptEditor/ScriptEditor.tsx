@@ -3,9 +3,10 @@
 import React from "react";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Editor from "react-simple-code-editor";
-import ScriptEditorEditButton from "@/app/build/_components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
 import ScriptEditorExecuteButton
 	from "@/app/build/_components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
+import ScriptEditorSaveButton from "@/app/build/_components/ScriptEditor/ScriptEditorSaveButton/ScriptEditorSaveButton";
+import ScriptEditorEditButton from "@/app/build/_components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
 import ScriptEditorDownloadButton
 	from "@/app/build/_components/ScriptEditor/ScriptEditorDownloadButton/ScriptEditorDownloadButton";
 import ScriptEditorShareButton
@@ -49,8 +50,9 @@ function ScriptEditor() : React.JSX.Element {
 		</div>
 	);
 }
-ScriptEditor.EditButton = ScriptEditorEditButton;
 ScriptEditor.ExecuteButton = ScriptEditorExecuteButton;
+ScriptEditor.SaveButton = ScriptEditorSaveButton;
+ScriptEditor.EditButton = ScriptEditorEditButton;
 ScriptEditor.DownloadButton = ScriptEditorDownloadButton;
 ScriptEditor.ShareButton = ScriptEditorShareButton;
 

@@ -217,6 +217,34 @@ class HideTurtleInstruction extends LogoInstruction {
 	}
 }
 
+class ShowGridInstruction extends LogoInstruction {
+	public constructor() {
+		super(
+			["MG", "MONTRERGRILLE"],
+			0,
+			"Montre la grille. Exemple : MG"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter): void {
+		interpreter.setGridVisible(true);
+	}
+}
+
+class HideGridInstruction extends LogoInstruction {
+	public constructor() {
+		super(
+			["CG", "CACHERGRILLE"],
+			0,
+			"Cache la grille. Exemple : CG"
+		);
+	}
+
+	protected _execute(interpreter: LogoInterpreter): void {
+		interpreter.setGridVisible(false);
+	}
+}
+
 class ShowTurtleInstruction extends LogoInstruction {
 	public constructor() {
 		super(
@@ -356,6 +384,7 @@ const instructionsToExpose: LogoInstruction[] = [
 	new SetTurtleAngleInstruction(), new GetTurtleAngleInstruction(),
 	new DisableTrailInstruction(), new EnableTrailInstruction(),
 	new HideTurtleInstruction(), new ShowTurtleInstruction(),
+	new HideGridInstruction(), new ShowGridInstruction(),
 	new ResetAllInstruction(), new ResetDrawInstruction(), new ResetTurtleOriginInstruction(),
 	new ClearHistoryInstruction(),
 	new ChangeTrailColorInstruction(), new ChangeBackgroundColorInstruction(),

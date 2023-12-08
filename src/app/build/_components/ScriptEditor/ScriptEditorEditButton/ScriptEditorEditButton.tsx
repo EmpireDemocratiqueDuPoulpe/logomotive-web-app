@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Modal from "@/components/Modal/Modal";
+import styles from "./ScriptEditorEditButton.module.css";
 
 function ScriptEditorEditButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -31,13 +33,13 @@ function ScriptEditorEditButton() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<button onClick={() => setModalVisible(true)}>
+			<button className="icon" onClick={() => setModalVisible(true)}>
 				<FontAwesomeIcon icon={scriptEditorCtx.currentScript.script_id ? faEdit : faSave}/>
 			</button>
 
 			{createPortal(
 				<Modal isVisible={isModalVisible} setVisible={setModalVisible}>
-					<form onSubmit={saveScript}>
+					<form className={styles.scriptForm} onSubmit={saveScript}>
 						<label>
 							Nom du script
 							<input type="text" value={scriptEditorCtx.currentScript.name} onChange={handleScriptNameChange}/>
@@ -53,7 +55,7 @@ function ScriptEditorEditButton() : React.JSX.Element {
 							<input type="checkbox" checked={scriptEditorCtx.currentScript.is_public} onChange={handleScriptVisibilityChange}/>
 						</label>
 
-						<input type="submit" value="Sauvegarder"/>
+						<input className={clsx(styles.formButton, "green")} type="submit" value="Sauvegarder"/>
 					</form>
 				</Modal>
 				, document.body)

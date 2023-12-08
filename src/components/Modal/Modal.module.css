@@ -27,3 +27,7 @@
 	justify-content: flex-start;
 	align-items: center;
 }
+
+.modalBackground .modal .header .closeButton {
+	margin-left: auto;
+}

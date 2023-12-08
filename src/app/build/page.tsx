@@ -39,6 +39,7 @@ function Build() : React.JSX.Element {
 					<ScriptEditorProvider scriptID={scriptID ?? undefined}>
 						<Box.Header name="Éditeur">
 							<ScriptEditor.ExecuteButton/>
+							<ScriptEditor.SaveButton/>
 							<ScriptEditor.EditButton/>
 							<ScriptEditor.DownloadButton/>
 							<ScriptEditor.ShareButton/>

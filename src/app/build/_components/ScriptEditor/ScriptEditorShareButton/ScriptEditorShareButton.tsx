@@ -27,10 +27,10 @@ function ScriptEditorShareButton() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<button onClick={onCreateClick} disabled={!scriptEditorCtx.currentScript.script_id}>
+			<button className="icon" onClick={onCreateClick} disabled={!scriptEditorCtx.currentScript.script_id}>
 				<FontAwesomeIcon icon={faShare}/>
 			</button>
-			<button disabled={!scriptEditorCtx.currentScript.script_id}>Voir les liens de partage</button>
+			<button disabled={/*!scriptEditorCtx.currentScript.script_id*/ true}>Voir les liens de partage</button>
 		</>
 	);
 }

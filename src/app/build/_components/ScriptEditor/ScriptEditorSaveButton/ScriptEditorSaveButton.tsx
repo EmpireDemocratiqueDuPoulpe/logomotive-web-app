@@ -1,18 +1,18 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 
-function ScriptEditorDownloadButton() : React.JSX.Element {
+function ScriptEditorSaveButton() : React.JSX.Element | null {
 	/* --- States -------------------------------- */
 	const scriptEditorCtx = useScriptEditorContext();
 
 	/* --- Component ----------------------------- */
-	return (
-		<button className="icon" onClick={scriptEditorCtx.downloadScript}>
-			<FontAwesomeIcon icon={faDownload}/>
+	return !scriptEditorCtx.currentScript.script_id ? null : (
+		<button className="blue icon" onClick={scriptEditorCtx.saveScript}>
+			<FontAwesomeIcon icon={faSave}/>
 		</button>
 	);
 }
 
-export default ScriptEditorDownloadButton;
+export default ScriptEditorSaveButton;

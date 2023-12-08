@@ -27,7 +27,7 @@ function ConsoleCleanButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<button onClick={clean} disabled={history.length === 0}>
+		<button className="icon" onClick={clean} disabled={history.length === 0}>
 			<FontAwesomeIcon icon={faBroom}/>
 		</button>
 	);

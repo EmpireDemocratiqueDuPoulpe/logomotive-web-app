@@ -1,5 +1,6 @@
 "use client";
 
+import tinycolor from "tinycolor2";
 import { InvalidInstruction, UnexpectedError } from "@/exceptions";
 import LogoDebugger from "./LogoDebugger/LogoDebugger";
 import LogoPointer from "./LogoPointer/LogoPointer";
@@ -15,9 +16,8 @@ export default class LogoInterpreter {
 	private pointerCanvasCtx: CanvasRenderingContext2D | null = null;
 	private canvasSize: { width: number, height: number } = { width: 0, height: 0 };
 	private backgroundColor: string = "#FFFFFF";
+	private isGridVisible: boolean = true;
 	private gridSpacing: number = 10;
-	private gridColor: string = "#EBEBEB";
-	private gridCrossColor: string = "#E1E1E1";
 
 	public readonly debugger: LogoDebugger = new LogoDebugger(false);
 	public readonly history: LogoHistory;
@@ -74,6 +74,10 @@ export default class LogoInterpreter {
 		this.debugger.printFnCall("Interpreter - setBackgroundColor", "start");
 		this.backgroundColor = hexColor;
 		this.debugger.printFnCall("Interpreter - setBackgroundColor", "end");
+	}
+
+	public setGridVisible(visible: boolean = true) : void {
+		this.isGridVisible = visible;
 	}
 
 	public addLine(line: Line) : void { this.lines.push(line); }
@@ -170,11 +174,24 @@ export default class LogoInterpreter {
 	}
 
 	private drawGrid() : void {
+		if (!this.isGridVisible) return;
 		if (this.drawCanvasCtx === null) return;
+
+		// Get grid color
+		let gridColor, gridCrossColor;
+		const colorProfile: tinycolor.Instance = tinycolor(this.backgroundColor);
+
+		if (colorProfile.isLight()) {
+			gridColor = colorProfile.darken(10).toHexString();
+			gridCrossColor = colorProfile.darken(12).toHexString();
+		} else {
+			gridColor = colorProfile.lighten(10).toHexString();
+			gridCrossColor = colorProfile.lighten(12).toHexString();
+		}
 
 		// Draw grid
 		this.drawCanvasCtx.beginPath();
-		this.drawCanvasCtx.strokeStyle = this.gridColor;
+		this.drawCanvasCtx.strokeStyle = gridColor;
 		this.drawCanvasCtx.lineWidth = 1;
 
 		for (let x: number = 0; x <= this.canvasSize.width; x += this.gridSpacing) {
@@ -192,7 +209,7 @@ export default class LogoInterpreter {
 
 		// Draw center
 		this.drawCanvasCtx.beginPath();
-		this.drawCanvasCtx.strokeStyle = this.gridCrossColor;
+		this.drawCanvasCtx.strokeStyle = gridCrossColor;
 		this.drawCanvasCtx.lineWidth = 2;
 
 		this.drawCanvasCtx.moveTo(0, (this.canvasSize.height / 2));
