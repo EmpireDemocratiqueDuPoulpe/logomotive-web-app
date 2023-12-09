@@ -3,20 +3,19 @@
 import React from "react";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Editor from "react-simple-code-editor";
-import ScriptEditorExecuteButton
-	from "@/app/build/_components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
-import ScriptEditorSaveButton from "@/app/build/_components/ScriptEditor/ScriptEditorSaveButton/ScriptEditorSaveButton";
-import ScriptEditorEditButton from "@/app/build/_components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
+import ScriptEditorExecuteButton from "@/components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
+import ScriptEditorSaveButton from "@/components/ScriptEditor/ScriptEditorSaveButton/ScriptEditorSaveButton";
+import ScriptEditorEditButton from "@/components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
 import ScriptEditorDownloadButton
-	from "@/app/build/_components/ScriptEditor/ScriptEditorDownloadButton/ScriptEditorDownloadButton";
-import ScriptEditorShareButton
-	from "@/app/build/_components/ScriptEditor/ScriptEditorShareButton/ScriptEditorShareButton";
+	from "@/components/ScriptEditor/ScriptEditorDownloadButton/ScriptEditorDownloadButton";
+import ScriptEditorShareButton from "@/components/ScriptEditor/ScriptEditorShareButton/ScriptEditorShareButton";
 import { languageName } from "@/utils/LogoInterpreter/LogoDefinition";
+import type { Props } from "./ScriptEditor.types";
 import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
 
-function ScriptEditor() : React.JSX.Element {
+function ScriptEditor({ editable = true }: Props) : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const scriptEditorCtx = useScriptEditorContext();
 
@@ -30,7 +29,7 @@ function ScriptEditor() : React.JSX.Element {
 						textareaClassName={`${styles.codeArea} language-${languageName}`}
 						preClassName={`${styles.codePre} language-${languageName}`}
 						value={scriptEditorCtx.currentScript.content}
-						onValueChange={scriptEditorCtx.changeScriptContent}
+						onValueChange={editable ? scriptEditorCtx.changeScriptContent : () => {}}
 						highlight={(code: string) => scriptEditorCtx.highlight(code, languageName, true) }
 						padding={10}
 						style={{

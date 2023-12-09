@@ -53,7 +53,7 @@ function Header() : React.JSX.Element | null {
 	/* --- Component ----------------------------- */
 	return (!isMounted || EXCLUDED_ROUTES.some((r: string) => pathname.includes(r))) ? null : (
 		<Navbar
-			className="my-4"
+			className="mb-4 flex-grow-0 flex-shrink-0"
 			classNames={{
 				item: [
 					"flex",
@@ -74,7 +74,7 @@ function Header() : React.JSX.Element | null {
 			position="sticky"
 		>
 			<NavbarBrand>
-				<Image className="h-16 w-16 mr-4" src={logomotive} alt="Logo(motive)" priority={true}/>
+				<Image className="h-16 w-16 mr-4" src={logomotive} alt="Logo(motive)" priority={true} width={64} height={64}/>
 				{removeAppName(document.title)}
 			</NavbarBrand>
 

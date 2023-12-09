@@ -7,6 +7,10 @@
 	top: 0;
 	left: 0;
 	font-size: 0.7em;
+	padding: 0.4em;
+	color: #FFFFFF;
+	background: #000000;
+	border-radius: 0 0 var(--default-border-radius) 0;
 	opacity: 0.6;
 	z-index: 3;
 }

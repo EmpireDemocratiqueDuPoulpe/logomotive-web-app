@@ -29,9 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<ReactQueryWrapper>
 						<AuthProvider>
 							<React.StrictMode>
-								<Header/>
+								<div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "auto" }}>
+									<Header/>
 
-								{children}
+									{children}
+								</div>
 							</React.StrictMode>
 						</AuthProvider>
 					</ReactQueryWrapper>
