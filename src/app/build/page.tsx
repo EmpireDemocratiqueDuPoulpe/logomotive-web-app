@@ -46,6 +46,7 @@ function Build() : React.JSX.Element {
 									<ScriptEditor.EditButton/>
 								</>
 							)}
+							<ScriptEditor.NewButton/>
 							<ScriptEditor.DownloadButton/>
 							{authContext.status === "connected" && (
 								<ScriptEditor.ShareButton/>

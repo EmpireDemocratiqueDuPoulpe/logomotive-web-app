@@ -5,6 +5,7 @@ import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import Editor from "react-simple-code-editor";
 import ScriptEditorExecuteButton from "@/components/ScriptEditor/ScriptEditorExecuteButton/ScriptEditorExecuteButton";
 import ScriptEditorSaveButton from "@/components/ScriptEditor/ScriptEditorSaveButton/ScriptEditorSaveButton";
+import ScriptEditorNewButton from "@/components/ScriptEditor/ScriptEditorNewButton/ScriptEditorNewButton";
 import ScriptEditorEditButton from "@/components/ScriptEditor/ScriptEditorEditButton/ScriptEditorEditButton";
 import ScriptEditorDownloadButton
 	from "@/components/ScriptEditor/ScriptEditorDownloadButton/ScriptEditorDownloadButton";
@@ -48,6 +49,7 @@ function ScriptEditor({ editable = true }: Props) : React.JSX.Element {
 }
 ScriptEditor.ExecuteButton = ScriptEditorExecuteButton;
 ScriptEditor.SaveButton = ScriptEditorSaveButton;
+ScriptEditor.NewButton = ScriptEditorNewButton;
 ScriptEditor.EditButton = ScriptEditorEditButton;
 ScriptEditor.DownloadButton = ScriptEditorDownloadButton;
 ScriptEditor.ShareButton = ScriptEditorShareButton;
