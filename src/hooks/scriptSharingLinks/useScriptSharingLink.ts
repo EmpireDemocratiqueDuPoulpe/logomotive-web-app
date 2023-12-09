@@ -1,11 +1,11 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "@/constants";
-import type { UseScriptSharingLinksData } from "@/hooks/scriptSharingLinks/useScriptSharingLinks.types";
-import type {JSONResponse, QueryParams} from "@/utils/Endpoint.types";
+import type { UseScriptSharingLinkData } from "@/hooks/scriptSharingLinks/useScriptSharingLink.types";
+import type {QueryParams} from "@/utils/Endpoint.types";
 import type { NewScriptSharingLink, SharingLinkID } from "@/typings/global";
 import toast from "react-hot-toast";
 
-function useScriptSharingLink(link_id: string | null, queryParams: QueryParams | undefined = undefined, options: object = {}): UseScriptSharingLinksData {
+function useScriptSharingLink(link_id: string | null, queryParams: QueryParams | undefined = undefined, options: object = {}): UseScriptSharingLinkData {
 	const queryClient: QueryClient = useQueryClient();
 	const scriptSharingLinkQuery = useQuery({
 		...options,

@@ -13,6 +13,7 @@ function Canvas() : React.JSX.Element {
 
 	/* --- Effects ------------------------------- */
 	useLayoutEffect(() : void => {
+		// @ts-ignore
 		setCanvasSize({ width: canvasBoxRef.current?.clientWidth, height: canvasBoxRef.current?.clientHeight });
 	}, []);
 
