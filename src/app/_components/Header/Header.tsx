@@ -74,8 +74,7 @@ function Header() : React.JSX.Element | null {
 			position="sticky"
 		>
 			<NavbarBrand>
-				<Image className="h-16 w-16" src={logomotive} alt="Logo(motive)" priority={true}/>
-				&nbsp;
+				<Image className="h-16 w-16 mr-4" src={logomotive} alt="Logo(motive)" priority={true}/>
 				{removeAppName(document.title)}
 			</NavbarBrand>
 

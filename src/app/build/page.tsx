@@ -33,7 +33,7 @@ function Build() : React.JSX.Element {
 	return (
 		<main className={styles.page}>
 			<LogoBuilderProvider>
-				<Card>
+				<Card className="border-1 border-default-50">
 					<Canvas width={canvasSize.width} height={canvasSize.height}/>
 				</Card>
 

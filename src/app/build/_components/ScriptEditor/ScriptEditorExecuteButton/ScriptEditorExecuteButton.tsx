@@ -10,7 +10,7 @@ function ScriptEditorExecuteButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<Button className="ml-auto bg-green-500" isIconOnly size="sm" onClick={scriptEditorCtx.executeScript}>
+		<Button className="ml-auto bg-green-500 text-background dark:text-foreground" isIconOnly size="sm" onClick={scriptEditorCtx.executeScript}>
 			<FontAwesomeIcon icon={faPlay}/>
 		</Button>
 	);

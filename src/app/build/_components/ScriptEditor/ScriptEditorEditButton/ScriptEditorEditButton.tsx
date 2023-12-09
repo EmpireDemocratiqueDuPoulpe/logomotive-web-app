@@ -30,7 +30,7 @@ function ScriptEditorEditButton() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<Button className={clsx("ml-5", (!scriptEditorCtx.currentScript.script_id && "bg-secondary"))} isIconOnly size="sm" onPress={onOpen}>
+			<Button className={clsx("ml-5", (!scriptEditorCtx.currentScript.script_id && "bg-secondary text-background dark:text-foreground"))} isIconOnly size="sm" onPress={onOpen}>
 				<FontAwesomeIcon icon={scriptEditorCtx.currentScript.script_id ? faEdit : faSave}/>
 			</Button>
 

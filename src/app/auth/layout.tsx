@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 	/* --- Layout -------------------------------- */
 	return (
 		<div className={styles.authBackground}>
-			<div className={styles.authBox}>
+			<div className={clsx(styles.authBox, "bg-default-50")}>
 				{GO_BACK_EXCLUDED_ROUTES.some((r: string) : boolean => pathname.includes(r)) ? null : (
 					<Link className={styles.backLink} href="/" isBlock>
 						<FontAwesomeIcon icon={faArrowLeft}/>

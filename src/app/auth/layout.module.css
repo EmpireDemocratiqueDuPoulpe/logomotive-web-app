@@ -17,7 +17,6 @@
 	left: 50%;
 	width: 25vw;
 	padding: var(--default-spacing);
-	background: var(--upfront-background-color);
 	border-radius: var(--default-border-radius);
 	transform: translate(-50%, -50%);
 }
