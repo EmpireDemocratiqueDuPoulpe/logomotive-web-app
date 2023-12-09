@@ -1,5 +1,0 @@
-.boxesLayout {
-	flex-grow: 1;
-	display: flex;
-	gap: var(--default-spacing);
-}

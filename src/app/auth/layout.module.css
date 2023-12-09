@@ -15,6 +15,7 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	width: 25vw;
 	padding: var(--default-spacing);
 	background: var(--upfront-background-color);
 	border-radius: var(--default-border-radius);
@@ -40,19 +41,18 @@
 	display: block;
 	width: var(--logo-size);
 	height: var(--logo-size);
-	margin: 0 auto;
+	margin: var(--default-spacing) auto;
 }
 
-.authBackground .authBox > main form {
+.authBackground .authBox > main {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	gap: calc(var(--default-spacing) / 2);
+	gap: var(--default-spacing);
 }
 
-.authBackground .authBox > main form a,
-.authBackground .authBox > main form input[type="submit"] { align-self: center; }
+.authBackground .authBox > main a,
+.authBackground .authBox > main button { align-self: center; }
 
-.authBackground .authBox > main form a { font-size: 0.8em; }
-.authBackground .authBox > main form input[type="submit"] { margin-top: calc(var(--default-spacing) / 2); }
+.authBackground .authBox > main a { font-size: 0.8em; }

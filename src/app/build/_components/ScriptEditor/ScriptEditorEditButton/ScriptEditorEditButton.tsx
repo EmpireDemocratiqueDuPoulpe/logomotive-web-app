@@ -1,62 +1,84 @@
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
 import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
-import Modal from "@/components/Modal/Modal";
-import styles from "./ScriptEditorEditButton.module.css";
+import {
+	Button,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	useDisclosure,
+	Input,
+	Checkbox
+} from "@nextui-org/react";
 
 function ScriptEditorEditButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const scriptEditorCtx = useScriptEditorContext();
-	const [isModalVisible, setModalVisible] = useState(false);
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	/* --- Functions ----------------------------- */
-	const handleScriptNameChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptName(event.target.value);
-	};
-
-	const handleScriptTagsChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptTags(event.target.value);
-	};
-
-	const handleScriptVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		scriptEditorCtx.changeScriptPublicStatus(event.target.checked);
-	};
-
-	const saveScript = (event: React.FormEvent) : void => {
-		event.preventDefault();
+	const saveScript = (onClose: () => void) : void => {
 		scriptEditorCtx.saveScript();
+		onClose();
 	};
 
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<button className={clsx("icon", (!scriptEditorCtx.currentScript.script_id && "blue"))} onClick={() => setModalVisible(true)}>
+			<Button className={clsx("ml-5", (!scriptEditorCtx.currentScript.script_id && "bg-secondary"))} isIconOnly size="sm" onPress={onOpen}>
 				<FontAwesomeIcon icon={scriptEditorCtx.currentScript.script_id ? faEdit : faSave}/>
-			</button>
+			</Button>
 
 			{createPortal(
-				<Modal isVisible={isModalVisible} setVisible={setModalVisible}>
-					<form className={styles.scriptForm} onSubmit={saveScript}>
-						<label>
-							Nom du script
-							<input type="text" value={scriptEditorCtx.currentScript.name} onChange={handleScriptNameChange}/>
-						</label>
+				<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<ModalHeader className="flex flex-col gap-1">Informations du script</ModalHeader>
 
-						<label>
-							Tags (séparé par des virgules)
-							<input type="text" value={scriptEditorCtx.currentScript.tags} onChange={handleScriptTagsChange}/>
-						</label>
+								<ModalBody>
+									<Input
+										type="text"
+										label="Nom du script"
+										value={scriptEditorCtx.currentScript.name}
+										onValueChange={scriptEditorCtx.changeScriptName}
+										isRequired
+									/>
 
-						<label>
-							Script public
-							<input type="checkbox" checked={scriptEditorCtx.currentScript.is_public} onChange={handleScriptVisibilityChange}/>
-						</label>
+									<Input
+										type="text"
+										label="Tags"
+										description="Séparer chaque tag par une virgule (,)."
+										value={scriptEditorCtx.currentScript.tags}
+										onValueChange={scriptEditorCtx.changeScriptTags}
+										isClearable
+									/>
 
-						<input className={clsx(styles.formButton, "green")} type="submit" value="Sauvegarder"/>
-					</form>
+									<Checkbox
+										isSelected={scriptEditorCtx.currentScript.is_public}
+										onValueChange={scriptEditorCtx.changeScriptPublicStatus}
+									>
+										Rendre public
+									</Checkbox>
+								</ModalBody>
+
+								<ModalFooter>
+									<Button color="danger" variant="light" onPress={onClose}>
+										Fermer
+									</Button>
+
+									<Button color="primary" onPress={() => saveScript(onClose)}>
+										Sauvegarder
+									</Button>
+								</ModalFooter>
+							</>
+						)}
+					</ModalContent>
 				</Modal>
 				, document.body)
 			}

@@ -3,7 +3,6 @@
 
 	margin-top: var(--default-spacing);
 	counter-reset: line;
-	border: 1px solid var(--discrete-border-color);
 }
 
 .scriptEditor .editor .codeArea {

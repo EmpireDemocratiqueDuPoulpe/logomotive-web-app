@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import useAuthContext from "@/contexts/AuthCtx/AuthCtx";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import { Link } from "@nextui-org/react";
 
 function Register() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -17,19 +19,12 @@ function Register() : React.JSX.Element {
 	const router = useRouter();
 
 	/* --- Functions ----------------------------- */
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		const target: HTMLInputElement = event.target;
-		const name: string = target.name;
-		const value: string | boolean = target.type === "checkbox" ? target.checked : target.value;
-
-		setUser(prevState => ({ ...prevState, [name]: value }));
+	const handleInputChange = (property: string, value: string) : void => {
+		setUser(prevState => ({ ...prevState, [property]: value }));
 	};
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) : Promise<void> => {
-		event.preventDefault();
-
-		const isRegistered: boolean = await authCtx.register(user);
-		if (isRegistered) {
+	const handleSubmit = async () : Promise<void> => {
+		if (await authCtx.register(user)) {
 			router.push("/auth/login");
 		}
 	};
@@ -44,30 +39,41 @@ function Register() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<main>
-			<form onSubmit={handleSubmit}>
-				<label>
-					Nom d&apos;utilisateur
-					<input type="text" name="username" value={user.username} onChange={handleInputChange} autoComplete="username"/>
-				</label>
+			<Input
+				type="text"
+				label="Nom d'utilisateur"
+				value={user.username}
+				onValueChange={(value: string) => handleInputChange("username", value)}
+				isRequired
+			/>
 
-				<label>
-					E-mail
-					<input type="email" name="email" value={user.email} onChange={handleInputChange} autoComplete="email"/>
-				</label>
+			<Input
+				type="email"
+				label="Email"
+				value={user.email}
+				onValueChange={(value: string) => handleInputChange("email", value)}
+				isRequired
+			/>
 
-				<label>
-					Mot de passe
-					<input type="password" name="password1" value={user.password1} onChange={handleInputChange} autoComplete="new-password"/>
-				</label>
+			<Input
+				type="password"
+				label="Mot de passe"
+				description="Min. 8 caractères, minuscule, majuscule, chiffre, caractère spécial"
+				value={user.password1}
+				onValueChange={(value: string) => handleInputChange("password1", value)}
+				isRequired
+			/>
 
-				<label>
-					Mot de passe (confirmation)
-					<input type="password" name="password2" value={user.password2} onChange={handleInputChange} autoComplete="new-password"/>
-				</label>
+			<Input
+				type="password"
+				label="Confirmez le mot de passe"
+				value={user.password2}
+				onValueChange={(value: string) => handleInputChange("password2", value)}
+				isRequired
+			/>
 
-				<input className="primaryColor" type="submit" value="Créer un compte"/>
-				<Link href="/auth/login">J&apos;ai d&eacute;j&agrave; un compte</Link>
-			</form>
+			<Button color="primary" onClick={handleSubmit}>Cr&eacute;er un compte</Button>
+			<Link href="/auth/login">J&apos;ai d&eacute;j&agrave; un compte</Link>
 		</main>
 	);
 }

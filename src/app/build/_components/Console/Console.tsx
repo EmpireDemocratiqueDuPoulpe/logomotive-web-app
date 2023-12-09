@@ -40,13 +40,13 @@ function Console() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<div className={clsx(styles.console, Fonts.firaCode.className)}>
-			<div className={styles.history}>
+			<div className={clsx(styles.history, "bg-default-200 dark:bg-default-100")}>
 				<ConsoleHistory/>
 			</div>
 
-			<div className={styles.commandLine}>
+			<div className={clsx(styles.commandLine, "border-t-1 border-t-default-400 dark:border-t-default-300")}>
 				<input
-					className={Fonts.firaCode.className}
+					className={clsx(Fonts.firaCode.className, "bg-default-200 dark:bg-default-100")}
 					type="text"
 					placeholder="Entrez une commande ici"
 					value={commandLine}

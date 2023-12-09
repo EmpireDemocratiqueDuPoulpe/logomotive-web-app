@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBroom } from "@fortawesome/free-solid-svg-icons";
 import useLogoBuilderContext from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import type { CommandHistory } from "@/utils/LogoInterpreter/LogoHistory/LogoHistory.types";
+import { Button } from "@nextui-org/react";
 
 function ConsoleCleanButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -27,9 +28,9 @@ function ConsoleCleanButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<button className="icon" onClick={clean} disabled={history.length === 0}>
+		<Button className="ml-auto" isIconOnly size="sm" onClick={clean} disabled={history.length === 0}>
 			<FontAwesomeIcon icon={faBroom}/>
-		</button>
+		</Button>
 	);
 }
 

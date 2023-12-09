@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import useAuthContext from "@/contexts/AuthCtx/AuthCtx";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import { Link } from "@nextui-org/react";
 
 function Login() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -16,19 +18,12 @@ function Login() : React.JSX.Element {
 	const router = useRouter();
 
 	/* --- Functions ----------------------------- */
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-		const target: HTMLInputElement = event.target;
-		const name: string = target.name;
-		const value: string | boolean = target.type === "checkbox" ? target.checked : target.value;
-
-		setUser(prevState => ({ ...prevState, [name]: value }));
+	const handleInputChange = (property: string, value: string) : void => {
+		setUser(prevState => ({ ...prevState, [property]: value }));
 	};
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) : Promise<void> => {
-		event.preventDefault();
-
-		const isLogged: boolean = await authCtx.login(user);
-		if (isLogged) {
+	const handleSubmit = async () : Promise<void> => {
+		if (await authCtx.login(user)) {
 			router.push("/");
 		}
 	};
@@ -43,20 +38,24 @@ function Login() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<main>
-			<form onSubmit={handleSubmit}>
-				<label>
-					E-mail
-					<input type="email" name="email" value={user.email} onChange={handleInputChange}/>
-				</label>
+			<Input
+				type="email"
+				label="Email"
+				value={user.email}
+				onValueChange={(value: string) => handleInputChange("email", value)}
+				isRequired
+			/>
 
-				<label>
-					Mot de passe
-					<input type="password" name="password" value={user.password} onChange={handleInputChange}/>
-				</label>
+			<Input
+				type="password"
+				label="Mot de passe"
+				value={user.password}
+				onValueChange={(value: string) => handleInputChange("password", value)}
+				isRequired
+			/>
 
-				<input className="primaryColor" type="submit" value="Se connecter"/>
-				<Link href="/auth/register">Je n&apos;ai pas de compte</Link>
-			</form>
+			<Button color="primary" onClick={handleSubmit}>Se connecter</Button>
+			<Link href="/auth/register">Je n&apos;ai pas de compte</Link>
 		</main>
 	);
 }

@@ -1,7 +1,9 @@
 import React from "react";
+import clsx from "clsx";
 import type { Metadata } from "next";
 import { Fonts } from "@/constants";
 import { Toaster } from "react-hot-toast";
+import { Providers } from "./providers";
 import ReactQueryWrapper from "@/app/_components/ReactQueryWrapper/ReactQueryWrapper";
 import { AuthProvider } from "@/contexts/AuthCtx/AuthCtx";
 import Header from "@/app/_components/Header/Header";
@@ -16,22 +18,24 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="fr">
-			<body className={Fonts.notoSans.className}>
+			<body className={clsx(Fonts.notoSans.className, "text-foreground bg-background")}>
 				<noscript>
 					Vous avez besoin de JavaScript pour accéder à la page Web. {/* TODO */}
 				</noscript>
 
 				<Toaster/>
 
-				<ReactQueryWrapper>
-					<AuthProvider>
-						<React.StrictMode>
-							<Header/>
+				<Providers>
+					<ReactQueryWrapper>
+						<AuthProvider>
+							<React.StrictMode>
+								<Header/>
 
-							{children}
-						</React.StrictMode>
-					</AuthProvider>
-				</ReactQueryWrapper>
+								{children}
+							</React.StrictMode>
+						</AuthProvider>
+					</ReactQueryWrapper>
+				</Providers>
 			</body>
 		</html>
 	);

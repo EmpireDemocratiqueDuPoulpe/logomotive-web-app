@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
+import { Button } from "@nextui-org/react";
 
 function ScriptEditorDownloadButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -9,9 +10,9 @@ function ScriptEditorDownloadButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<button className="icon" onClick={scriptEditorCtx.downloadScript}>
+		<Button className="ml-5" isIconOnly size="sm" onClick={scriptEditorCtx.downloadScript}>
 			<FontAwesomeIcon icon={faDownload}/>
-		</button>
+		</Button>
 	);
 }
 

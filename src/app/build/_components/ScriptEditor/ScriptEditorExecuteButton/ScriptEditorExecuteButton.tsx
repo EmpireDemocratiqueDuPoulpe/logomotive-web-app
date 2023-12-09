@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
+import { Button } from "@nextui-org/react";
 
 function ScriptEditorExecuteButton() : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -9,9 +10,9 @@ function ScriptEditorExecuteButton() : React.JSX.Element {
 
 	/* --- Component ----------------------------- */
 	return (
-		<button className="green icon" onClick={scriptEditorCtx.executeScript}>
+		<Button className="ml-auto bg-green-500" isIconOnly size="sm" onClick={scriptEditorCtx.executeScript}>
 			<FontAwesomeIcon icon={faPlay}/>
-		</button>
+		</Button>
 	);
 }
 

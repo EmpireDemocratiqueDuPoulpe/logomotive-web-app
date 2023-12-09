@@ -5,6 +5,7 @@ import useScriptSharingLink from "@/hooks/scriptSharingLinks/useScriptSharingLin
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
 import type { SharingLinkID } from "@/typings/global";
 import type { JSONResponse } from "@/utils/Endpoint.types";
+import { Button } from "@nextui-org/react";
 import toast from "react-hot-toast";
 
 function ScriptEditorShareButton() : React.JSX.Element {
@@ -27,10 +28,13 @@ function ScriptEditorShareButton() : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<>
-			<button className="icon" onClick={onCreateClick} disabled={!scriptEditorCtx.currentScript.script_id}>
+			<Button className="ml-5 mr-1" isIconOnly size="sm" onClick={onCreateClick} disabled={!scriptEditorCtx.currentScript.script_id}>
 				<FontAwesomeIcon icon={faShare}/>
-			</button>
-			<button disabled={/*!scriptEditorCtx.currentScript.script_id*/ true}>Voir les liens de partage</button>
+			</Button>
+
+			<Button size="sm" disabled={/*!scriptEditorCtx.currentScript.script_id*/ true}>
+				Voir les liens de partage
+			</Button>
 		</>
 	);
 }

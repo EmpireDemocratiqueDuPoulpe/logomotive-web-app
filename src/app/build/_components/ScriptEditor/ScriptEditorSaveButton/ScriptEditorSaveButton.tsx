@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import useScriptEditorContext from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
+import { Button } from "@nextui-org/react";
 
 function ScriptEditorSaveButton() : React.JSX.Element | null {
 	/* --- States -------------------------------- */
@@ -9,9 +10,9 @@ function ScriptEditorSaveButton() : React.JSX.Element | null {
 
 	/* --- Component ----------------------------- */
 	return !scriptEditorCtx.currentScript.script_id ? null : (
-		<button className="primaryColor icon" onClick={scriptEditorCtx.saveScript}>
+		<Button className="ml-1 bg-secondary" isIconOnly size="sm" onClick={scriptEditorCtx.saveScript}>
 			<FontAwesomeIcon icon={faSave}/>
-		</button>
+		</Button>
 	);
 }
 

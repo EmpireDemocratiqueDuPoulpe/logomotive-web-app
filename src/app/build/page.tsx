@@ -3,13 +3,14 @@
 import React, { useMemo } from "react";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import useWindowSize from "@/hooks/windowSize/useWindowSize";
+import useScripts from "@/hooks/scripts/useScripts";
 import { LogoBuilderProvider } from "@/contexts/LogoBuilderCtx/LogoBuilderCtx";
 import { ScriptEditorProvider } from "@/contexts/ScriptEditorCtx/ScriptEditorCtx";
-import Box from "@/components/Box/Box";
 import Console from "@/app/build/_components/Console/Console";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
 import ScriptsExplorer from "@/app/build/_components/ScriptsExplorer/ScriptsExplorer";
 import ScriptEditor from "@/app/build/_components/ScriptEditor/ScriptEditor";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import styles from "./page.module.css";
 
 const SCRIPT_ID_PARAM: string = "scriptID";
@@ -24,42 +25,63 @@ function Build() : React.JSX.Element {
 	const windowSize = useWindowSize();
 	const scriptID: number | null = useMemo(() => getScriptID(searchParams), [searchParams]);
 	const canvasSize: { width: number, height: number } = useMemo(() => (
-		{ width: Math.floor(windowSize.width / 2), height: Math.floor(windowSize.height / 2) }
+		{ width: Math.floor(windowSize.width / 2), height: Math.floor(windowSize.height / 2.025) }
 	), [windowSize]);
+	const scripts = useScripts();
 
 	/* --- Component ----------------------------- */
 	return (
 		<main className={styles.page}>
 			<LogoBuilderProvider>
-				<Box className={styles.canvasBox} width={`${canvasSize.width}px`} height={`${canvasSize.height}px`}>
+				<Card>
 					<Canvas width={canvasSize.width} height={canvasSize.height}/>
-				</Box>
+				</Card>
 
 				<ScriptEditorProvider scriptID={scriptID ?? undefined}>
-					<Box height={`${canvasSize.height}px`} header={(
-						<Box.Header name="Éditeur">
+					<Card>
+						<CardHeader>
+							<span className="text-sm">&Eacute;diteur</span>
+
 							<ScriptEditor.ExecuteButton/>
 							<ScriptEditor.SaveButton/>
 							<ScriptEditor.EditButton/>
 							<ScriptEditor.DownloadButton/>
 							<ScriptEditor.ShareButton/>
-						</Box.Header>
-					)}>
+						</CardHeader>
+
 						<ScriptEditor/>
-					</Box>
+					</Card>
 				</ScriptEditorProvider>
 
-				<Box width={`${canvasSize.width}px`} header={(
-					<Box.Header name="Console">
-						<Console.CleanBtn/>
-					</Box.Header>
-				)}>
-					<Console/>
-				</Box>
+				<Card>
+					<CardHeader>
+						<span className="text-sm">Console</span>
 
-				<Box header={<Box.Header name="Explorateur de scripts"/>}>
-					<ScriptsExplorer script_id={scriptID}/>
-				</Box>
+						<Console.CleanBtn/>
+					</CardHeader>
+
+					<CardBody>
+						<Console/>
+					</CardBody>
+				</Card>
+
+				<Card>
+					<CardHeader>
+						<span className="text-sm">Explorateur de scripts</span>
+					</CardHeader>
+
+					<CardBody>
+						{scripts.isLoading ? <p>Chargement en cours...</p> : (
+							scripts.isError ? null : (
+								<ScriptsExplorer script_id={scriptID!} scripts={scripts.data!.data.scripts}/>
+							)
+						)}
+					</CardBody>
+
+					<CardFooter>
+						<span className="text-xs">{scripts.data?.data.scripts.length ? `${scripts.data?.data.scripts.length} fichier(s)` : null}</span>
+					</CardFooter>
+				</Card>
 			</LogoBuilderProvider>
 		</main>
 	);

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* --- Variables ---------------------------------------------------------------------------------------------------- */
 :root {
 	--foreground-color: #000000;
@@ -38,6 +42,7 @@
 /* --- Body --------------------------------------------------------------------------------------------------------- */
 html, body {
 	max-width: 100vw;
+	height: 100%;
 	overflow-x: hidden;
 }
 
@@ -57,55 +62,4 @@ body {
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
-}
-
-/* --- Links -------------------------------------------------------------------------------------------------------- */
-a {
-	color: var(--primary-color);
-	text-decoration: none;
-}
-
-/* --- Buttons ------------------------------------------------------------------------------------------------------ */
-button, input[type="submit"] {
-	--button-color: var(--foreground-color);
-	--button-height: calc(1em + var(--default-spacing) + 2px);
-
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	height: var(--button-height);
-	padding: calc(var(--default-spacing) / 2);
-	color: var(--button-color);
-	background: none;
-	border: 1px var(--button-color) solid;
-	border-radius: var(--default-border-radius);
-	font-weight: 700;
-	font-family: inherit;
-	appearance: none;
-	cursor: pointer;
-}
-button:hover:not(:disabled), input[type="submit"]:hover:not(:disabled),
-button.full, input[type="submit"].full {
-	background: var(--button-color);
-	color: var(--upfront-background-color);
-}
-button:disabled, input[type="submit"]:disabled { cursor: not-allowed; opacity: 0.4; }
-
-button.icon, input[type="submit"].icon {
-	--button-height: calc(1em + calc(var(--default-spacing) / 1.5) + 2px);
-
-	width: var(--button-height);
-	padding: calc(var(--default-spacing) / 4);
-	border: none;
-	font-size: 1.1rem;
-}
-
-button.primaryColor, input[type="submit"].primaryColor { --button-color: var(--primary-color); }
-button.red, input[type="submit"].red { --button-color: var(--red-button-color); }
-button.green, input[type="submit"].green { --button-color: var(--green-button-color); }
-button.blue, input[type="submit"].blue { --button-color: var(--blue-button-color); }
-
-button > svg, input[type="submit"] > svg {
-
 }
