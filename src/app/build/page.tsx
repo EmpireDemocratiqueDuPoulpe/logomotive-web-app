@@ -10,7 +10,7 @@ import Console from "@/app/build/_components/Console/Console";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
 import ScriptsExplorer from "@/app/build/_components/ScriptsExplorer/ScriptsExplorer";
 import ScriptEditor from "@/components/ScriptEditor/ScriptEditor";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Spinner} from "@nextui-org/react";
 import styles from "./page.module.css";
 
 const SCRIPT_ID_PARAM: string = "scriptID";
@@ -77,7 +77,7 @@ function Build() : React.JSX.Element {
 						{authContext.status !== "connected" ? (
 							<p className="text-sm text-default-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">Veuillez vous connecter pour utiliser cette fonctionnalité.</p>
 						) : (
-							scripts.isLoading ? <p>Chargement en cours...</p> : (
+							scripts.isLoading ? <Spinner className="absolute top-1/2 left-1/2 translate-x-1/2 translate-y-1/2"/> : (
 								scripts.isError ? null : (
 									<ScriptsExplorer script_id={scriptID!} scripts={scripts.data!.data.scripts}/>
 								)

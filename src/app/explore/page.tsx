@@ -8,7 +8,7 @@ import { ScriptEditorProvider } from "@/contexts/ScriptEditorCtx/ScriptEditorCtx
 import ScriptEditor from "@/components/ScriptEditor/ScriptEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import {Avatar, Card, CardBody, CardFooter, Input, Accordion, AccordionItem} from "@nextui-org/react";
+import {Avatar, Card, CardBody, CardFooter, Input, Accordion, AccordionItem, Spinner} from "@nextui-org/react";
 import {isoDateTimeToHumanReadable} from "@/utils/time";
 import Canvas from "@/app/build/_components/Canvas/Canvas";
 import { useDebounce } from "usehooks-ts";
@@ -23,7 +23,7 @@ function Explore() : React.JSX.Element {
 	return (
 		<main className="h-full">
 			<LogoBuilderProvider>
-				{publicScripts.isLoading ? <p>Chargement en cours...</p> : (
+				{publicScripts.isLoading ? <Spinner className="absolute top-1/2 left-1/2 translate-x-1/2 translate-y-1/2"/> : (
 					publicScripts.isError ? null : (
 						<div className="flex flex-row items-stretch justify-start h-full p-4 gap-4">
 							<div className="grow">

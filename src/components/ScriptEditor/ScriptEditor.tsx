@@ -14,6 +14,7 @@ import type { Props } from "./ScriptEditor.types";
 import styles from "./ScriptEditor.module.css";
 import "@/sharedCSS/scriptEditor/scriptEditor.theme.css";
 import "prismjs/themes/prism-tomorrow.min.css";
+import {Spinner} from "@nextui-org/react";
 
 function ScriptEditor({ editable = true }: Props) : React.JSX.Element {
 	/* --- States -------------------------------- */
@@ -22,7 +23,7 @@ function ScriptEditor({ editable = true }: Props) : React.JSX.Element {
 	/* --- Component ----------------------------- */
 	return (
 		<div className={styles.scriptEditor}>
-			{scriptEditorCtx.isLoading ? <p>Chargement en cours...</p> : (
+			{scriptEditorCtx.isLoading ? <Spinner className="absolute top-1/2 left-1/2 translate-x-1/2 translate-y-1/2"/> : (
 				scriptEditorCtx.isLoadError ? null : (
 					<Editor
 						className={`${styles.editor} language-${languageName}`}
