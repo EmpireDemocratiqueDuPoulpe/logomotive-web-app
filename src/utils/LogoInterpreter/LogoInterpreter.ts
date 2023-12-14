@@ -8,6 +8,8 @@ import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
 import LogoInstructions from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 import type { LogoInstruction } from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 import type { Line, RenderReason, ScriptReturn } from "./LogoInterpreter.types";
+import {ScopeFinder} from "@/utils/LogoInterpreter/LogoScopes/LogoScopes";
+import {FoundScopes} from "@/utils/LogoInterpreter/LogoScopes/LogoScopes.types";
 
 export default class LogoInterpreter {
 	private drawCanvas: HTMLCanvasElement | null = null;
@@ -20,6 +22,7 @@ export default class LogoInterpreter {
 	private gridSpacing: number = 10;
 
 	public readonly debugger: LogoDebugger = new LogoDebugger(false);
+	public readonly scopeFinder: ScopeFinder = new ScopeFinder();
 	public readonly history: LogoHistory;
 	public readonly pointer: LogoPointer;
 	private readonly lines: Line[] = [];
@@ -140,6 +143,11 @@ export default class LogoInterpreter {
 	public executeScript(script: string) : ScriptReturn {
 		this.debugger.printFnCall("Interpreter - executeScript", "start");
 		this.reset();
+
+		const foundScopes: FoundScopes = this.scopeFinder.find(script);
+		// TODO
+		return { status: "ok", errors: [] };
+
 		const instructions: string[] = script.split("\n");
 		const returnObj: ScriptReturn = { status: "ok", errors: [] };
 
