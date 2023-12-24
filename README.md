@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Logomotive
+Logomotive est un éditeur et un interpréteur de Logo disponible directement sur le Web. Les utilisateurs peuvent créer
+des scripts de Logo et les partager aux autres utilisateurs de la plateforme.
+---
+_**[Eng]** Logomotive is a Logo editor and interpreter available directly on the Web. Users can create Logo scripts and
+share them with other platform users._
 
-## Getting Started
+## Installation
+Logomotive nécessite :
+- Node.js v20 ou supérieur
 
-First, run the development server:
+1. Suivez la procédure d'installation de l'API.
+2. Depuis le répertoire racine de l'application, exécutez la commande `npm install`.
+3. Vous pouvez désormais lancer l'application avec la commande `npm run dev`.
+4. L'application est accessible à l'URI suivante : http://localhost:3000/.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Deux comptes utilisateurs sont pré-créés. Voici leurs informations de connexion :
+- <ins>Johmnny McNumgget :</ins>
+  - Email : `johmnny.mcnumgget@cheems.mail`
+  - Mot de passe : `MotDePasse123!`
+- <ins>Johmnny McNumgget :</ins>
+    - Email : `mo.lamine@sup.info`
+    - Mot de passe : `MotDePasse123!`
+---
+_**[Eng]** Logomotive needs:_
+- _Node.js v20 or greater_
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. _Follow the API installation procedure._
+2. _From the application root directory, run the `npm install` command._
+3. _You can now launch the application with the `npm run dev` command._
+4. _The application can be accessed at the following URI: http://localhost:3000/._
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+_Two user accounts are pre-created. Here are their login details:_
+- <ins>Johmnny McNumgget :</ins>
+  - Email : `johmnny.mcnumgget@cheems.mail`
+  - Password : `MotDePasse123!`
+- <ins>Johmnny McNumgget :</ins>
+  - Email : `mo.lamine@sup.info`
+  - Password : `MotDePasse123!`

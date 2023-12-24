@@ -9,10 +9,9 @@ import { Link } from "@nextui-org/react";
 
 function Login() : React.JSX.Element {
 	/* --- States -------------------------------- */
-	// TODO: FOR TESTING PURPOSE ONLY, REMOVE BEFORE PROD
 	const [ user, setUser ] = useState({
-		email: "johmnny.mcnumgget@cheems.mail",
-		password: "MotDePasse123!"
+		email: "",
+		password: ""
 	});
 	const authCtx = useAuthContext();
 	const router = useRouter();

@@ -1,9 +1,9 @@
 {
-  "name": "logo-web-app",
+  "name": "logomotive-web-app",
   "version": "0.1.0",
   "author": "TODO",
-  "description": "TODO",
-  "license": "TODO",
+  "description": "Logomotive is a Logo editor and interpreter available directly on the Web. Users can create Logo scripts and share them with other platform users.",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",

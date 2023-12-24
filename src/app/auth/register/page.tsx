@@ -10,10 +10,10 @@ import { Link } from "@nextui-org/react";
 function Register() : React.JSX.Element {
 	/* --- States -------------------------------- */
 	const [ user, setUser ] = useState({
-		username: "mlamine",
-		email: "mo.lamine@sup.info",
-		password1: "MotDePasse123!",
-		password2: "MotDePasse123!"
+		username: "",
+		email: "",
+		password1: "",
+		password2: ""
 	});
 	const authCtx = useAuthContext();
 	const router = useRouter();
