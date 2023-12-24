@@ -1,4 +1,4 @@
-import type { LogoScope } from "./LogoScopes";
+import type { _LogoScope } from "./LogoScopes";
 
 /// --- Types ----------------------------------------------------------------------------------------------------------
 export type Keyword = {
@@ -7,6 +7,6 @@ export type Keyword = {
 }
 
 export type FoundScopes = {
-	scopes: { [key: string]: LogoScope }
+	scopes: { [key: string]: _LogoScope }
 	unscopedCode: string
 }

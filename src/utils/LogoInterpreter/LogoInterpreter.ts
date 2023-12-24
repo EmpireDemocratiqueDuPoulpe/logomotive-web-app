@@ -8,8 +8,8 @@ import LogoHistory from "@/utils/LogoInterpreter/LogoHistory/LogoHistory";
 import LogoInstructions from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 import type { LogoInstruction } from "@/utils/LogoInterpreter/LogoInstructions/LogoInstructions";
 import type { Line, RenderReason, ScriptReturn } from "./LogoInterpreter.types";
-import {ScopeFinder} from "@/utils/LogoInterpreter/LogoScopes/LogoScopes";
-import {FoundScopes} from "@/utils/LogoInterpreter/LogoScopes/LogoScopes.types";
+import { _LogoScope, ScopeFinder } from "@/utils/LogoInterpreter/LogoScopes/LogoScopes";
+import { FoundScopes } from "@/utils/LogoInterpreter/LogoScopes/LogoScopes.types";
 
 export default class LogoInterpreter {
 	private drawCanvas: HTMLCanvasElement | null = null;
@@ -94,12 +94,20 @@ export default class LogoInterpreter {
 		return LogoInstructions[instruction];
 	}
 
+	public getScope(scopes: { [key: string]: _LogoScope }, scopeName: string) : _LogoScope {
+		if (!scopes.hasOwnProperty(scopeName)) {
+			throw new InvalidInstruction();
+		}
+
+		return scopes[scopeName];
+	}
+
 	public splitInstruction(fullInstruction: string) : string[] {
 		// Split by any whitespace character, unless within square brackets.
 		return fullInstruction.split(/\s+(?![^\[]*])/);
 	}
 
-	public executeInstruction(fullInstruction: string) : Error | null {
+	public executeInstruction(fullInstruction: string, scopes?: { [key: string]: _LogoScope }) : Error | null {
 		this.debugger.printFnCall("Interpreter - executeInstruction", "start");
 
 		const [ instruction, ...args ] = this.splitInstruction(fullInstruction.trim());
@@ -109,7 +117,16 @@ export default class LogoInterpreter {
 		if (!instruction) return null;
 
 		try {
-			const instructionWorker: LogoInstruction = this.getInstruction(instruction);
+			let instructionWorker: LogoInstruction | _LogoScope;
+
+			try {
+				instructionWorker = this.getInstruction(instruction);
+			} catch (err: unknown) {
+				if (scopes) instructionWorker = this.getScope(scopes, instruction);
+				else { // noinspection ExceptionCaughtLocallyJS
+					throw err;
+				}
+			}
 
 			if (this.drawCanvasCtx && this.pointerCanvasCtx) {
 				output = instructionWorker.execute(this, ...args);
@@ -145,18 +162,17 @@ export default class LogoInterpreter {
 		this.reset();
 
 		const foundScopes: FoundScopes = this.scopeFinder.find(script);
-		// TODO
-		return { status: "ok", errors: [] };
 
-		const instructions: string[] = script.split("\n");
+		const instructions: string[] = foundScopes.unscopedCode.split("\n");
+		const allInstructions: string[] = script.split("\n");
 		const returnObj: ScriptReturn = { status: "ok", errors: [] };
 
-		instructions.forEach((instruction: string, idx: number) : void => {
-			const err: Error | null = this.executeInstruction(instruction);
+		instructions.forEach((instruction: string) : void => {
+			const err: Error | null = this.executeInstruction(instruction, foundScopes.scopes);
 
 			if (err) {
 				returnObj.status = "failed";
-				returnObj.errors.push({ line: (idx + 1), error: err.message });
+				returnObj.errors.push({ line: (allInstructions.indexOf(instruction) + 1), error: err.message });
 				return;
 			}
 		});

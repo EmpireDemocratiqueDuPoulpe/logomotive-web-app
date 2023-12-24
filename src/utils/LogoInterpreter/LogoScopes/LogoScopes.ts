@@ -1,15 +1,16 @@
 "use client";
 
-import { UnclosedScope, UnnamedScope } from "@/exceptions";
+import { InvalidArgumentsCount, UnclosedScope, UnnamedScope } from "@/exceptions";
 import type {FoundScopes, Keyword} from "@/utils/LogoInterpreter/LogoScopes/LogoScopes.types";
+import LogoInterpreter from "@/utils/LogoInterpreter/LogoInterpreter";
 
-class _LogoScope {
+export class _LogoScope {
 	public static readonly keyword: Keyword;
-	protected name: string;
+	public name: string;
 	public static readonly description: string | null;
 	protected code: string;
 
-	protected constructor(code: string) {
+	public constructor(code: string) {
 		this.name = "NameNotExtracted";
 		this.code = code;
 
@@ -17,20 +18,23 @@ class _LogoScope {
 	}
 
 	public extractName() : void {};
+	public execute(interpreter: LogoInterpreter, ...args: string[]) : string | void { return; }
 }
 export type LogoScope = typeof _LogoScope;
 
-export function LogoScope(keyword: Keyword, description?: string) {
+export function LogoScope(keyword: Keyword, description?: string) : typeof _LogoScope{
 	return class extends _LogoScope {
 		public static readonly keyword: Keyword = keyword;
 		public static readonly description: string | null = description ?? null;
+
+		public execute(interpreter: LogoInterpreter, ...args: string[]) : string | void { return; }
 	};
 }
 
 /*************************************************************
  * Scopes
  *************************************************************/
-class FunctionScope extends LogoScope({ start: "POUR", end: "FIN" }, "Définit une fonction. Exemple : POUR NomFonction :param1 :param2\n    ....\nFIN") {
+export class FunctionScope extends LogoScope({ start: "POUR", end: "FIN" }, "Définit une fonction. Exemple : POUR NomFonction :param1 :param2\n    ....\nFIN") {
 	constructor(code: string) {
 		super(code);
 	}
@@ -44,6 +48,53 @@ class FunctionScope extends LogoScope({ start: "POUR", end: "FIN" }, "Définit u
 		}
 
 		this.name = matches[1];
+	}
+
+	public execute(interpreter: LogoInterpreter, ...args: string[]): string | void {
+		interpreter.debugger.printFnCall(`Scope - execute[${FunctionScope.keyword.start}]`, "start");
+
+		const scopeOut: string | void = this._execute(interpreter, ...args);
+
+		interpreter.debugger.printFnCall(`Scope - execute[${FunctionScope.keyword.start}]`, "end");
+		return scopeOut;
+	}
+
+	protected _execute(interpreter: LogoInterpreter, ...args: string[]): string | void {
+		let instructions: string[] = this.code.split("\n").filter(Boolean);
+		const parameters: ({ name: string, value: string })[] = [];
+
+		const parametersMatch: RegExpMatchArray | null = instructions[0]
+			.match(new RegExp(`${FunctionScope.keyword.start}\\s+${this.name}\\s+(:)`));
+
+		if (parametersMatch) {
+			const parametersIdx: number = instructions[0].indexOf(parametersMatch[1]);
+			const parametersDefinition: string[] = instructions[0].slice(parametersIdx).split(/\s+/);
+
+			if (args.length < parametersDefinition.length) {
+				throw new InvalidArgumentsCount(parametersDefinition.length, args.length);
+			}
+
+			for (let idx = 0; idx < parametersDefinition.length; idx++) {
+				parameters.push({ name: parametersDefinition[idx], value: args[idx] });
+			}
+		}
+
+		instructions.shift();
+		instructions.pop();
+
+		instructions = instructions.map((instruction: string): string => {
+			let filledInstruction: string = instruction.trim();
+
+			for (const parameter of parameters) {
+				if (instruction.includes(parameter.name)) {
+					filledInstruction = filledInstruction.replaceAll(parameter.name, parameter.value);
+				}
+			}
+
+			return filledInstruction;
+		});
+
+		instructions.forEach((i: string) => interpreter.executeInstruction(i));
 	}
 }
 
@@ -75,7 +126,8 @@ export class ScopeFinder {
 				const from: number = startIndexes[idx];
 				const to: number = endIndexes[idx] + scopeClass.keyword.end.length;
 
-				const scope: LogoScope = new scopeClass(foundScopes.unscopedCode.substring(from, (to + 1)));
+				// @ts-ignore
+				const scope: _LogoScope = new scopeClass(foundScopes.unscopedCode.substring(from, (to + 1)));
 
 				foundScopes.scopes[scope.name] = scope;
 			}
